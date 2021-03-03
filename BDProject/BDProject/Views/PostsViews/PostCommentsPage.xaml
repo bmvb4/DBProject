@@ -1,12 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDProject.Views.PostsViews.PostCommentsPage">
+             x:Class="BDProject.Views.PostsViews.PostCommentsPage"
+             
+             Shell.NavBarIsVisible="False">
+    
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+
+        <Grid 
+            RowDefinitions="auto,auto,*,auto">
+
+            <Grid 
+                Grid.Row="0"
+                ColumnDefinitions="auto,auto,*">
+
+                <Button 
+                    Grid.Column="0"
+                    Text="Back" 
+                    Command="{Binding BackCommand}"/>
+
+                <Label 
+                    Grid.Column="1"
+                    FontSize="Medium"
+                    HorizontalOptions="Center"
+                    Text="Comments" />
+
+            </Grid>
+
+            <CollectionView 
+                Grid.Row="2"
+                x:Name="CommentsCollectionView"
+                ItemsSource="{Binding CommentsCollection}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid 
+                            Padding="8"
+                            ColumnDefinitions="auto,*">
+
+                            <!--<ImageButton Source="Profile" />-->
+                            <Button 
+                                Grid.Column="0"
+                                Text="Profile" />
+
+                            <Grid 
+                                Grid.Column="1"
+                                RowDefinitions="*,auto,auto,*">
+
+                                <Label 
+                                    Grid.Row="1"
+                                    Text="Name" />
+
+                                <Label 
+                                    Grid.Row="2"
+                                    Text="Comment" />
+
+                            </Grid>
+
+                        </Grid>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Grid 
+                Grid.Row="3"
+                ColumnDefinitions="*,auto">
+
+                <Entry 
+                    Grid.Column="0"
+                    Placeholder="Comment"
+                    Text="{Binding Comment}"/>
+
+                <Button 
+                    Grid.Column="1"
+                    Text="Send"/>
+
+            </Grid>
+            
+        </Grid>
+        
     </ContentPage.Content>
 </ContentPage>

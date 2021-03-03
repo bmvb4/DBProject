@@ -7,6 +7,8 @@ namespace BDProject
 {
     public partial class App : Application
     {
+        public int UserID = 0;
+
         public App()
         {
             InitializeComponent();

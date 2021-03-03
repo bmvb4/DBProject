@@ -144,9 +144,11 @@ namespace BDProject.ViewModels
 
         // Open Post Comments command
         public ICommand OpenPostCommentsItemCommand { get; set; }
-        private void OpenPostCommentsItemFunction(object user)
+        private async void OpenPostCommentsItemFunction(object post)
         {
-            //App.Current.MainPage = new PostCommentsPage();
+            //await Shell.Current.GoToAsync($"//PostComments?id={(Post)post.ID}");
+
+            await Shell.Current.GoToAsync("//PostComments");
         }
 
     }

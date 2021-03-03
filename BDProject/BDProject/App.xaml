@@ -2,7 +2,12 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.App">
+    
     <Application.Resources>
 
+        <Color x:Key="PrimaryBlack">#1c1c1e</Color>
+        <Color x:Key="PrimaryWhite">#f2f2f7</Color>
+
     </Application.Resources>
+
 </Application>

@@ -2,28 +2,30 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:BDProject.Views"
+       xmlns:localPosts="clr-namespace:BDProject.Views.PostsViews"
        x:Class="BDProject.AppShell">
 
     <TabBar>
 
         <ShellContent 
             Title="Home"
-            Icon="icon.xml"
             Route="HomePage"
             ContentTemplate="{DataTemplate local:HomePage}"/>
 
         <ShellContent 
             Title="Post"
-            Icon="icon.xml"
             Route="PostPage"
             ContentTemplate="{DataTemplate local:MakePostPage}"/>
 
         <ShellContent 
             Title="Profile"
-            Icon="icon.xml"
             Route="ProfilePage"
             ContentTemplate="{DataTemplate local:ProfilePage}"/>
 
     </TabBar>
-    
+
+    <ShellContent 
+        Route="PostComments" 
+        ContentTemplate="{DataTemplate localPosts:PostCommentsPage}"/>
+
 </Shell>
