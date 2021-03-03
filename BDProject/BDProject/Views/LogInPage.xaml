@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.LogInPage">
+    
+    <ContentPage.Content>
+        <Grid
+            Margin="16"
+            RowDefinitions="*,auto,*">
+
+            <StackLayout 
+                Grid.Row="1"
+                Orientation="Vertical">
+
+                <Label
+                    Margin="0,0,0,16"
+                    FontSize="Large"
+                    HorizontalOptions="Center"
+                    Text="Log into the App" />
+
+                <Entry 
+                    Text="{Binding Username}"
+                    Placeholder="Username" />
+
+                <Entry 
+                    Text="{Binding Password}"
+                    Placeholder="Password" 
+                    IsPassword="True" />
+
+                <Grid ColumnDefinitions="*,*">
+
+                    <Button 
+                        Grid.Column="0"
+                        Text="Sign Up"
+                        Command="{Binding SignUpCommand}" />
+
+                    <Button 
+                        Grid.Column="1"
+                        Text="Log In"
+                        Command="{Binding LogInCommand}" />
+
+                </Grid>
+
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

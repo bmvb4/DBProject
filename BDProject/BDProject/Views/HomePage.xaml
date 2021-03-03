@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.HomePage"
+             
+             Shell.NavBarIsVisible="False">
+    
+    <ContentPage.Content>
+
+        <Grid RowDefinitions="auto,*">
+
+            <Entry
+                Grid.Row="0"
+                Text="{Binding Search}"
+                Placeholder="Search" />
+
+            <CollectionView 
+                Grid.Row="1"
+                x:Name="PostsCollectionView"
+                ItemsSource="{Binding PostsCollection}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid 
+                            Padding="8,16"
+                            RowDefinitions="*,auto">
+
+                            <Grid
+                                Grid.Row="0"
+                                ColumnDefinitions="*,auto">
+
+                                <!--<Image Source="Post Image/Video"/>-->
+                                <Button
+                                    HeightRequest="200"
+                                    Grid.Column="0"
+                                    Text="Post" />
+
+                                <StackLayout
+                                    HorizontalOptions="Center"
+                                    Grid.Column="1"
+                                    Orientation="Vertical">
+
+                                    <Button 
+                                        Text="L"
+                                        Command="{Binding BindingContext.LikePostItemCommand, Source={x:Reference PostsCollectionView}}"
+                                        CommandParameter="{Binding .}"/>
+
+                                    <Label 
+                                        Text="{Binding BindingContext.LikesCount, Source={x:Reference PostsCollectionView}}" />
+
+                                    <Button 
+                                        Text="C" 
+                                        Command="{Binding BindingContext.OpenPostCommentsItemCommand, Source={x:Reference PostsCollectionView}}"
+                                        CommandParameter="{Binding .}"/>
+
+                                    <Label 
+                                        Text="{Binding BindingContext.CommentsCount, Source={x:Reference PostsCollectionView}}" />
+
+                                </StackLayout>
+
+                            </Grid>
+
+                            <StackLayout
+                                Grid.Row="1"
+                                Orientation="Vertical">
+
+                                <Label 
+                                    Grid.Column="0"
+                                    FontSize="Medium"
+                                    FontAttributes="Bold"
+                                    Text="{Binding BindingContext.Username, Source={x:Reference PostsCollectionView}}" />
+
+                                <Label 
+                                    Grid.Column="1"
+                                    FontSize="Medium"
+                                    Text="{Binding BindingContext.PostDescription, Source={x:Reference PostsCollectionView}}" />
+
+                                <!--<Grid 
+                                    ColumnDefinitions="*,auto">
+
+                                    <Entry 
+                                        Grid.Column="0"
+                                        Text="{Binding BindingContext.Comment, Source={x:Reference PostsCollectionView}}" />
+
+                                    <Button 
+                                        Grid.Column="1"
+                                        Command="{Binding BindingContext.SendCommentToPostItemCommand, Source={x:Reference PostsCollectionView}}"
+                                        CommandParameter="{Binding .}"
+                                        Text="Send" />
+
+                                </Grid>-->
+
+                            </StackLayout>
+
+                        </Grid>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>

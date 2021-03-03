@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BDProject.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +11,7 @@ namespace BDProject
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new LogInPage();
         }
 
         protected override void OnStart()
