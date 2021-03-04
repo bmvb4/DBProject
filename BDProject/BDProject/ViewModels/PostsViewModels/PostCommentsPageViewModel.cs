@@ -16,8 +16,12 @@ namespace BDProject.ViewModels.PostsViewModels
             CommentsCollection = new ObservableCollection<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             //========TEST=======
 
+            LikesCount = $"{likeCounter}";
+            CommentsCount = $"{commentsCounter}";
+
             // Assigning functions to the commands
             BackCommand = new Command(BackFunction);
+            LikePostItemCommand = new Command(LikePostItemFunction);
         }
 
         // Parameters
@@ -48,12 +52,76 @@ namespace BDProject.ViewModels.PostsViewModels
             }
         }
 
+        // Likes count parameter
+        private int likeCounter = 0;
+        private string likesCount = "";
+        public string LikesCount
+        {
+            get => likesCount;
+            set
+            {
+                if (value == likesCount) { return; }
+                likesCount = value;
+                OnPropertyChanged(nameof(LikesCount));
+            }
+        }
+
+        // Comments count parameter
+        private int commentsCounter = 0;
+        private string commentsCount = "";
+        public string CommentsCount
+        {
+            get => commentsCount;
+            set
+            {
+                if (value == commentsCount) { return; }
+                commentsCount = value;
+                OnPropertyChanged(nameof(CommentsCount));
+            }
+        }
+
+        // Username parameter
+        //=================================== za testvane
+        private string username = "Daniel";
+        public string Username
+        {
+            get => username;
+            set
+            {
+                if (value == username) { return; }
+                username = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+
+        // Post description parameter
+        //=================================== za testvane
+        private string postDescription = "tova e prosto nqkakvo opisanie za testvane na dizaina";
+        public string PostDescription
+        {
+            get => postDescription;
+            set
+            {
+                if (value == postDescription) { return; }
+                postDescription = value;
+                OnPropertyChanged(nameof(PostDescription));
+            }
+        }
+
         // Commands
         // Back to post command
         public ICommand BackCommand { get; set; }
         private async void BackFunction(object user)
         {
             await Shell.Current.GoToAsync("//HomePage");
+        }
+
+        // Like Post command
+        public ICommand LikePostItemCommand { get; set; }
+        private void LikePostItemFunction(object user)
+        {
+            likeCounter++;
+            LikesCount = $"{likeCounter}";
         }
 
     }

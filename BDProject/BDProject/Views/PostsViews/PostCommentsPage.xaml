@@ -1,9 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDProject.Views.PostsViews.PostCommentsPage"
-             
-             Shell.NavBarIsVisible="False">
+             x:Class="BDProject.Views.PostsViews.PostCommentsPage">
     
     <ContentPage.Content>
 
@@ -12,20 +10,39 @@
 
             <Grid 
                 Grid.Row="0"
-                ColumnDefinitions="auto,auto,*">
+                Padding="8,16"
+                ColumnDefinitions="auto,*">
 
                 <Button 
                     Grid.Column="0"
-                    Text="Back" 
+                    HeightRequest="46"
+                    WidthRequest="46"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
                     Command="{Binding BackCommand}"/>
 
-                <Label 
-                    Grid.Column="1"
-                    FontSize="Medium"
-                    HorizontalOptions="Center"
-                    Text="Comments" />
-
             </Grid>
+
+            <StackLayout
+                Grid.Row="1"
+                Padding="8,0"
+                Orientation="Vertical">
+
+                <Label 
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    Text="{Binding Username}" />
+
+                <Label 
+                    FontSize="Medium"
+                    Text="{Binding PostDescription}" />
+
+                <Label 
+                    HorizontalOptions="Center"
+                    Text="All Comemnts" />
+
+            </StackLayout>
 
             <CollectionView 
                 Grid.Row="2"
@@ -41,19 +58,26 @@
                             <!--<ImageButton Source="Profile" />-->
                             <Button 
                                 Grid.Column="0"
-                                Text="Profile" />
+                                HeightRequest="46"
+                                WidthRequest="46"
+                                Text=""
+                                FontSize="Large"
+                                FontFamily="FA-R" />
 
                             <Grid 
                                 Grid.Column="1"
-                                RowDefinitions="*,auto,auto,*">
+                                RowDefinitions="auto,auto">
 
                                 <Label 
                                     Grid.Row="1"
-                                    Text="Name" />
+                                    Text="Name"
+                                    FontSize="Medium"
+                                    FontAttributes="Bold"/>
 
                                 <Label 
                                     Grid.Row="2"
-                                    Text="Comment" />
+                                    Text="Comment"
+                                    FontSize="Medium"/>
 
                             </Grid>
 
@@ -74,7 +98,11 @@
 
                 <Button 
                     Grid.Column="1"
-                    Text="Send"/>
+                    HeightRequest="46"
+                    WidthRequest="58"
+                    Text=""
+                    FontSize="Large"
+                    FontFamily="FA-R"/>
 
             </Grid>
             

@@ -1,14 +1,87 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDProject.Views.ProfilePage"
-             
-             Shell.NavBarIsVisible="False">
+             x:Class="BDProject.Views.ProfilePage">
+    
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+
+        <StackLayout 
+            Orientation="Vertical">
+
+            <Grid 
+                Grid.Row="0"
+                Padding="8,16"
+                ColumnDefinitions="*,auto">
+
+                <Button 
+                    Grid.Column="1"
+                    HeightRequest="46"
+                    WidthRequest="46"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    Command="{Binding BackCommand}"/>
+
+            </Grid>
+
+            <Grid ColumnDefinitions="*,auto,*">
+
+                <!--<Image Source="Profile"/>-->
+                <Button 
+                    Grid.Column="1"
+                    HeightRequest="150"
+                    WidthRequest="150"
+                    Text=""
+                    FontSize="Large"
+                    FontFamily="FA-R"/>
+
+            </Grid>
+
+            <Grid 
+                ColumnDefinitions="*,*">
+
+                <Grid 
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    RowDefinitions="*,*">
+
+                    <Label 
+                        Grid.Row="0"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="Followers" />
+
+                    <Label 
+                        Grid.Row="1"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="10" />
+                    
+                </Grid>
+
+                <Grid 
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    RowDefinitions="*,*">
+
+                    <Label 
+                        Grid.Row="0"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="Following" />
+
+                    <Label 
+                        Grid.Row="1"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="10" />
+
+                </Grid>
+
+            </Grid>
+
         </StackLayout>
+
     </ContentPage.Content>
+    
 </ContentPage>
