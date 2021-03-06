@@ -98,9 +98,9 @@ namespace BDProject.ViewModels
         // Commands
         // Sign Up command
         public ICommand SignUpCommand { get; set; }
-        private void SignUpFunction()
+        private async void SignUpFunction()
         {
-            App.Current.MainPage = new AppShell();
+            await Shell.Current.GoToAsync("//HomePage");
         }
 
     }

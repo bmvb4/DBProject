@@ -3,13 +3,28 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:BDProject.Views"
        xmlns:localPosts="clr-namespace:BDProject.Views.PostsViews"
-       x:Class="BDProject.AppShell">
+       x:Class="BDProject.AppShell"
+       
+       FlyoutBehavior="Disabled">
+
+    <ShellContent 
+        Route="LogInPage" 
+        Shell.BackgroundColor="{StaticResource White}"
+        Shell.NavBarIsVisible="False"
+        ContentTemplate="{DataTemplate local:LogInPage}"/>
+
+    <ShellContent 
+        Route="SignUpPage" 
+        Shell.BackgroundColor="{StaticResource White}"
+        Shell.NavBarIsVisible="False"
+        ContentTemplate="{DataTemplate local:SignUpPage}"/>
 
     <TabBar>
 
         <Tab
             Title="Home"
             Route="HomePage"
+            Shell.BackgroundColor="{StaticResource White}"
             Shell.NavBarIsVisible="False">
             <Tab.Icon>
                 <FontImageSource 
@@ -23,6 +38,8 @@
         <Tab
             Title="Post"
             Route="PostPage"
+            Shell.TabBarIsVisible="False"
+            Shell.BackgroundColor="{StaticResource White}"
             Shell.NavBarIsVisible="False">
             <Tab.Icon>
                 <FontImageSource 
@@ -36,6 +53,7 @@
         <Tab
             Title="Profile"
             Route="ProfilePage"
+            Shell.BackgroundColor="{StaticResource White}"
             Shell.NavBarIsVisible="False">
             <Tab.Icon>
                 <FontImageSource 
@@ -50,7 +68,14 @@
 
     <ShellContent 
         Route="PostComments" 
+        Shell.BackgroundColor="{StaticResource White}"
         Shell.NavBarIsVisible="False"
         ContentTemplate="{DataTemplate localPosts:PostCommentsPage}"/>
+
+    <ShellContent 
+        Route="SettingsPage" 
+        Shell.BackgroundColor="{StaticResource White}"
+        Shell.NavBarIsVisible="False"
+        ContentTemplate="{DataTemplate local:SettingsPage}"/>
 
 </Shell>

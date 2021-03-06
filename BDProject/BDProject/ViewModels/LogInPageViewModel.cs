@@ -47,16 +47,16 @@ namespace BDProject.ViewModels
         // Commands
         // Log In command
         public ICommand LogInCommand { get; set; }
-        private void LogInFunction()
+        private async void LogInFunction()
         {
-            App.Current.MainPage = new AppShell();
+            await Shell.Current.GoToAsync("//HomePage");
         }
 
         // Sign Up command
         public ICommand SignUpCommand { get; set; }
-        private void SignUpFunction()
+        private async void SignUpFunction()
         {
-            App.Current.MainPage = new SignUpPage();
+            await Shell.Current.GoToAsync("//SignUpPage");
         }
 
     }

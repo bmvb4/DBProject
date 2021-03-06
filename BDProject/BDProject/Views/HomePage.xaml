@@ -30,6 +30,7 @@
 
             <CollectionView 
                 Grid.Row="1"
+                SelectionMode="None"
                 x:Name="PostsCollectionView"
                 ItemsSource="{Binding PostsCollection}">
                 <CollectionView.ItemTemplate>

@@ -13,7 +13,7 @@ namespace BDProject
         {
             InitializeComponent();
 
-            MainPage = new LogInPage();
+            MainPage = new AppShell();
         }
 
         protected override void OnStart()

@@ -150,6 +150,8 @@ namespace BDProject.ViewModels
             //await Shell.Current.GoToAsync($"//PostComments?id={(Post)post.ID}");
 
             await Shell.Current.GoToAsync("//PostComments");
+
+            //App.Current.MainPage = new PostCommentsPage();
         }
 
     }

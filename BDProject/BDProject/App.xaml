@@ -5,8 +5,8 @@
     
     <Application.Resources>
 
-        <Color x:Key="PrimaryBlack">#1c1c1e</Color>
-        <Color x:Key="PrimaryWhite">#f2f2f7</Color>
+        <Color x:Key="Black">#1c1c1e</Color>
+        <Color x:Key="White">#f2f2f7</Color>
 
     </Application.Resources>
 

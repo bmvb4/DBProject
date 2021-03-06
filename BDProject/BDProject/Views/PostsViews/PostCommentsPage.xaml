@@ -2,21 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.PostsViews.PostCommentsPage">
-    
-    <ContentPage.Content>
 
+    <ContentPage.Content>
+        
         <Grid 
-            RowDefinitions="auto,auto,*,auto">
+            RowDefinitions="auto,*,auto">
 
             <Grid 
                 Grid.Row="0"
-                Padding="8,16"
+                Padding="8,8,0,0"
                 ColumnDefinitions="auto,*">
 
                 <Button 
                     Grid.Column="0"
-                    HeightRequest="46"
-                    WidthRequest="46"
+                    HeightRequest="48"
+                    WidthRequest="48"
                     Text="" 
                     FontFamily="FA-S"
                     FontSize="Large"
@@ -24,89 +24,92 @@
 
             </Grid>
 
-            <StackLayout
-                Grid.Row="1"
-                Padding="8,0"
-                Orientation="Vertical">
+            <ScrollView Grid.Row="1">
+                <StackLayout>
 
-                <Label 
-                    FontSize="Medium"
-                    FontAttributes="Bold"
-                    Text="{Binding Username}" />
+                    <StackLayout
+                        Padding="8,0"
+                        Orientation="Vertical">
 
-                <Label 
-                    FontSize="Medium"
-                    Text="{Binding PostDescription}" />
+                        <Label 
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            Text="{Binding Username}" />
 
-                <Label 
-                    HorizontalOptions="Center"
-                    Text="All Comemnts" />
+                        <Label 
+                            FontSize="Medium"
+                            Text="{Binding PostDescription}" />
 
-            </StackLayout>
+                        <Label 
+                            HorizontalOptions="Center"
+                            Text="All Comemnts" />
 
-            <CollectionView 
-                Grid.Row="2"
-                x:Name="CommentsCollectionView"
-                ItemsSource="{Binding CommentsCollection}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    </StackLayout>
 
-                        <Grid 
-                            Padding="8"
-                            ColumnDefinitions="auto,*">
+                    <StackLayout 
+                        BindableLayout.ItemsSource="{Binding CommentsCollection}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
 
-                            <!--<ImageButton Source="Profile" />-->
-                            <Button 
-                                Grid.Column="0"
-                                HeightRequest="46"
-                                WidthRequest="46"
-                                Text=""
-                                FontSize="Large"
-                                FontFamily="FA-R" />
+                                <Grid
+                                    Padding="8"
+                                    ColumnDefinitions="auto,*">
 
-                            <Grid 
-                                Grid.Column="1"
-                                RowDefinitions="auto,auto">
+                                    <!--<ImageButton Source="Profile" />-->
+                                    <Button
+                                        Grid.Column="0"
+                                        HeightRequest="46"
+                                        WidthRequest="46"
+                                        Text=""
+                                        FontSize="Large"
+                                        FontFamily="FA-R" />
 
-                                <Label 
-                                    Grid.Row="1"
-                                    Text="Name"
-                                    FontSize="Medium"
-                                    FontAttributes="Bold"/>
+                                    <Grid 
+                                        Grid.Column="1"
+                                        RowDefinitions="auto,auto">
 
-                                <Label 
-                                    Grid.Row="2"
-                                    Text="Comment"
-                                    FontSize="Medium"/>
+                                        <Label 
+                                            Grid.Row="1"
+                                            Text="Name"
+                                            FontSize="Medium"
+                                            FontAttributes="Bold"/>
 
-                            </Grid>
+                                        <Label 
+                                            Grid.Row="2"
+                                            Text="Comment"
+                                            FontSize="Medium"/>
 
-                        </Grid>
+                                    </Grid>
 
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                </Grid>
+
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
 
             <Grid 
-                Grid.Row="3"
-                ColumnDefinitions="*,auto">
+                    Grid.Row="2"
+                    ColumnDefinitions="*,auto">
 
-                <Entry 
-                    Grid.Column="0"
-                    Placeholder="Comment"
-                    Text="{Binding Comment}"/>
+                    <Entry 
+                        Grid.Column="0"
+                        Placeholder="Comment"
+                        Text="{Binding Comment}"/>
 
-                <Button 
-                    Grid.Column="1"
-                    HeightRequest="46"
-                    WidthRequest="58"
-                    Text=""
-                    FontSize="Large"
-                    FontFamily="FA-R"/>
+                    <Button 
+                        Grid.Column="1"
+                        HeightRequest="46"
+                        WidthRequest="58"
+                        Text=""
+                        FontSize="Large"
+                        FontFamily="FA-R"/>
 
-            </Grid>
+                </Grid>
             
-        </Grid>
+            </Grid>
+
         
     </ContentPage.Content>
 </ContentPage>
