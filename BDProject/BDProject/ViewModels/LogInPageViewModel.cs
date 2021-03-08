@@ -13,13 +13,10 @@ namespace BDProject.ViewModels
 {
     public class LogInPageViewModel : BaseViewModel
     {
-        // API Interface
-        APIInterface api;
-
+        
         public LogInPageViewModel()
         {
             test = "Log into the App";
-            api = RestService.For<APIInterface>("https://localhost:5001/");
 
             // Assigning functions to the commands
             LogInCommand = new Command(LogInFunction);
@@ -58,15 +55,17 @@ namespace BDProject.ViewModels
         public ICommand LogInCommand { get; set; }
         private async void LogInFunction()
         {
-            User user = new User()
-            {
-                Username = Username,
-                Password = Password
-            };
+            //APIInterface api = RestService.For<APIInterface>("https://localhost:5001/");
 
-            var result = await api.LogInUser(user);
+            //User user = new User()
+            //{
+            //    Username = Username,
+            //    Password = Password
+            //};
 
-            test = result;
+            //var result = await api.LogInUser(user);
+
+            //test = result;
 
             //Toast.MakeText(result, int.Parse(result), ToastLength.Short).Show();
 

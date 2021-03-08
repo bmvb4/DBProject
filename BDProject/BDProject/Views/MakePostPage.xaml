@@ -27,11 +27,22 @@
                 <Image 
                     Grid.Row="0"
                     Source="{Binding TakenPhoto}" />
-                
-                <Button
+
+                <Grid
                     Grid.Row="1"
-                    Text="Snap"
+                    ColumnDefinitions="*,auto,auto,*">
+
+                    <Button
+                    Grid.Column="1"
+                    Text="Take"
                     Command="{Binding TakePhotoCommand}"/>
+
+                    <Button
+                    Grid.Column="2"
+                    Text="Pick"
+                    Command="{Binding PickPhotoCommand}"/>
+
+                </Grid>
 
             </Grid>
 

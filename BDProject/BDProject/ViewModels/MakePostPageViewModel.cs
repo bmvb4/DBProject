@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels
@@ -14,6 +15,7 @@ namespace BDProject.ViewModels
             // Assigning functions to the commands
             BackCommand = new Command(BackFunction);
             TakePhotoCommand = new Command(TakePhotoFunction);
+            PickPhotoCommand = new Command(PickPhotoFunction);
         }
 
         // Parameters
@@ -42,12 +44,29 @@ namespace BDProject.ViewModels
         public ICommand TakePhotoCommand { get; set; }
         private async void TakePhotoFunction()
         {
-            var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions() { });
+            var result = await MediaPicker.CapturePhotoAsync();
 
-            if (photo != null)
+            if (result == null) { return; }
+
+            var stream = await result.OpenReadAsync();
+
+            TakenPhoto = ImageSource.FromStream(() => stream);
+        }
+
+        // Pick Photo command
+        public ICommand PickPhotoCommand { get; set; }
+        private async void PickPhotoFunction()
+        {
+            var result = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
             {
-                TakenPhoto = ImageSource.FromStream(() => { return photo.GetStream(); });
-            }
+                Title = "Pick a photo"
+            });
+
+            if (result == null) { return; }
+
+            var stream = await result.OpenReadAsync();
+
+            TakenPhoto = ImageSource.FromStream(() => stream);
         }
 
     }
