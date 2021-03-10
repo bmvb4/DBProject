@@ -9,7 +9,7 @@
         <ScrollView>
 
             <StackLayout 
-            Orientation="Vertical">
+                Orientation="Vertical">
 
                 <Grid 
                 Grid.Row="0"
@@ -43,12 +43,12 @@
                 </Grid>
 
                 <Label 
-                Text="Name"
+                Text="{Binding Name}"
                 FontSize="Large"
                 HorizontalOptions="Center"/>
 
                 <Label 
-                Text="Description" 
+                Text="{Binding Description}" 
                 FontSize="Medium"
                 HorizontalOptions="Center"/>
 
@@ -70,7 +70,7 @@
                         Grid.Row="1"
                         FontSize="Large"
                         HorizontalOptions="Center"
-                        Text="10" />
+                        Text="{Binding FollowersCount}" />
 
                     </Grid>
 
@@ -89,7 +89,7 @@
                         Grid.Row="1"
                         FontSize="Large"
                         HorizontalOptions="Center"
-                        Text="10" />
+                        Text="{Binding FollowingCount}" />
 
                     </Grid>
 

@@ -18,17 +18,28 @@
                     Margin="0,0,0,16"
                     FontSize="Large"
                     HorizontalOptions="Center"
-                    Text="{Binding test}" />
-                <!--Log into the App-->
+                    Text="Log into the App" />
 
                 <Entry 
+                    x:Name="UsernameEntry"
                     Text="{Binding Username}"
                     Placeholder="Username" />
 
+                <Label 
+                    Text="{Binding UsernameAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+
                 <Entry 
+                    x:Name="PasswordEntry"
                     Text="{Binding Password}"
                     Placeholder="Password" 
                     IsPassword="True" />
+                
+                <Label 
+                    Text="{Binding PasswordAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
 
                 <Grid ColumnDefinitions="*,*">
 

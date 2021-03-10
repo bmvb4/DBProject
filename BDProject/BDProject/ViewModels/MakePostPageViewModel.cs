@@ -37,7 +37,7 @@ namespace BDProject.ViewModels
         public ICommand BackCommand { get; set; }
         private async void BackFunction()
         {
-            await Shell.Current.GoToAsync("//ProfilePage");
+            await Shell.Current.GoToAsync("//HomePage");
         }
 
         // Take Photo command

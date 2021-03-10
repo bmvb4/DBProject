@@ -17,6 +17,13 @@ namespace BDProject.Views
         {
             InitializeComponent();
 
+            firstnameEntry.Unfocus();
+            lastnameEntry.Unfocus();
+            usernameEntry.Unfocus();
+            passwordEntry.Unfocus();
+            confirmEntry.Unfocus();
+            emailEntry.Unfocus();
+
             BindingContext = new SignUpPageViewModel();
         }
     }

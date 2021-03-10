@@ -23,15 +23,37 @@
 
                 <Grid ColumnDefinitions="*,*">
 
-                    <Entry
+                    <StackLayout
                         Grid.Column="0"
-                        Text="{Binding FirstName}"
-                        Placeholder="First Name" />
+                        Orientation="Vertical">
 
-                    <Entry 
+                        <Entry
+                            x:Name="firstnameEntry"
+                            Text="{Binding FirstName}"
+                            Placeholder="First Name" />
+
+                        <Label 
+                            Text="{Binding FirstNameAlert}" 
+                            FontSize="Small"
+                            TextColor="Red"/>
+
+                    </StackLayout>
+
+                    <StackLayout
                         Grid.Column="1"
-                        Text="{Binding LastName}"
-                        Placeholder="Last Name" />
+                        Orientation="Vertical">
+
+                        <Entry
+                            x:Name="lastnameEntry"
+                            Text="{Binding LastName}"
+                            Placeholder="Last Name" />
+
+                        <Label 
+                            Text="{Binding LastNameAlert}" 
+                            FontSize="Small"
+                            TextColor="Red"/>
+
+                    </StackLayout>
 
                 </Grid>
 
@@ -39,24 +61,67 @@
                     Text="{Binding Username}"
                     Placeholder="Username" />
 
+                <Label 
+                    x:Name="usernameEntry"
+                    Text="{Binding UsernameAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+                
+                
+
                 <Entry 
+                    x:Name="passwordEntry"
                     Text="{Binding Password}"
                     Placeholder="Password" 
                     IsPassword="True" />
+                
+                <Label 
+                    Text="{Binding PasswordAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+                
+                
 
                 <Entry 
+                    x:Name="confirmEntry"
                     Text="{Binding ConfirmPassword}"
                     Placeholder="Confirm Password" 
                     IsPassword="True" />
+                
+                <Label 
+                    Text="{Binding ConfirmPasswordAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+                
+                
 
-                <Entry 
+                <Entry
+                    x:Name="emailEntry"
                     Text="{Binding Email}"
                     Placeholder="Email" />
+                
+                <Label 
+                    Text="{Binding EmailAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
 
-                <Button 
-                    Text="Sign Up" 
-                    Command="{Binding SignUpCommand}"
-                    HorizontalOptions="Center"/>
+
+
+                <Grid ColumnDefinitions="*,*">
+
+                    <Button 
+                        Grid.Column="0"
+                        Text="Cancel" 
+                        Command="{Binding CancelCommand}"
+                        HorizontalOptions="Center"/>
+
+                    <Button 
+                        Grid.Column="1"
+                        Text="Sign Up" 
+                        Command="{Binding SignUpCommand}"
+                        HorizontalOptions="Center"/>
+
+                </Grid>
 
             </StackLayout>
 

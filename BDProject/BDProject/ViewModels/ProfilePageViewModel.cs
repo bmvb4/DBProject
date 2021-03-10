@@ -37,6 +37,7 @@ namespace BDProject.ViewModels
             }
         }
 
+        // Your Posts Collection height parameter
         private double collectionHeight = 0;
         public double CollectionHeight
         {
@@ -49,6 +50,7 @@ namespace BDProject.ViewModels
             }
         }
 
+        // Your Posts height parameter
         private double postHeight = 0;
         public double PostHeight
         {
@@ -58,6 +60,58 @@ namespace BDProject.ViewModels
                 if (value == postHeight) { return; }
                 postHeight = value;
                 OnPropertyChanged(nameof(PostHeight));
+            }
+        }
+
+        // Your Name parameter
+        private string name = "";
+        public string Name
+        {
+            get => name;
+            set
+            {
+                if (value == name) { return; }
+                name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        // Your Description parameter
+        private string description = "";
+        public string Description
+        {
+            get => description;
+            set
+            {
+                if (value == description) { return; }
+                description = value;
+                OnPropertyChanged(nameof(Description));
+            }
+        }
+
+        // Your followers count parameter
+        private int followersCount = 0;
+        public int FollowersCount
+        {
+            get => followersCount;
+            set
+            {
+                if (value == followersCount) { return; }
+                followersCount = value;
+                OnPropertyChanged(nameof(FollowersCount));
+            }
+        }
+
+        // Your following count parameter
+        private int followingCount = 0;
+        public int FollowingCount
+        {
+            get => followingCount;
+            set
+            {
+                if (value == followingCount) { return; }
+                followingCount = value;
+                OnPropertyChanged(nameof(FollowingCount));
             }
         }
 
