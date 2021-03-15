@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDProject.Views.PostsViews.PostCommentsPage">
+             x:Class="BDProject.Views.PostsViews.PostCommentsPage"
+             
+             Shell.BackgroundColor="{StaticResource White}"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
 
     <ContentPage.Content>
         
@@ -20,6 +24,7 @@
                     Text="" 
                     FontFamily="FA-S"
                     FontSize="Large"
+                    BackgroundColor="{StaticResource White}"
                     Command="{Binding BackCommand}"/>
 
             </Grid>
@@ -34,15 +39,18 @@
                         <Label 
                             FontSize="Medium"
                             FontAttributes="Bold"
-                            Text="{Binding Username}" />
+                            Text="{Binding Username}"
+                            TextColor="{StaticResource Black}"/>
 
                         <Label 
                             FontSize="Medium"
-                            Text="{Binding PostDescription}" />
+                            Text="{Binding PostDescription}"
+                            TextColor="{StaticResource Black}"/>
 
                         <Label 
                             HorizontalOptions="Center"
-                            Text="All Comemnts" />
+                            Text="All Comemnts"
+                            TextColor="{StaticResource Black}"/>
 
                     </StackLayout>
 
@@ -62,7 +70,8 @@
                                         WidthRequest="46"
                                         Text=""
                                         FontSize="Large"
-                                        FontFamily="FA-R" />
+                                        FontFamily="FA-R" 
+                                        BackgroundColor="{StaticResource White}"/>
 
                                     <Grid 
                                         Grid.Column="1"
@@ -72,12 +81,14 @@
                                             Grid.Row="1"
                                             Text="Name"
                                             FontSize="Medium"
-                                            FontAttributes="Bold"/>
+                                            FontAttributes="Bold"
+                                            TextColor="{StaticResource Black}"/>
 
                                         <Label 
                                             Grid.Row="2"
                                             Text="Comment"
-                                            FontSize="Medium"/>
+                                            FontSize="Medium"
+                                            TextColor="{StaticResource Black}"/>
 
                                     </Grid>
 

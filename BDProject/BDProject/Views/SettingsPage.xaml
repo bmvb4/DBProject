@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDProject.Views.SettingsPage">
+             x:Class="BDProject.Views.SettingsPage"
+             
+             Shell.BackgroundColor="{StaticResource White}"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
     
     <ContentPage.Content>
 
@@ -11,7 +15,7 @@
                 <Grid 
                     Grid.Row="0"
                     Padding="8,8,0,0"
-                    ColumnDefinitions="auto,*,auto,*">
+                    ColumnDefinitions="auto,auto,*">
 
                     <Button 
                         Grid.Column="0"
@@ -20,14 +24,17 @@
                         Text="" 
                         FontFamily="FA-S"
                         FontSize="Large"
+                        BackgroundColor="{StaticResource White}"
                         Command="{Binding BackCommand}"/>
 
                     <Label 
-                        Grid.Column="2"
+                        Grid.Column="1"
+                        Margin="10,5,0,0"
                         Text="Settings" 
                         FontAttributes="Bold"
-                        FontSize="Large"
-                        HorizontalOptions="Center"/>
+                        FontSize="Title"
+                        HorizontalOptions="Center"
+                        TextColor="{StaticResource Black}"/>
 
                 </Grid>
                 

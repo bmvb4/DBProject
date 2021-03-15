@@ -1,4 +1,5 @@
 ﻿using BDProject.Models;
+using BDProject.ModelWrappers;
 using BDProject.Views;
 using Java.Net;
 using Newtonsoft.Json;
@@ -19,9 +20,28 @@ namespace BDProject.ViewModels
     {
         public SignUpPageViewModel()
         {
+            /*
+            //==============================TEST
+            User user = new User()
+            {
+                FirstName = "Daniel",
+                LastName = "Kostov",
+                Username = "DanielRK",
+                Password = "",
+                Email = "",
+                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            };
+            _Globals.SetMainUser(new UserWrapper(user));*/
+
+            //var jsonStr = JsonConvert.SerializeObject(user);
+            //Shell.Current.GoToAsync($"//HomePage?user={jsonStr}").Wait();
+
+            Shell.Current.GoToAsync("//HomePage?").Wait();
+            //==============================TEST
+
             // Assigning functions to the commands
-            SignUpCommand = new Command(SignUpFunction);
-            CancelCommand = new Command(CancelFunction);
+            SignUpCommand = new Command(async () => await SignUpFunction());
+            CancelCommand = new Command(async () => await CancelFunction());
         }
 
         // Parameters
@@ -198,15 +218,15 @@ namespace BDProject.ViewModels
         // Commands
         // Sign Up command
         public ICommand SignUpCommand { get; set; }
-        private async void SignUpFunction()
+        private async Task SignUpFunction()
         {
-            // vaidate email
-            EmailValidator();
+            // vaidate email and username
+            if (EmailValidator() == false || UsernameValidation() == false) { return; }
 
             // checking all parameters
             if (CheckParameters() == true) { return; }
 
-            const string URL = "https://10.0.2.2:5001/login";
+            const string URL = "https://10.0.2.2:5001/register";
             const string sContentType = "application/json";
 
             HttpClientHandler clientHandler = new HttpClientHandler();
@@ -218,7 +238,7 @@ namespace BDProject.ViewModels
             oJsonObject.Add("Password", Password);
             oJsonObject.Add("FirstName", FirstName);
             oJsonObject.Add("LastName", LastName);
-            //oJsonObject.Add("Email", Email);
+            oJsonObject.Add("Email", Email);
 
             var result = await _client.PostAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
 
@@ -227,13 +247,13 @@ namespace BDProject.ViewModels
                 var earthquakesJson = result.Content.ReadAsStringAsync().Result;
                 var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
 
-                await Shell.Current.GoToAsync("//HomePage");
+                await Shell.Current.GoToAsync($"//HomePage?user={rootobject}");
             }
         }
 
         // Sign Up command
         public ICommand CancelCommand { get; set; }
-        private async void CancelFunction()
+        private async Task CancelFunction()
         {
             await Shell.Current.GoToAsync("//LogInPage");
 
@@ -292,7 +312,6 @@ namespace BDProject.ViewModels
         // Check for symbols and numbers function
         private void CheckSymbolsAndNumbers(string text, int choice)
         {
-            // ########################### Not Working
             bool result = Regex.IsMatch(text, "^[a-zA-Z]+$");
 
             switch (choice)
@@ -323,17 +342,38 @@ namespace BDProject.ViewModels
             }
         }
 
-        private void EmailValidator()
+        // Username validation
+        private bool UsernameValidation()
+        {
+            bool result = Regex.IsMatch(Username, @"^[A-z][A-z|\.|\s]+$");
+
+            if (result == false)
+            {
+                UsernameAlert = "Invalid Username";
+                return false;
+            }
+            else
+            {
+                UsernameAlert = "";
+                return true;
+            }
+        }
+
+        // Email validation
+        private bool EmailValidator()
         {
             try
             {
                 MailAddress m = new MailAddress(Email);
 
                 EmailAlert = "";
+
+                return true;
             }
             catch
             {
                 EmailAlert = "Invalid Email";
+                return false;
             }
         }
 
@@ -462,95 +502,6 @@ namespace BDProject.ViewModels
             // return flag result
             return flag;
         }
-
-        // Functions
-        // Check for parameters lenght
-        //private void CheckLenght(string text, int maxLength, int minLength, int choice)
-        //{
-        //    switch (choice)
-        //    {
-        //        case 1:
-        //            if (text.Length >= maxLength)
-        //            {
-        //                FirstNameAlert = $"First name should be less than {maxLength} characters";
-        //            }
-        //            else if(text.Length < minLength)
-        //            {
-        //                FirstNameAlert = $"First name should be more than {minLength} characters";
-        //            }
-        //            else
-        //            {
-        //                FirstNameAlert = "";
-        //            }
-        //            break;
-
-
-        //        case 2:
-        //            if (text.Length >= maxLength)
-        //            {
-        //                LastNameAlert = $"Last name should be less than {maxLength} characters";
-        //            }
-        //            else if (text.Length < minLength)
-        //            {
-        //                LastNameAlert = $"Last name should be more than {minLength} characters";
-        //            }
-        //            else
-        //            {
-        //                LastNameAlert = "";
-        //            }
-        //            break;
-
-
-        //        case 3:
-        //            if (text.Length >= maxLength)
-        //            {
-        //                UsernameAlert = $"Username should be less than {maxLength} characters";
-        //            }
-        //            else if (text.Length < minLength)
-        //            {
-        //                UsernameAlert = $"Userame should be more than {minLength} characters";
-        //            }
-        //            else
-        //            {
-        //                UsernameAlert = "";
-        //            }
-        //            break;
-
-
-        //        case 4:
-        //            if (text.Length >= maxLength)
-        //            {
-        //                PasswordAlert = $"Password should be less than {maxLength} characters";
-        //            }
-        //            else if (text.Length < minLength)
-        //            {
-        //                PasswordAlert = $"Password should be more than {minLength} characters";
-        //            }
-        //            else
-        //            {
-        //                PasswordAlert = "";
-        //            }
-        //            break;
-
-
-        //        case 5:
-        //            if (text.Length >= maxLength)
-        //            {
-        //                EmailAlert = $"Email should be less than {maxLength} characters";
-        //            }
-        //            else if (text.Length < minLength)
-        //            {
-        //                EmailAlert = $"Email should be more than {minLength} characters";
-        //            }
-        //            else
-        //            {
-        //                EmailAlert = "";
-        //            }
-        //            break;
-
-        //        default: break;
-        //    }
-        //}
 
     }
 }

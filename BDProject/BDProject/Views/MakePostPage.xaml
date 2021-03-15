@@ -4,49 +4,71 @@
              x:Class="BDProject.Views.MakePostPage">
     
     <ContentPage.Content>
-        <StackLayout>
+        <ScrollView>
 
-            <Grid 
-                Padding="8,8,0,0"
-                ColumnDefinitions="auto,*">
+            <StackLayout>
 
-                <Button 
-                    Grid.Column="0"
-                    HeightRequest="48"
-                    WidthRequest="48"
-                    Text="" 
-                    FontFamily="FA-S"
-                    FontSize="Large"
-                    Command="{Binding BackCommand}"/>
+                <Grid 
+                    Padding="8,8,0,0"
+                    ColumnDefinitions="auto,*">
 
-            </Grid>
-
-            <Grid 
-                RowDefinitions="*,auto">
-
-                <Image 
-                    Grid.Row="0"
-                    Source="{Binding TakenPhoto}" />
-
-                <Grid
-                    Grid.Row="1"
-                    ColumnDefinitions="*,auto,auto,*">
-
-                    <Button
-                    Grid.Column="1"
-                    Text="Take"
-                    Command="{Binding TakePhotoCommand}"/>
-
-                    <Button
-                    Grid.Column="2"
-                    Text="Pick"
-                    Command="{Binding PickPhotoCommand}"/>
+                    <Button 
+                        Grid.Column="0"
+                        HeightRequest="48"
+                        WidthRequest="48"
+                        Text="" 
+                        FontFamily="FA-S"
+                        FontSize="Large"
+                        BackgroundColor="{StaticResource White}"
+                        Command="{Binding BackCommand}"/>
 
                 </Grid>
 
-            </Grid>
+                <Grid 
+                    RowDefinitions="*,auto">
 
-        </StackLayout>
+                    <Image 
+                        Grid.Row="0"
+                        Aspect="AspectFit"
+                        WidthRequest="{Binding ImageWidth}"
+                        HeightRequest="{Binding ImageHeight}"
+                        Source="{Binding TakenPhoto}" />
+
+                    <Grid
+                        Grid.Row="1"
+                        ColumnDefinitions="*,auto,auto,*">
+
+                        <Button
+                        Grid.Column="1"
+                        Text="Take"
+                        Command="{Binding TakePhotoCommand}"/>
+
+                        <Button
+                        Grid.Column="2"
+                        Text="Pick"
+                        Command="{Binding PickPhotoCommand}"/>
+
+                    </Grid>
+
+                </Grid>
+
+                <StackLayout 
+                    Orientation="Vertical">
+
+                    <Entry
+                        HeightRequest="80"
+                        Placeholder="Add description"
+                        Text="{Binding Description}"/>
+
+                    <Button 
+                        Text="Add Tags" 
+                        Command="{Binding AddTagsCommnd}"/>
+
+                </StackLayout>
+
+            </StackLayout>
+
+        </ScrollView>
     </ContentPage.Content>
     
 </ContentPage>

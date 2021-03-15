@@ -6,128 +6,154 @@
              xmlns:local="clr-namespace:BDProject.ViewModels">
 
     <ContentPage.Content>
-        <ScrollView>
+        <RefreshView
+            Margin="8,0"
+            IsRefreshing="{Binding IsRefreshing}"
+            Command="{Binding RefreshCommand}">
+            <ScrollView>
 
-            <StackLayout 
-                Orientation="Vertical">
-
-                <Grid 
-                Grid.Row="0"
-                Padding="0,8,8,0"
-                ColumnDefinitions="*,auto">
-
-                    <Button 
-                    Grid.Column="1"
-                    HeightRequest="46"
-                    WidthRequest="46"
-                    Text="" 
-                    FontFamily="FA-S"
-                    FontSize="Large"
-                    Command="{Binding OpenSettingsCommand}"/>
-
-                </Grid>
-
-                <Grid 
-                ColumnDefinitions="*,auto,*">
-
-                    <!--<Image Source="Profile"/>-->
-                    <Button 
-                    Grid.Column="1"
-                    CornerRadius="100"
-                    HeightRequest="150"
-                    WidthRequest="150"
-                    Text=""
-                    FontSize="Large"
-                    FontFamily="FA-R"/>
-
-                </Grid>
-
-                <Label 
-                Text="{Binding Name}"
-                FontSize="Large"
-                HorizontalOptions="Center"/>
-
-                <Label 
-                Text="{Binding Description}" 
-                FontSize="Medium"
-                HorizontalOptions="Center"/>
-
-                <Grid 
-                ColumnDefinitions="*,*">
+                <StackLayout 
+                    Orientation="Vertical">
 
                     <Grid 
-                    Grid.Column="0"
-                    HorizontalOptions="Center"
-                    RowDefinitions="*,*">
-
-                        <Label 
                         Grid.Row="0"
-                        FontSize="Large"
-                        HorizontalOptions="Center"
-                        Text="Followers" />
+                        Padding="0,8,8,0"
+                        ColumnDefinitions="*,auto">
 
-                        <Label 
-                        Grid.Row="1"
-                        FontSize="Large"
-                        HorizontalOptions="Center"
-                        Text="{Binding FollowersCount}" />
+                        <Button 
+                            Grid.Column="1"
+                            HeightRequest="46"
+                            WidthRequest="46"
+                            Text="" 
+                            FontFamily="FA-S"
+                            FontSize="Large"
+                            BackgroundColor="{StaticResource White}"
+                            Command="{Binding OpenSettingsCommand}"/>
 
                     </Grid>
 
                     <Grid 
-                    Grid.Column="1"
-                    HorizontalOptions="Center"
-                    RowDefinitions="*,*">
+                        ColumnDefinitions="*,auto,*">
 
-                        <Label 
-                        Grid.Row="0"
-                        FontSize="Large"
-                        HorizontalOptions="Center"
-                        Text="Following" />
+                        <Frame
+                            Grid.Column="1"
+                            Padding="0"
+                            CornerRadius="100"
+                            HeightRequest="150"
+                            WidthRequest="150"
+                            IsClippedToBounds="True">
 
-                        <Label 
-                        Grid.Row="1"
-                        FontSize="Large"
-                        HorizontalOptions="Center"
-                        Text="{Binding FollowingCount}" />
+                            <ImageButton
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Scale="1.4"
+                                Source="{Binding ProfilePictureSource}"/>
+
+                        </Frame>
 
                     </Grid>
 
-                </Grid>
+                    <Label 
+                        Text="{Binding Name}"
+                        Margin="16,0"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        TextColor="{StaticResource Black}"/>
 
-                <Label 
-                    Text="Posts"
-                    HorizontalOptions="Center"
-                    FontSize="Medium"/>
+                    <Label 
+                        Text="{Binding Description}" 
+                        Margin="8,0"
+                        FontSize="Medium"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        TextColor="{StaticResource Black}"/>
 
-                <CollectionView 
-                    SelectionMode="None"
-                    HeightRequest="{Binding CollectionHeight}"
-                    x:Name="YourPostsCollectionView"
-                    ItemsSource="{Binding YourPostsCollection}">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout 
-                            Orientation="Vertical"
-                            Span="3"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                    <Grid 
+                        ColumnDefinitions="*,*">
 
-                            <!--<ImageButton Source="Profile" />-->
-                            <Button 
-                                Grid.Column="0"
-                                HeightRequest="{Binding PostHeight, Source={
+                        <Grid 
+                            Grid.Column="0"
+                            HorizontalOptions="Center"
+                            RowDefinitions="*,*">
+
+                            <Label 
+                                Grid.Row="0"
+                                FontSize="Large"
+                                HorizontalOptions="Center"
+                                Text="Followers"
+                                TextColor="{StaticResource Black}"/>
+
+                            <Label 
+                                Grid.Row="1"
+                                FontSize="Large"
+                                HorizontalOptions="Center"
+                                Text="{Binding FollowersCount}"
+                                TextColor="{StaticResource Black}"/>
+
+                        </Grid>
+
+                        <Grid 
+                            Grid.Column="1"
+                            HorizontalOptions="Center"
+                            RowDefinitions="*,*">
+
+                            <Label 
+                                Grid.Row="0"
+                                FontSize="Large"
+                                HorizontalOptions="Center"
+                                Text="Following"
+                                TextColor="{StaticResource Black}"/>
+
+                            <Label 
+                                Grid.Row="1"
+                                FontSize="Large"
+                                HorizontalOptions="Center"
+                                Text="{Binding FollowingCount}"
+                                TextColor="{StaticResource Black}"/>
+
+                        </Grid>
+
+                    </Grid>
+
+                    <Label 
+                        Text="Posts"
+                        HorizontalOptions="Center"
+                        FontSize="Medium"
+                        TextColor="{StaticResource Black}"/>
+
+                    <CollectionView 
+                        SelectionMode="None"
+                        HeightRequest="{Binding CollectionHeight}"
+                        x:Name="YourPostsCollectionView"
+                        ItemsSource="{Binding YourPostsCollection}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout 
+                                Orientation="Vertical"
+                                Span="3"
+                                HorizontalItemSpacing="8"
+                                VerticalItemSpacing="8"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <ImageButton 
+                                    Padding="0"
+                                    Margin="0"
+                                    Scale="1.2"
+                                    BackgroundColor="{StaticResource White}"
+                                    Source="{Binding PhotoSource}"
+                                    HeightRequest="{Binding PostHeight, Source={
                                         RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
-                                    }}"
-                                Text="Post"/>
+                                        }}"/>
 
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-            </StackLayout>
+                </StackLayout>
 
-        </ScrollView>
+            </ScrollView>
+        </RefreshView>
     </ContentPage.Content>
     
 </ContentPage>

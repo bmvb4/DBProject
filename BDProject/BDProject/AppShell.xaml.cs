@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BDProject.Views;
+using BDProject.Views.PostsViews;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,9 @@ namespace BDProject
         public AppShell()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute("PostComments", typeof(PostCommentsPage));
+            Routing.RegisterRoute("SettingsPage", typeof(SettingsPage));
         }
     }
 }

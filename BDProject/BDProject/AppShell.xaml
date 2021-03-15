@@ -7,6 +7,22 @@
        
        FlyoutBehavior="Disabled">
 
+    <Shell.Resources>
+        <Style x:Key="BaseStyle" TargetType="Element">
+            <!--<Setter Property="Shell.ForegroundColor" Value="Black" />-->
+            <!--<Setter Property="Shell.BackgroundColor" Value="LightBlue" />-->
+            <!--<Setter Property="Shell.TitleColor" Value="Black" />-->
+            <!--<Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />-->
+            <!--<Setter Property="Shell.UnselectedColor" Value="Red" />-->
+            <!--<Setter Property="Shell.TabBarForegroundColor" Value="Orange"/>-->
+            <Setter Property="Shell.TabBarBackgroundColor" Value="White"/>
+            <Setter Property="Shell.TabBarUnselectedColor" Value="LightSlateGray"/>
+            <Setter Property="Shell.TabBarTitleColor" Value="Black"/>
+            
+        </Style>
+        <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
+    </Shell.Resources>
+
     <ShellContent 
         Route="LogInPage" 
         Shell.BackgroundColor="{StaticResource White}"
@@ -21,61 +37,49 @@
 
     <TabBar>
 
-        <Tab
-            Title="Home"
-            Route="HomePage"
-            Shell.BackgroundColor="{StaticResource White}"
-            Shell.NavBarIsVisible="False">
+        <Tab>
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
                     Glyph=""/>
             </Tab.Icon>
 
-            <ShellContent ContentTemplate="{DataTemplate local:HomePage}"/>
+            <ShellContent 
+                Route="HomePage"
+                Shell.BackgroundColor="{StaticResource White}"
+                Shell.NavBarIsVisible="False"
+                ContentTemplate="{DataTemplate local:HomePage}"/>
         </Tab>
 
-        <Tab
-            Title="Post"
-            Route="PostPage"
-            Shell.TabBarIsVisible="False"
-            Shell.BackgroundColor="{StaticResource White}"
-            Shell.NavBarIsVisible="False">
+        <Tab>
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
                     Glyph=""/>
             </Tab.Icon>
 
-            <ShellContent ContentTemplate="{DataTemplate local:MakePostPage}"/>
+            <ShellContent 
+                Route="PostPage"
+                Shell.TabBarIsVisible="False"
+                Shell.BackgroundColor="{StaticResource White}"
+                Shell.NavBarIsVisible="False"
+                ContentTemplate="{DataTemplate local:MakePostPage}"/>
         </Tab>
 
-        <Tab
-            Title="Profile"
-            Route="ProfilePage"
-            Shell.BackgroundColor="{StaticResource White}"
-            Shell.NavBarIsVisible="False">
+        <Tab>
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
                     Glyph=""/>
             </Tab.Icon>
 
-            <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}"/>
+            <ShellContent 
+                Route="ProfilePage"
+                Shell.BackgroundColor="{StaticResource White}"
+                Shell.NavBarIsVisible="False"
+                ContentTemplate="{DataTemplate local:ProfilePage}"/>
         </Tab>
 
     </TabBar>
-
-    <ShellContent 
-        Route="PostComments" 
-        Shell.BackgroundColor="{StaticResource White}"
-        Shell.NavBarIsVisible="False"
-        ContentTemplate="{DataTemplate localPosts:PostCommentsPage}"/>
-
-    <ShellContent 
-        Route="SettingsPage" 
-        Shell.BackgroundColor="{StaticResource White}"
-        Shell.NavBarIsVisible="False"
-        ContentTemplate="{DataTemplate local:SettingsPage}"/>
 
 </Shell>

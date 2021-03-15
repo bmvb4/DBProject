@@ -113,7 +113,7 @@ namespace BDProject.ViewModels.PostsViewModels
         public ICommand BackCommand { get; set; }
         private async void BackFunction(object user)
         {
-            await Shell.Current.GoToAsync("//HomePage");
+            await Shell.Current.Navigation.PopAsync();
         }
 
         // Like Post command

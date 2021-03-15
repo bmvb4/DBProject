@@ -1,6 +1,10 @@
-﻿using System;
+﻿using BDProject.Models;
+using BDProject.ModelWrappers;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -12,10 +16,14 @@ namespace BDProject.ViewModels
 
         public MakePostPageViewModel()
         {
+            ImageHeight = App.Current.MainPage.Width;
+            ImageWidth = App.Current.MainPage.Width / 2;
+
             // Assigning functions to the commands
-            BackCommand = new Command(BackFunction);
-            TakePhotoCommand = new Command(TakePhotoFunction);
-            PickPhotoCommand = new Command(PickPhotoFunction);
+            BackCommand = new Command(async () => await BackFunction());
+            TakePhotoCommand = new Command(async () => await TakePhotoFunction());
+            PickPhotoCommand = new Command(async () => await PickPhotoFunction());
+            AddTagsCommand = new Command(async () => await AddTagsFunction());
         }
 
         // Parameters
@@ -32,42 +40,108 @@ namespace BDProject.ViewModels
             }
         }
 
+        // Image width
+        private double imageWidth = 0.0;
+        public double ImageWidth
+        {
+            get => imageWidth;
+            set
+            {
+                if (value == imageWidth) { return; }
+                imageWidth = value;
+                OnPropertyChanged(nameof(ImageWidth));
+            }
+        }
+
+        // Image height
+        private double imageHeight = 0.0;
+        public double ImageHeight
+        {
+            get => imageHeight;
+            set
+            {
+                if (value == imageHeight) { return; }
+                imageHeight = value;
+                OnPropertyChanged(nameof(ImageHeight));
+            }
+        }
+
+        // Post description
+        private string description = "";
+        public string Descriptio
+        {
+            get => description;
+            set
+            {
+                if (value == description) { return; }
+                description = value;
+                OnPropertyChanged(nameof(Descriptio));
+            }
+        }
+
         // Commands
         // Back to post command
         public ICommand BackCommand { get; set; }
-        private async void BackFunction()
+        private async Task BackFunction()
         {
             await Shell.Current.GoToAsync("//HomePage");
+
+            TakenPhoto = null;
         }
 
         // Take Photo command
         public ICommand TakePhotoCommand { get; set; }
-        private async void TakePhotoFunction()
+        private async Task TakePhotoFunction()
         {
-            var result = await MediaPicker.CapturePhotoAsync();
+            TakenPhoto = null;
 
+            var result = await MediaPicker.CapturePhotoAsync();
             if (result == null) { return; }
 
-            var stream = await result.OpenReadAsync();
+            // image path
+            var path = Path.Combine(FileSystem.CacheDirectory, result.FileName);
 
-            TakenPhoto = ImageSource.FromStream(() => stream);
+            byte[] imageBytes = File.ReadAllBytes(path);
+            string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+
+            TakenPhoto = ImageSource.FromFile(path);
         }
 
         // Pick Photo command
         public ICommand PickPhotoCommand { get; set; }
-        private async void PickPhotoFunction()
+        private async Task PickPhotoFunction()
         {
-            var result = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
-            {
-                Title = "Pick a photo"
-            });
+            TakenPhoto = null;
 
+            var result = await MediaPicker.PickPhotoAsync();
             if (result == null) { return; }
 
-            var stream = await result.OpenReadAsync();
+            byte[] imageBytes = File.ReadAllBytes(result.FullPath);
+            string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
 
-            TakenPhoto = ImageSource.FromStream(() => stream);
+            //============TEST
+            _Globals.AddPost(new PostWrapper(new Post() { Photo = base64ImageRepresentation }));
+            User user = new User()
+            {
+                FirstName = "Daniel",
+                LastName = "Kostov",
+                Username = "DanielRK",
+                Password = "",
+                Email = "",
+                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                Photo = base64ImageRepresentation
+            };
+            _Globals.SetMainUser(new UserWrapper(user));
+            //============TEST
+
+            TakenPhoto = ImageSource.FromFile(result.FullPath);
         }
 
+        // add tags command
+        public ICommand AddTagsCommand { get; set; }
+        private async Task AddTagsFunction()
+        {
+            
+        }
     }
 }

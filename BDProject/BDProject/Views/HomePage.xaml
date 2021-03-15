@@ -28,120 +28,136 @@
 
             </Grid>
 
-            <CollectionView 
+            <RefreshView 
                 Grid.Row="1"
-                SelectionMode="None"
-                x:Name="PostsCollectionView"
-                ItemsSource="{Binding PostsCollection}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                IsRefreshing="{Binding IsRefreshing}"
+                Command="{Binding RefreshCommand}">
 
-                        <Grid 
-                            Padding="8,16"
-                            RowDefinitions="auto,*,auto">
+                <CollectionView 
+                    SelectionMode="None"
+                    x:Name="PostsCollectionView"
+                    ItemsSource="{Binding PostsCollection}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
 
-                            <StackLayout
-                                Grid.Row="0"
-                                Orientation="Horizontal">
-
-                                <!--<Image Source="Profile"/>-->
-                                <Button 
-                                    HeightRequest="46"
-                                    WidthRequest="46"
-                                    Text=""
-                                    FontSize="Large"
-                                    FontFamily="FA-R"/>
-
-                                <Label 
-                                    VerticalOptions="Center"
-                                    FontSize="Medium"
-                                    FontAttributes="Bold"
-                                    Text="{Binding Username, Source={
-                                        RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                    }}" />
-
-                            </StackLayout>
-
-                            <Grid
-                                Grid.Row="1"
-                                ColumnDefinitions="*,auto">
-
-                                <!--<Image Source="Post Image/Video"/>-->
-                                <Button
-                                    HeightRequest="200"
-                                    Grid.Column="0"
-                                    Text="Post"/>
+                            <Grid 
+                                Padding="8,16"
+                                RowDefinitions="auto,*,auto">
 
                                 <StackLayout
-                                    VerticalOptions="Center"
-                                    HorizontalOptions="Center"
-                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    Orientation="Horizontal">
+
+                                    <Frame
+                                        HeightRequest="30"
+                                        WidthRequest="30"
+                                        CornerRadius="100"
+                                        Padding="0"
+                                        IsClippedToBounds="True">
+                                        
+                                        <ImageButton 
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Scale="1.4"
+                                            Source="{Binding UserPhotoSource}"/>
+                                        
+                                    </Frame>
+                                    
+                                    <Label 
+                                        VerticalOptions="Center"
+                                        FontSize="Medium"
+                                        FontAttributes="Bold"
+                                        TextColor="{StaticResource Black}"
+                                        Text="{Binding Username}" />
+
+                                </StackLayout>
+
+                                <Grid
+                                    Grid.Row="1"
+                                    ColumnDefinitions="*,auto">
+
+                                    <Image 
+                                        Grid.Column="0"
+                                        Source="{Binding PhotoSource}"/>
+                                    <!--<Button
+                                        HeightRequest="200"
+                                        Grid.Column="0"
+                                        Text="Post"/> -->
+
+                                    <StackLayout
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Center"
+                                        Grid.Column="1"
+                                        Orientation="Vertical">
+
+                                        <Button 
+                                            HeightRequest="46"
+                                            WidthRequest="46"
+                                            Text=""
+                                            FontSize="Large"
+                                            FontFamily="FA-R"
+                                            BackgroundColor="{StaticResource White}"
+                                            Command="{Binding LikePostItemCommand, Source={
+                                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                            }}"
+                                            CommandParameter="{Binding .}"/>
+
+                                        <Label 
+                                            FontSize="Large"
+                                            HorizontalOptions="Center"
+                                            TextColor="{StaticResource Black}"
+                                            Text="{Binding LikesCount, Source={
+                                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                            }}" />
+
+                                        <Button 
+                                            HeightRequest="46"
+                                            WidthRequest="46"
+                                            Text="" 
+                                            FontSize="Large"
+                                            FontFamily="FA-R"
+                                            BackgroundColor="{StaticResource White}"
+                                            Command="{Binding OpenPostCommentsItemCommand, Source={
+                                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                            }}"
+                                            CommandParameter="{Binding .}"/>
+
+                                        <Label 
+                                            FontSize="Large"
+                                            HorizontalOptions="Center"
+                                            TextColor="{StaticResource Black}"
+                                            Text="{Binding CommentsCount, Source={
+                                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                            }}" />
+
+                                    </StackLayout>
+
+                                </Grid>
+
+                                <StackLayout
+                                    Grid.Row="2"
                                     Orientation="Vertical">
 
-                                    <Button 
-                                        HeightRequest="46"
-                                        WidthRequest="46"
-                                        Text=""
-                                        FontSize="Large"
-                                        FontFamily="FA-R"
-                                        Command="{Binding LikePostItemCommand, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}"
-                                        CommandParameter="{Binding .}"/>
+                                    <!--<Label 
+                                        FontSize="Medium"
+                                        FontAttributes="Bold"
+                                        TextColor="{StaticResource Black}"
+                                        Text="{Binding Username}" />-->
 
                                     <Label 
-                                        FontSize="Large"
-                                        HorizontalOptions="Center"
-                                        Text="{Binding LikesCount, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}" />
-
-                                    <Button 
-                                        HeightRequest="46"
-                                        WidthRequest="46"
-                                        Text="" 
-                                        FontSize="Large"
-                                        FontFamily="FA-R"
-                                        Command="{Binding OpenPostCommentsItemCommand, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}"
-                                        CommandParameter="{Binding .}"/>
-
-                                    <Label 
-                                        FontSize="Large"
-                                        HorizontalOptions="Center"
-                                        Text="{Binding CommentsCount, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}" />
+                                        FontSize="Medium"
+                                        TextColor="{StaticResource Black}"
+                                        Text="{Binding Description}" />
 
                                 </StackLayout>
 
                             </Grid>
 
-                            <StackLayout
-                                Grid.Row="2"
-                                Orientation="Vertical">
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-                                <Label 
-                                    FontSize="Medium"
-                                    FontAttributes="Bold"
-                                    Text="{Binding Username, Source={
-                                        RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                    }}" />
-
-                                <Label 
-                                    FontSize="Medium"
-                                    Text="{Binding PostDescription, Source={
-                                        RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                    }}" />
-
-                            </StackLayout>
-
-                        </Grid>
-
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            </RefreshView>
 
         </Grid>
         

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -19,8 +20,8 @@ namespace BDProject.ViewModels
         public LogInPageViewModel()
         {
             // Assigning functions to the commands
-            LogInCommand = new Command(LogInFunction);
-            SignUpCommand = new Command(SignUpFunction);
+            LogInCommand = new Command(async () => await LogInFunction());
+            SignUpCommand = new Command(async () => await SignUpFunction());
         }
 
         // Parameters
@@ -85,7 +86,7 @@ namespace BDProject.ViewModels
         // Commands
         // Log In command
         public ICommand LogInCommand { get; set; }
-        private async void LogInFunction()
+        private async Task LogInFunction()
         {
             if (CheckParameters() == true) { return; }
 
@@ -117,7 +118,7 @@ namespace BDProject.ViewModels
 
         // Sign Up command
         public ICommand SignUpCommand { get; set; }
-        private async void SignUpFunction()
+        private async Task SignUpFunction()
         {
             await Shell.Current.GoToAsync("//SignUpPage");
 

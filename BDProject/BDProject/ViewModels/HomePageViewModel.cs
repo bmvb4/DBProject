@@ -1,37 +1,92 @@
-﻿using BDProject.Views;
+﻿using BDProject.Models;
+using BDProject.ModelWrappers;
+using BDProject.Views;
 using BDProject.Views.PostsViews;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels
 {
+    //[QueryProperty(nameof(FName), "FirstName")]
+    //[QueryProperty(nameof(LName), "LastName")]
+    //[QueryProperty(nameof(UName), "Username")]
     public class HomePageViewModel : BaseViewModel
     {
+        // User data object
+        //private string fNameData; // users first name
+        //public string FName
+        //{
+        //    get => fNameData;
+        //    set
+        //    {
+        //        fNameData = Uri.UnescapeDataString(value);
+        //        OnPropertyChanged(nameof(FName));
+        //    }
+        //}
+        //private string lNameData; // users last name
+        //public string LName
+        //{
+        //    get => lNameData;
+        //    set
+        //    {
+        //        lNameData = Uri.UnescapeDataString(value);
+        //        OnPropertyChanged(nameof(LName));
+        //    }
+        //}
+        //private string uNameData; // users username
+        //public string UName
+        //{
+        //    get => uNameData;
+        //    set
+        //    {
+        //        uNameData = Uri.UnescapeDataString(value);
+        //        OnPropertyChanged(nameof(UName));
+        //    }
+        //}
 
+        //private void SetUserData()
+        //{
+        //    Username = UName;
+        //    PostDescription = FName = " " + LName;
+        //}
+
+        private void SetCollection()
+        {
+            PostsCollection.Clear();
+            PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GetPosts());
+        }
+
+        // setting application defaults
         public HomePageViewModel()
         {
             //========TEST=======
-            PostsCollection = new ObservableCollection<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            Username = "Username";
+            PostDescription = "this is some description on a post";
             //========TEST=======
+            
+            SetCollection();
 
             LikesCount = $"{likeCounter}";
             CommentsCount = $"{commentsCounter}";
 
             // Assigning functions to the commands
             LikePostItemCommand = new Command(LikePostItemFunction);
-            OpenPostCommentsItemCommand = new Command(OpenPostCommentsItemFunction);
+            OpenPostCommentsItemCommand = new Command(async () => await OpenPostCommentsItemFunction());
             SendCommentToPostItemCommand = new Command(SendCommentToPostItemFunction);
+            RefreshCommand = new Command(async () => await RefreshFunction());
         }
 
         // Parameters
         // Posts Collection parameter
-        // ================= zadaden e int za testvane na dizaina
-        private ObservableCollection<int> postsCollection = new ObservableCollection<int>();
-        public ObservableCollection<int> PostsCollection
+        private ObservableCollection<PostWrapper> postsCollection = new ObservableCollection<PostWrapper>();
+        public ObservableCollection<PostWrapper> PostsCollection
         {
             get => postsCollection;
             set
@@ -84,8 +139,7 @@ namespace BDProject.ViewModels
         }
 
         // Username parameter
-        //=================================== za testvane
-        private string username = "Daniel";
+        private string username = "";
         public string Username
         {
             get => username;
@@ -98,8 +152,7 @@ namespace BDProject.ViewModels
         }
 
         // Post description parameter
-        //=================================== za testvane
-        private string postDescription = "tova e prosto nqkakvo opisanie za testvane na dizaina";
+        private string postDescription = "";
         public string PostDescription
         {
             get => postDescription;
@@ -124,10 +177,23 @@ namespace BDProject.ViewModels
             }
         }
 
+        // Refreshing parameter
+        private bool isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                if (value == isRefreshing) { return; }
+                isRefreshing = value;
+                OnPropertyChanged(nameof(IsRefreshing));
+            }
+        }
+
         // Commands
         // Like Post command
         public ICommand LikePostItemCommand { get; set; }
-        private void LikePostItemFunction(object user)
+        private void LikePostItemFunction()
         {
             likeCounter++;
             LikesCount = $"{likeCounter}";
@@ -135,7 +201,7 @@ namespace BDProject.ViewModels
 
         // Send Post Comment command
         public ICommand SendCommentToPostItemCommand { get; set; }
-        private void SendCommentToPostItemFunction(object user)
+        private void SendCommentToPostItemFunction()
         {
             Comment = "";
             commentsCounter++;
@@ -144,15 +210,19 @@ namespace BDProject.ViewModels
 
         // Open Post Comments command
         public ICommand OpenPostCommentsItemCommand { get; set; }
-        private async void OpenPostCommentsItemFunction(object post)
+        private async Task OpenPostCommentsItemFunction()
         {
-            //if (post == null) { return; }
-            //await Shell.Current.GoToAsync($"//PostComments?id={(Post)post.ID}");
-
-            await Shell.Current.GoToAsync("//PostComments");
-
-            //App.Current.MainPage = new PostCommentsPage();
+            await Shell.Current.GoToAsync("PostComments");
         }
 
+        // Refresh collection view command
+        public ICommand RefreshCommand { get; set; }
+        private async Task RefreshFunction()
+        {
+            IsRefreshing = true;
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            SetCollection();
+            IsRefreshing = false;
+        }
     }
 }
