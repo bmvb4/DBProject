@@ -8,14 +8,19 @@ namespace BDProject.ViewModels
 {
     public static class _Globals
     {
-        private static UserWrapper MainUser;
-        private static List<PostWrapper> Posts = new List<PostWrapper>();
+        private static UserWrapper MainUser=new UserWrapper();
+        public static UserWrapper GlobalMainUser
+        {
+            get => MainUser;
+            set => MainUser = value;
+        }
 
-
-        public static void SetMainUser(UserWrapper user) { MainUser = user; }
-        public static UserWrapper GetMainUser() { return MainUser; }
-
-        public static void AddPost(PostWrapper post) { Posts.Add(post); }
-        public static List<PostWrapper> GetPosts() { return Posts; } 
+        private static List<PostWrapper> FeedPosts = new List<PostWrapper>();
+        public static List<PostWrapper> GlobalFeedPosts
+        {
+            get => FeedPosts;
+            set => FeedPosts = value;
+        }
+        public static void AddPost(PostWrapper post) { FeedPosts.Add(post); }
     }
 }

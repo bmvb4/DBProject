@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.SearchViews.SearchPage"
+             
+             Shell.BackgroundColor="{StaticResource White}"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
+    
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Grid 
+                Padding="8,8,8,0"
+                ColumnDefinitions="auto,*">
+
+                <Button 
+                    Grid.Column="0"
+                    HeightRequest="46"
+                    WidthRequest="38"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="{StaticResource White}"
+                    Command="{Binding BackCommand}"/>
+
+                <Entry
+                    Grid.Column="1"
+                    x:Name="Searcher"
+                    Text="{Binding Search}"
+                    Placeholder=""
+                    FontFamily="FA-S"/>
+
+            </Grid>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

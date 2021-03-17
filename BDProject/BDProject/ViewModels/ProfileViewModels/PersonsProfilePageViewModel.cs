@@ -1,5 +1,4 @@
-﻿using BDProject.Models;
-using BDProject.ModelWrappers;
+﻿using BDProject.ModelWrappers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,10 +7,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace BDProject.ViewModels
+namespace BDProject.ViewModels.ProfileViewModels
 {
-    public class ProfilePageViewModel : BaseViewModel
+    public class PersonsProfilePageViewModel : BaseViewModel
     {
+
         private void SetUserData()
         {
             UserWrapper user = _Globals.GlobalMainUser;
@@ -22,16 +22,16 @@ namespace BDProject.ViewModels
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+
             }
         }
 
         private void SetCollection()
         {
             YourPostsCollection.Clear();
-            YourPostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalMainUser.MyPosts);
+            YourPostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
 
             if (YourPostsCollection.Count != 0)
             {
@@ -40,7 +40,7 @@ namespace BDProject.ViewModels
             }
         }
 
-        public ProfilePageViewModel()
+        public PersonsProfilePageViewModel()
         {
             //========TEST=======
             SetUserData();
@@ -48,8 +48,7 @@ namespace BDProject.ViewModels
             //========TEST=======
 
             // Assigning functions to the commands
-            OpenSettingsCommand = new Command(async () => await OpenSettingsFunction());
-            OpenEditProfileCommand=new Command(async () => await OpenEditProfileFunction());
+            BackCommand = new Command(async () => await BackFunction());
             RefreshCommand = new Command(async () => await RefreshFunction());
         }
 
@@ -184,18 +183,11 @@ namespace BDProject.ViewModels
         }
 
         // Commands PostHeight
-        // Settings command
-        public ICommand OpenSettingsCommand { get; set; }
-        private async Task OpenSettingsFunction()
+        // Back to post command
+        public ICommand BackCommand { get; set; }
+        private async Task BackFunction()
         {
-            await Shell.Current.GoToAsync("SettingsPage");
-        }
-
-        // Edit profile command
-        public ICommand OpenEditProfileCommand { get; set; }
-        private async Task OpenEditProfileFunction()
-        {
-            await Shell.Current.GoToAsync("EditProfilePage");
+            await Shell.Current.Navigation.PopAsync();
         }
 
         // Refresh collection view command

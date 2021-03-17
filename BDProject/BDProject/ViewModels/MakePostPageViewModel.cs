@@ -24,10 +24,12 @@ namespace BDProject.ViewModels
             TakePhotoCommand = new Command(async () => await TakePhotoFunction());
             PickPhotoCommand = new Command(async () => await PickPhotoFunction());
             AddTagsCommand = new Command(async () => await AddTagsFunction());
+            PostCommand = new Command(async () => await PostFunction());
         }
 
         // Parameters
         // Taken Image parameter
+        private string base64ImageRepresentation = "";
         private ImageSource takenPhoto = null;
         public ImageSource TakenPhoto
         {
@@ -68,14 +70,14 @@ namespace BDProject.ViewModels
 
         // Post description
         private string description = "";
-        public string Descriptio
+        public string Description
         {
             get => description;
             set
             {
                 if (value == description) { return; }
                 description = value;
-                OnPropertyChanged(nameof(Descriptio));
+                OnPropertyChanged(nameof(Description));
             }
         }
 
@@ -86,6 +88,7 @@ namespace BDProject.ViewModels
         {
             await Shell.Current.GoToAsync("//HomePage");
 
+            base64ImageRepresentation = "";
             TakenPhoto = null;
         }
 
@@ -93,6 +96,7 @@ namespace BDProject.ViewModels
         public ICommand TakePhotoCommand { get; set; }
         private async Task TakePhotoFunction()
         {
+            base64ImageRepresentation = "";
             TakenPhoto = null;
 
             var result = await MediaPicker.CapturePhotoAsync();
@@ -101,8 +105,8 @@ namespace BDProject.ViewModels
             // image path
             var path = Path.Combine(FileSystem.CacheDirectory, result.FileName);
 
-            byte[] imageBytes = File.ReadAllBytes(path);
-            string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+            //byte[] imageBytes = File.ReadAllBytes(path);
+            //base64ImageRepresentation = Convert.ToBase64String(imageBytes);
 
             TakenPhoto = ImageSource.FromFile(path);
         }
@@ -111,17 +115,17 @@ namespace BDProject.ViewModels
         public ICommand PickPhotoCommand { get; set; }
         private async Task PickPhotoFunction()
         {
+            base64ImageRepresentation = "";
             TakenPhoto = null;
 
             var result = await MediaPicker.PickPhotoAsync();
             if (result == null) { return; }
 
             byte[] imageBytes = File.ReadAllBytes(result.FullPath);
-            string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+            base64ImageRepresentation = Convert.ToBase64String(imageBytes);
 
             //============TEST
-            _Globals.AddPost(new PostWrapper(new Post() { Photo = base64ImageRepresentation }));
-            User user = new User()
+            _Globals.GlobalMainUser = new UserWrapper(new User()
             {
                 FirstName = "Daniel",
                 LastName = "Kostov",
@@ -130,8 +134,7 @@ namespace BDProject.ViewModels
                 Email = "",
                 Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                 Photo = base64ImageRepresentation
-            };
-            _Globals.SetMainUser(new UserWrapper(user));
+            });
             //============TEST
 
             TakenPhoto = ImageSource.FromFile(result.FullPath);
@@ -141,7 +144,55 @@ namespace BDProject.ViewModels
         public ICommand AddTagsCommand { get; set; }
         private async Task AddTagsFunction()
         {
-            
+            await Shell.Current.GoToAsync("AddTagsPage");
         }
+
+        // post command
+        public ICommand PostCommand { get; set; }
+        private async Task PostFunction()
+        {
+            if (TakenPhoto == null) 
+            { 
+                await App.Current.MainPage.DisplayAlert("Warning!", "You can't continue without a photo", "OK");
+                return;
+            }
+
+            //=================TEST
+            _Globals.AddPost(new PostWrapper(new Post()
+            {
+                Photo = base64ImageRepresentation,
+                Description = description
+            })
+            {
+                Username = "Stranger",
+                Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
+            });
+            _Globals.AddPost(new PostWrapper(new Post()
+            {
+                Photo = base64ImageRepresentation,
+                Description = description
+            })
+            {
+                Username = _Globals.GlobalMainUser.Username,
+                Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
+            });
+            //=================TEST
+
+            _Globals.GlobalMainUser.AddPost(new PostWrapper(new Post()
+            {
+                Photo = base64ImageRepresentation,
+                Description = description
+            })
+            {
+                Username = _Globals.GlobalMainUser.Username,
+                Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
+            });
+
+            await Shell.Current.GoToAsync("//HomePage");
+
+            base64ImageRepresentation = "";
+            TakenPhoto = null;
+        }
+
     }
 }

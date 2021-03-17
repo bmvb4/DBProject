@@ -9,8 +9,8 @@
             <StackLayout>
 
                 <Grid 
-                    Padding="8,8,0,0"
-                    ColumnDefinitions="auto,*">
+                    Padding="8,8,8,0"
+                    ColumnDefinitions="auto,*,auto">
 
                     <Button 
                         Grid.Column="0"
@@ -21,6 +21,16 @@
                         FontSize="Large"
                         BackgroundColor="{StaticResource White}"
                         Command="{Binding BackCommand}"/>
+
+                    <Button 
+                        Grid.Column="2"
+                        HeightRequest="48"
+                        WidthRequest="48"
+                        Text="" 
+                        FontFamily="FA-S"
+                        FontSize="Large"
+                        BackgroundColor="{StaticResource White}"
+                        Command="{Binding PostCommand}"/>
 
                 </Grid>
 
@@ -56,13 +66,13 @@
                     Orientation="Vertical">
 
                     <Entry
-                        HeightRequest="80"
+                        HeightRequest="100"
                         Placeholder="Add description"
                         Text="{Binding Description}"/>
 
                     <Button 
                         Text="Add Tags" 
-                        Command="{Binding AddTagsCommnd}"/>
+                        Command="{Binding AddTagsCommand}"/>
 
                 </StackLayout>
 

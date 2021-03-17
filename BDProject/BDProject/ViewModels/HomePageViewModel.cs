@@ -60,27 +60,26 @@ namespace BDProject.ViewModels
         private void SetCollection()
         {
             PostsCollection.Clear();
-            PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GetPosts());
+            PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
         }
 
         // setting application defaults
         public HomePageViewModel()
-        {
-            //========TEST=======
-            Username = "Username";
-            PostDescription = "this is some description on a post";
-            //========TEST=======
-            
+        {            
             SetCollection();
 
+            DaysCount = $"{daysCounter}";
             LikesCount = $"{likeCounter}";
             CommentsCount = $"{commentsCounter}";
 
             // Assigning functions to the commands
             LikePostItemCommand = new Command(LikePostItemFunction);
+            DoubleTapLikePostItemCommand = new Command(DoubleTapLikePostItemFunction);
             OpenPostCommentsItemCommand = new Command(async () => await OpenPostCommentsItemFunction());
             SendCommentToPostItemCommand = new Command(SendCommentToPostItemFunction);
             RefreshCommand = new Command(async () => await RefreshFunction());
+            OpenSearchCommand = new Command(async () => await OpenSearchFunction());
+            OpenPersonsProfileCommand = new Command(async () => await OpenPersonsProfileFunction());
         }
 
         // Parameters
@@ -107,6 +106,20 @@ namespace BDProject.ViewModels
                 if (value == search) { return; }
                 search = value;
                 OnPropertyChanged(nameof(Search));
+            }
+        }
+
+        // Days count parameter
+        private int daysCounter = 0;
+        private string daysCount = "";
+        public string DaysCount
+        {
+            get => daysCount;
+            set
+            {
+                if (value == daysCount) { return; }
+                daysCount = value;
+                OnPropertyChanged(nameof(DaysCount));
             }
         }
 
@@ -151,19 +164,6 @@ namespace BDProject.ViewModels
             }
         }
 
-        // Post description parameter
-        private string postDescription = "";
-        public string PostDescription
-        {
-            get => postDescription;
-            set
-            {
-                if (value == postDescription) { return; }
-                postDescription = value;
-                OnPropertyChanged(nameof(PostDescription));
-            }
-        }
-
         // Comment parameter
         private string comment = "";
         public string Comment
@@ -199,6 +199,14 @@ namespace BDProject.ViewModels
             LikesCount = $"{likeCounter}";
         }
 
+        //DubleTapLikePostItemCommand
+        public ICommand DoubleTapLikePostItemCommand { get; set; }
+        private void DoubleTapLikePostItemFunction()
+        {
+            likeCounter++;
+            LikesCount = $"{likeCounter}";
+        }
+
         // Send Post Comment command
         public ICommand SendCommentToPostItemCommand { get; set; }
         private void SendCommentToPostItemFunction()
@@ -223,6 +231,20 @@ namespace BDProject.ViewModels
             await Task.Delay(TimeSpan.FromSeconds(1));
             SetCollection();
             IsRefreshing = false;
+        }
+
+        // Open Search command
+        public ICommand OpenSearchCommand { get; set; }
+        private async Task OpenSearchFunction()
+        {
+            await Shell.Current.GoToAsync("SearchPage");
+        }
+
+        // Open Persons profile command
+        public ICommand OpenPersonsProfileCommand { get; set; }
+        private async Task OpenPersonsProfileFunction()
+        {
+            await Shell.Current.GoToAsync("PersonsProfilePage");
         }
     }
 }
