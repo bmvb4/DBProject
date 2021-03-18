@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.SettingsPage">
+    
+    <ContentPage.Content>
+
+        <ScrollView>
+            <StackLayout>
+
+                <Grid 
+                    Grid.Row="0"
+                    Padding="8,8,0,0"
+                    ColumnDefinitions="auto,*,auto,*">
+
+                    <Button 
+                        Grid.Column="0"
+                        HeightRequest="48"
+                        WidthRequest="48"
+                        Text="" 
+                        FontFamily="FA-S"
+                        FontSize="Large"
+                        Command="{Binding BackCommand}"/>
+
+                    <Label 
+                        Grid.Column="2"
+                        Text="Settings" 
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        HorizontalOptions="Center"/>
+
+                </Grid>
+                
+
+
+            </StackLayout>
+        </ScrollView>
+
+    </ContentPage.Content>
+    
+</ContentPage>

@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.SignUpPage"
+             
+             Shell.NavBarIsVisible="False">
+    
+    <ContentPage.Content>
+
+        <Grid
+            Margin="16"
+            RowDefinitions="*,auto,*">
+
+            <StackLayout 
+                Grid.Row="1"
+                Orientation="Vertical">
+
+                <Label
+                    Margin="0,0,0,16"
+                    FontSize="Large"
+                    HorizontalOptions="Center"
+                    Text="Sign Up Your Account" />
+
+                <Grid ColumnDefinitions="*,*">
+
+                    <StackLayout
+                        Grid.Column="0"
+                        Orientation="Vertical">
+
+                        <Entry
+                            x:Name="firstnameEntry"
+                            Text="{Binding FirstName}"
+                            Placeholder="First Name" />
+
+                        <Label 
+                            Text="{Binding FirstNameAlert}" 
+                            FontSize="Small"
+                            TextColor="Red"/>
+
+                    </StackLayout>
+
+                    <StackLayout
+                        Grid.Column="1"
+                        Orientation="Vertical">
+
+                        <Entry
+                            x:Name="lastnameEntry"
+                            Text="{Binding LastName}"
+                            Placeholder="Last Name" />
+
+                        <Label 
+                            Text="{Binding LastNameAlert}" 
+                            FontSize="Small"
+                            TextColor="Red"/>
+
+                    </StackLayout>
+
+                </Grid>
+
+                <Entry 
+                    Text="{Binding Username}"
+                    Placeholder="Username" />
+
+                <Label 
+                    x:Name="usernameEntry"
+                    Text="{Binding UsernameAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+                
+                
+
+                <Entry 
+                    x:Name="passwordEntry"
+                    Text="{Binding Password}"
+                    Placeholder="Password" 
+                    IsPassword="True" />
+                
+                <Label 
+                    Text="{Binding PasswordAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+                
+                
+
+                <Entry 
+                    x:Name="confirmEntry"
+                    Text="{Binding ConfirmPassword}"
+                    Placeholder="Confirm Password" 
+                    IsPassword="True" />
+                
+                <Label 
+                    Text="{Binding ConfirmPasswordAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+                
+                
+
+                <Entry
+                    x:Name="emailEntry"
+                    Text="{Binding Email}"
+                    Placeholder="Email" />
+                
+                <Label 
+                    Text="{Binding EmailAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
+
+
+
+                <Grid ColumnDefinitions="*,*">
+
+                    <Button 
+                        Grid.Column="0"
+                        Text="Cancel" 
+                        Command="{Binding CancelCommand}"
+                        HorizontalOptions="Center"/>
+
+                    <Button 
+                        Grid.Column="1"
+                        Text="Sign Up" 
+                        Command="{Binding SignUpCommand}"
+                        HorizontalOptions="Center"/>
+
+                </Grid>
+
+            </StackLayout>
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>

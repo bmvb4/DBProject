@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.ProfilePage"
+             
+             xmlns:local="clr-namespace:BDProject.ViewModels">
+
+    <ContentPage.Content>
+        <ScrollView>
+
+            <StackLayout 
+                Orientation="Vertical">
+
+                <Grid 
+                Grid.Row="0"
+                Padding="0,8,8,0"
+                ColumnDefinitions="*,auto">
+
+                    <Button 
+                    Grid.Column="1"
+                    HeightRequest="46"
+                    WidthRequest="46"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    Command="{Binding OpenSettingsCommand}"/>
+
+                </Grid>
+
+                <Grid 
+                ColumnDefinitions="*,auto,*">
+
+                    <!--<Image Source="Profile"/>-->
+                    <Button 
+                    Grid.Column="1"
+                    CornerRadius="100"
+                    HeightRequest="150"
+                    WidthRequest="150"
+                    Text=""
+                    FontSize="Large"
+                    FontFamily="FA-R"/>
+
+                </Grid>
+
+                <Label 
+                Text="{Binding Name}"
+                FontSize="Large"
+                HorizontalOptions="Center"/>
+
+                <Label 
+                Text="{Binding Description}" 
+                FontSize="Medium"
+                HorizontalOptions="Center"/>
+
+                <Grid 
+                ColumnDefinitions="*,*">
+
+                    <Grid 
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    RowDefinitions="*,*">
+
+                        <Label 
+                        Grid.Row="0"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="Followers" />
+
+                        <Label 
+                        Grid.Row="1"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="{Binding FollowersCount}" />
+
+                    </Grid>
+
+                    <Grid 
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    RowDefinitions="*,*">
+
+                        <Label 
+                        Grid.Row="0"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="Following" />
+
+                        <Label 
+                        Grid.Row="1"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        Text="{Binding FollowingCount}" />
+
+                    </Grid>
+
+                </Grid>
+
+                <Label 
+                    Text="Posts"
+                    HorizontalOptions="Center"
+                    FontSize="Medium"/>
+
+                <CollectionView 
+                    SelectionMode="None"
+                    HeightRequest="{Binding CollectionHeight}"
+                    x:Name="YourPostsCollectionView"
+                    ItemsSource="{Binding YourPostsCollection}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout 
+                            Orientation="Vertical"
+                            Span="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <!--<ImageButton Source="Profile" />-->
+                            <Button 
+                                Grid.Column="0"
+                                HeightRequest="{Binding PostHeight, Source={
+                                        RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
+                                    }}"
+                                Text="Post"/>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </StackLayout>
+
+        </ScrollView>
+    </ContentPage.Content>
+    
+</ContentPage>

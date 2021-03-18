@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.MakePostPage">
+    
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Grid 
+                Padding="8,8,0,0"
+                ColumnDefinitions="auto,*">
+
+                <Button 
+                    Grid.Column="0"
+                    HeightRequest="48"
+                    WidthRequest="48"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    Command="{Binding BackCommand}"/>
+
+            </Grid>
+
+            <Grid 
+                RowDefinitions="*,auto">
+
+                <Image 
+                    Grid.Row="0"
+                    Source="{Binding TakenPhoto}" />
+
+                <Grid
+                    Grid.Row="1"
+                    ColumnDefinitions="*,auto,auto,*">
+
+                    <Button
+                    Grid.Column="1"
+                    Text="Take"
+                    Command="{Binding TakePhotoCommand}"/>
+
+                    <Button
+                    Grid.Column="2"
+                    Text="Pick"
+                    Command="{Binding PickPhotoCommand}"/>
+
+                </Grid>
+
+            </Grid>
+
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>
