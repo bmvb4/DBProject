@@ -68,18 +68,32 @@ namespace BDProject.ViewModels
         {            
             SetCollection();
 
+            FollowButtonText = "Follow";
             DaysCount = $"{daysCounter}";
             LikesCount = $"{likeCounter}";
             CommentsCount = $"{commentsCounter}";
 
             // Assigning functions to the commands
+            // refresh command
+            RefreshCommand = new Command(async () => await RefreshFunction());
+            
+            // like commands
             LikePostItemCommand = new Command(LikePostItemFunction);
             DoubleTapLikePostItemCommand = new Command(DoubleTapLikePostItemFunction);
-            OpenPostCommentsItemCommand = new Command(async () => await OpenPostCommentsItemFunction());
+            
+            // ========
             SendCommentToPostItemCommand = new Command(SendCommentToPostItemFunction);
-            RefreshCommand = new Command(async () => await RefreshFunction());
+            
+            // open commands
+            OpenPostCommentsItemCommand = new Command(async () => await OpenPostCommentsItemFunction());
             OpenSearchCommand = new Command(async () => await OpenSearchFunction());
             OpenPersonsProfileCommand = new Command(async () => await OpenPersonsProfileFunction());
+
+            // follow command
+            FollowProfileCommand= new Command(FollowProfileFunction);
+
+            // edit post command
+            EditPostCommand = new Command(async () => await EditPostFunction());
         }
 
         // Parameters
@@ -190,6 +204,32 @@ namespace BDProject.ViewModels
             }
         }
 
+        // follow text parameter
+        private string followButtonText = "Follow";
+        public string FollowButtonText
+        {
+            get => followButtonText;
+            set
+            {
+                if (value == followButtonText) { return; }
+                followButtonText = value;
+                OnPropertyChanged(nameof(FollowButtonText));
+            }
+        }
+
+        // follow text parameter
+        private PostWrapper postParameter;
+        public PostWrapper PostParameter
+        {
+            get => postParameter;
+            set
+            {
+                if (value == postParameter) { return; }
+                postParameter = value;
+                OnPropertyChanged(nameof(PostParameter));
+            }
+        }
+
         // Commands
         // Like Post command
         public ICommand LikePostItemCommand { get; set; }
@@ -245,6 +285,33 @@ namespace BDProject.ViewModels
         private async Task OpenPersonsProfileFunction()
         {
             await Shell.Current.GoToAsync("PersonsProfilePage");
+        }
+
+        // Follow profile command
+        public ICommand FollowProfileCommand { get; set; }
+        private void FollowProfileFunction()
+        {
+            if (FollowButtonText == "Follow")
+            {
+                _Globals.GlobalMainUser.AddFollowing(PostParameter.Username);
+
+                FollowButtonText = "Following";
+            }
+            else
+            {
+                _Globals.GlobalMainUser.RemoveFollowing(PostParameter.Username);
+
+                FollowButtonText = "Follow";
+            }
+            //await Shell.Current.GoToAsync("PersonsProfilePage");
+        }
+
+        // Follow profile command
+        public ICommand EditPostCommand { get; set; }
+        private async Task EditPostFunction()
+        {
+            int id = 2; //==================TEST
+            await Shell.Current.GoToAsync($"EditPostPage?PostID={id}");
         }
     }
 }

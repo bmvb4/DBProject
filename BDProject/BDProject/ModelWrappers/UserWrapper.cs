@@ -92,12 +92,14 @@ namespace BDProject.ModelWrappers
 
 
 
-        private List<UserWrapper> followings;
-        public List<UserWrapper> Followings
+        private List<string> followings;
+        public List<string> Followings
         {
             get => followings;
         }
-        public void AddFollowing(UserWrapper user) { followings.Add(user); }
+        public void AddFollowing(string username) { followings.Add(username); }
+        public void RemoveFollowing(string username) { followings.Remove(username); }
+
 
 
 
@@ -106,14 +108,43 @@ namespace BDProject.ModelWrappers
         {
             get => myPosts;
         }
-        public void AddPost(PostWrapper post) { myPosts.Add(post); }
+        public void AddPost(PostWrapper post) 
+        {
+            post.PostID = myPosts.Count;
+            myPosts.Add(post); 
+        }
         public bool IsInside(PostWrapper post)
         {
             foreach(PostWrapper p in myPosts)
             {
                 if (p.Username == post.Username) { return true; }
             }
+            // not found
             return false;
+        }
+        public void EditPost(PostWrapper post)
+        {
+            myPosts[post.PostID].Description = post.Description;
+            /*foreach (PostWrapper p in myPosts)
+            {
+                if (p.PostID == post.PostID)
+                {
+                    myPosts[post.PostID] = post;
+                    myPosts.Add(post);
+                }
+            }*/
+        }
+        public PostWrapper GetPost(int id)
+        {
+            foreach (PostWrapper p in myPosts)
+            {
+                if (p.PostID == id)
+                {
+                    return p;
+                }
+            }
+            // not found
+            return new PostWrapper();
         }
 
 

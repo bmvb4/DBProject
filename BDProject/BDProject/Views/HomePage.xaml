@@ -71,7 +71,10 @@
                             WidthRequest="38"
                             Text=""
                             FontFamily="FA-S"
-                            BackgroundColor="{StaticResource White}"/>
+                            BackgroundColor="{StaticResource White}"
+                            Command="{Binding EditPostCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                            }}"/>
 
                     </Grid>
 
@@ -228,8 +231,13 @@
                             Grid.Column="3"
                             CornerRadius="100"
                             HeightRequest="0"
-                            Text="Follow"
-                            FontAttributes="Bold"/>
+                            Text="{Binding FollowButtonText, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                            }}"
+                            FontAttributes="Bold"
+                            Command="{Binding FollowProfileCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                            }}"/>
 
                     </Grid>
 
@@ -357,7 +365,10 @@
                     SelectionMode="None"
                     x:Name="PostsCollectionView"
                     ItemsSource="{Binding PostsCollection}"
-                    ItemTemplate="{StaticResource templateSelector}"/>
+                    ItemTemplate="{StaticResource templateSelector}"
+                    SelectedItem="{Binding PostParameter, Source={
+                        RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                    }}"/>
 
             </RefreshView>
 

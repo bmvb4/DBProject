@@ -18,9 +18,21 @@ namespace BDProject.ViewModels
         private static List<PostWrapper> FeedPosts = new List<PostWrapper>();
         public static List<PostWrapper> GlobalFeedPosts
         {
-            get => FeedPosts;
+            get
+            {
+                foreach(PostWrapper p in MainUser.MyPosts)
+                {
+                    p.PostID = FeedPosts.Count;
+                    FeedPosts.Add(p);
+                }
+                return FeedPosts;
+            }
             set => FeedPosts = value;
         }
-        public static void AddPost(PostWrapper post) { FeedPosts.Add(post); }
+        public static void AddPost(PostWrapper post) 
+        {
+            post.PostID = FeedPosts.Count;
+            FeedPosts.Add(post); 
+        }
     }
 }

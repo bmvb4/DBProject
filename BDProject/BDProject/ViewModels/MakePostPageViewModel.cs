@@ -161,19 +161,19 @@ namespace BDProject.ViewModels
             _Globals.AddPost(new PostWrapper(new Post()
             {
                 Photo = base64ImageRepresentation,
-                Description = description
+                Description = "Test description 1"
             })
             {
-                Username = "Stranger",
+                Username = "Stranger1",
                 Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
             });
             _Globals.AddPost(new PostWrapper(new Post()
             {
                 Photo = base64ImageRepresentation,
-                Description = description
+                Description = "Test description 2"
             })
             {
-                Username = _Globals.GlobalMainUser.Username,
+                Username = "Stranger2",
                 Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
             });
             //=================TEST

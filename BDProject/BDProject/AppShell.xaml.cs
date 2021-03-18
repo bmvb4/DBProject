@@ -21,8 +21,9 @@ namespace BDProject
         {
             InitializeComponent();
 
-            // pages for posts comments
+            // pages for posts
             Routing.RegisterRoute("PostComments", typeof(PostCommentsPage));
+            Routing.RegisterRoute("EditPostPage", typeof(EditPostPage));
 
             // pages for settings
             Routing.RegisterRoute("SettingsPage", typeof(SettingsPage));
