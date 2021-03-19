@@ -18,7 +18,8 @@
                     Margin="0,0,0,16"
                     FontSize="Large"
                     HorizontalOptions="Center"
-                    Text="Log into the App" />
+                    Text="Log into the App"
+                    TextColor="{StaticResource Black}"/>
 
                 <Entry 
                     x:Name="UsernameEntry"

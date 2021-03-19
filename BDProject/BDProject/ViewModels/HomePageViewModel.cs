@@ -1,37 +1,105 @@
-﻿using BDProject.Views;
+﻿using BDProject.Models;
+using BDProject.ModelWrappers;
+using BDProject.Views;
 using BDProject.Views.PostsViews;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels
 {
+    //[QueryProperty(nameof(FName), "FirstName")]
+    //[QueryProperty(nameof(LName), "LastName")]
+    //[QueryProperty(nameof(UName), "Username")]
     public class HomePageViewModel : BaseViewModel
     {
+        // User data object
+        //private string fNameData; // users first name
+        //public string FName
+        //{
+        //    get => fNameData;
+        //    set
+        //    {
+        //        fNameData = Uri.UnescapeDataString(value);
+        //        OnPropertyChanged(nameof(FName));
+        //    }
+        //}
+        //private string lNameData; // users last name
+        //public string LName
+        //{
+        //    get => lNameData;
+        //    set
+        //    {
+        //        lNameData = Uri.UnescapeDataString(value);
+        //        OnPropertyChanged(nameof(LName));
+        //    }
+        //}
+        //private string uNameData; // users username
+        //public string UName
+        //{
+        //    get => uNameData;
+        //    set
+        //    {
+        //        uNameData = Uri.UnescapeDataString(value);
+        //        OnPropertyChanged(nameof(UName));
+        //    }
+        //}
 
-        public HomePageViewModel()
+        //private void SetUserData()
+        //{
+        //    Username = UName;
+        //    PostDescription = FName = " " + LName;
+        //}
+
+        private void SetCollection()
         {
-            //========TEST=======
-            PostsCollection = new ObservableCollection<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            //========TEST=======
+            PostsCollection.Clear();
+            PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
+        }
 
+        // setting application defaults
+        public HomePageViewModel()
+        {            
+            SetCollection();
+
+            FollowButtonText = "Follow";
+            DaysCount = $"{daysCounter}";
             LikesCount = $"{likeCounter}";
             CommentsCount = $"{commentsCounter}";
 
             // Assigning functions to the commands
+            // refresh command
+            RefreshCommand = new Command(async () => await RefreshFunction());
+            
+            // like commands
             LikePostItemCommand = new Command(LikePostItemFunction);
-            OpenPostCommentsItemCommand = new Command(OpenPostCommentsItemFunction);
+            DoubleTapLikePostItemCommand = new Command(DoubleTapLikePostItemFunction);
+            
+            // ========
             SendCommentToPostItemCommand = new Command(SendCommentToPostItemFunction);
+            
+            // open commands
+            OpenPostCommentsItemCommand = new Command(async () => await OpenPostCommentsItemFunction());
+            OpenSearchCommand = new Command(async () => await OpenSearchFunction());
+            OpenPersonsProfileCommand = new Command(async () => await OpenPersonsProfileFunction());
+
+            // follow command
+            FollowProfileCommand= new Command(FollowProfileFunction);
+
+            // edit post command
+            EditPostCommand = new Command(async () => await EditPostFunction());
         }
 
         // Parameters
         // Posts Collection parameter
-        // ================= zadaden e int za testvane na dizaina
-        private ObservableCollection<int> postsCollection = new ObservableCollection<int>();
-        public ObservableCollection<int> PostsCollection
+        private ObservableCollection<PostWrapper> postsCollection = new ObservableCollection<PostWrapper>();
+        public ObservableCollection<PostWrapper> PostsCollection
         {
             get => postsCollection;
             set
@@ -52,6 +120,20 @@ namespace BDProject.ViewModels
                 if (value == search) { return; }
                 search = value;
                 OnPropertyChanged(nameof(Search));
+            }
+        }
+
+        // Days count parameter
+        private int daysCounter = 0;
+        private string daysCount = "";
+        public string DaysCount
+        {
+            get => daysCount;
+            set
+            {
+                if (value == daysCount) { return; }
+                daysCount = value;
+                OnPropertyChanged(nameof(DaysCount));
             }
         }
 
@@ -84,8 +166,7 @@ namespace BDProject.ViewModels
         }
 
         // Username parameter
-        //=================================== za testvane
-        private string username = "Daniel";
+        private string username = "";
         public string Username
         {
             get => username;
@@ -94,20 +175,6 @@ namespace BDProject.ViewModels
                 if (value == username) { return; }
                 username = value;
                 OnPropertyChanged(nameof(Username));
-            }
-        }
-
-        // Post description parameter
-        //=================================== za testvane
-        private string postDescription = "tova e prosto nqkakvo opisanie za testvane na dizaina";
-        public string PostDescription
-        {
-            get => postDescription;
-            set
-            {
-                if (value == postDescription) { return; }
-                postDescription = value;
-                OnPropertyChanged(nameof(PostDescription));
             }
         }
 
@@ -124,10 +191,57 @@ namespace BDProject.ViewModels
             }
         }
 
+        // Refreshing parameter
+        private bool isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                if (value == isRefreshing) { return; }
+                isRefreshing = value;
+                OnPropertyChanged(nameof(IsRefreshing));
+            }
+        }
+
+        // follow text parameter
+        private string followButtonText = "Follow";
+        public string FollowButtonText
+        {
+            get => followButtonText;
+            set
+            {
+                if (value == followButtonText) { return; }
+                followButtonText = value;
+                OnPropertyChanged(nameof(FollowButtonText));
+            }
+        }
+
+        // follow text parameter
+        private PostWrapper postParameter;
+        public PostWrapper PostParameter
+        {
+            get => postParameter;
+            set
+            {
+                if (value == postParameter) { return; }
+                postParameter = value;
+                OnPropertyChanged(nameof(PostParameter));
+            }
+        }
+
         // Commands
         // Like Post command
         public ICommand LikePostItemCommand { get; set; }
-        private void LikePostItemFunction(object user)
+        private void LikePostItemFunction()
+        {
+            likeCounter++;
+            LikesCount = $"{likeCounter}";
+        }
+
+        //DubleTapLikePostItemCommand
+        public ICommand DoubleTapLikePostItemCommand { get; set; }
+        private void DoubleTapLikePostItemFunction()
         {
             likeCounter++;
             LikesCount = $"{likeCounter}";
@@ -135,7 +249,7 @@ namespace BDProject.ViewModels
 
         // Send Post Comment command
         public ICommand SendCommentToPostItemCommand { get; set; }
-        private void SendCommentToPostItemFunction(object user)
+        private void SendCommentToPostItemFunction()
         {
             Comment = "";
             commentsCounter++;
@@ -144,15 +258,60 @@ namespace BDProject.ViewModels
 
         // Open Post Comments command
         public ICommand OpenPostCommentsItemCommand { get; set; }
-        private async void OpenPostCommentsItemFunction(object post)
+        private async Task OpenPostCommentsItemFunction()
         {
-            //if (post == null) { return; }
-            //await Shell.Current.GoToAsync($"//PostComments?id={(Post)post.ID}");
-
-            await Shell.Current.GoToAsync("//PostComments");
-
-            //App.Current.MainPage = new PostCommentsPage();
+            await Shell.Current.GoToAsync("PostComments");
         }
 
+        // Refresh collection view command
+        public ICommand RefreshCommand { get; set; }
+        private async Task RefreshFunction()
+        {
+            IsRefreshing = true;
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            SetCollection();
+            IsRefreshing = false;
+        }
+
+        // Open Search command
+        public ICommand OpenSearchCommand { get; set; }
+        private async Task OpenSearchFunction()
+        {
+            await Shell.Current.GoToAsync("SearchPage");
+        }
+
+        // Open Persons profile command
+        public ICommand OpenPersonsProfileCommand { get; set; }
+        private async Task OpenPersonsProfileFunction()
+        {
+            await Shell.Current.GoToAsync("PersonsProfilePage");
+        }
+
+        // Follow profile command
+        public ICommand FollowProfileCommand { get; set; }
+        private void FollowProfileFunction()
+        {
+            if (FollowButtonText == "Follow")
+            {
+                _Globals.GlobalMainUser.AddFollowing(PostParameter.Username);
+
+                FollowButtonText = "Following";
+            }
+            else
+            {
+                _Globals.GlobalMainUser.RemoveFollowing(PostParameter.Username);
+
+                FollowButtonText = "Follow";
+            }
+            //await Shell.Current.GoToAsync("PersonsProfilePage");
+        }
+
+        // Follow profile command
+        public ICommand EditPostCommand { get; set; }
+        private async Task EditPostFunction()
+        {
+            int id = 2; //==================TEST
+            await Shell.Current.GoToAsync($"EditPostPage?PostID={id}");
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using BDProject.ViewModels;
+﻿using BDProject.Models;
+using BDProject.ViewModels;
+using BDProject.ViewModels.SearchViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,12 @@ namespace BDProject.Views
             InitializeComponent();
 
             BindingContext = new HomePageViewModel();
+        }
+
+        private async void Entry_Focused(object sender, FocusEventArgs e)
+        {
+            Searcher.Unfocus();
+            await Shell.Current.GoToAsync("SearchPage");
         }
     }
 }

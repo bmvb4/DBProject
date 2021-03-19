@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.PostsViews.EditPostPage"
+             
+             Shell.BackgroundColor="{StaticResource White}"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Grid 
+                Padding="8,8,8,0"
+                ColumnDefinitions="auto,*,auto">
+
+                <Button 
+                    Grid.Column="0"
+                    HeightRequest="48"
+                    WidthRequest="48"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="{StaticResource White}"
+                    Command="{Binding BackCommand}"/>
+
+                <Button 
+                    Grid.Column="2"
+                    HeightRequest="48"
+                    WidthRequest="48"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="{StaticResource White}"
+                    Command="{Binding SaveChangesCommand}"/>
+
+            </Grid>
+
+            <Grid 
+                Padding="8,16"
+                RowDefinitions="auto,auto,*">
+
+                <Grid
+                    Grid.Row="0"
+                    ColumnDefinitions="auto,auto,*,auto">
+
+                    <Frame
+                        Grid.Column="0"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        CornerRadius="100"
+                        Padding="0"
+                        IsClippedToBounds="True">
+
+                        <Image 
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Scale="1.4"
+                            Source="{Binding UserPhotoSource}"/>
+
+                    </Frame>
+
+                    <Grid
+                        Grid.Column="1"
+                        RowDefinitions="auto,auto">
+
+                        <Label 
+                            Grid.Row="0"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding Username}"/>
+
+                    </Grid>
+
+                </Grid>
+
+                <Entry 
+                    Grid.Row="1"
+                    FontSize="Medium"
+                    TextColor="{StaticResource Black}"
+                    Text="{Binding Description}" />
+
+                <Image 
+                    Grid.Row="2"
+                    Aspect="Fill"
+                    Source="{Binding PhotoSource}"/>
+
+            </Grid>
+
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>

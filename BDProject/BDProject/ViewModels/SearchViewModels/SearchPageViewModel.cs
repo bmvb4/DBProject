@@ -5,16 +5,30 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace BDProject.ViewModels
+namespace BDProject.ViewModels.SearchViewModels
 {
-    public class SettingsPageViewModel : BaseViewModel
+    public class SearchPageViewModel : BaseViewModel
     {
 
-        public SettingsPageViewModel()
+        public SearchPageViewModel()
         {
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
+        }
+
+        // Parameters
+        // Search parameter
+        private string search = "";
+        public string Search
+        {
+            get => search;
+            set
+            {
+                if (value == search) { return; }
+                search = value;
+                OnPropertyChanged(nameof(Search));
+            }
         }
 
         // Commands

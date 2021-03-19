@@ -7,7 +7,9 @@ using Refit;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -19,8 +21,8 @@ namespace BDProject.ViewModels
         public LogInPageViewModel()
         {
             // Assigning functions to the commands
-            LogInCommand = new Command(LogInFunction);
-            SignUpCommand = new Command(SignUpFunction);
+            LogInCommand = new Command(async () => await LogInFunction());
+            SignUpCommand = new Command(async () => await SignUpFunction());
         }
 
         // Parameters
@@ -85,7 +87,7 @@ namespace BDProject.ViewModels
         // Commands
         // Log In command
         public ICommand LogInCommand { get; set; }
-        private async void LogInFunction()
+        private async Task LogInFunction()
         {
             if (CheckParameters() == true) { return; }
 
@@ -106,7 +108,15 @@ namespace BDProject.ViewModels
             {
                 var earthquakesJson = result.Content.ReadAsStringAsync().Result;
                 var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
-
+                _Globals.GlobalMainUser = new ModelWrappers.UserWrapper(rootobject);
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", rootobject.token);
+                result = await _client.GetAsync("https://10.0.2.2:5001/posts/image/getAll/"+rootobject.Username);
+                if (result.IsSuccessStatusCode)
+                {
+                    earthquakesJson = result.Content.ReadAsStringAsync().Result;
+                    var postList = JsonConvert.DeserializeObject<List<Post>>(earthquakesJson);
+                    //_Globals.GlobalMainUser.MyPosts = postList;
+                }
                 await Shell.Current.GoToAsync("//HomePage");
             }
             else
@@ -117,7 +127,7 @@ namespace BDProject.ViewModels
 
         // Sign Up command
         public ICommand SignUpCommand { get; set; }
-        private async void SignUpFunction()
+        private async Task SignUpFunction()
         {
             await Shell.Current.GoToAsync("//SignUpPage");
 

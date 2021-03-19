@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.ProfileViews.ProfilePostPage"
+             
+             Shell.BackgroundColor="{StaticResource White}"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Content>
+        <StackLayout>
+            
+            <Grid 
+                Grid.Row="0"
+                Padding="8,8,0,0"
+                ColumnDefinitions="auto,*">
+
+                <Button 
+                    Grid.Column="0"
+                    HeightRequest="48"
+                    WidthRequest="38"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="{StaticResource White}"
+                    Command="{Binding BackCommand}"/>
+
+            </Grid>
+            
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>

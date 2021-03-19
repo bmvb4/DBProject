@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace BDProject.ViewModels
+namespace BDProject.ViewModels.MakePostViewModels
 {
-    public class SettingsPageViewModel : BaseViewModel
+    public class AddTagsPageViewModel : BaseViewModel
     {
 
-        public SettingsPageViewModel()
+        public AddTagsPageViewModel()
         {
-
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
         }

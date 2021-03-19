@@ -8,11 +8,12 @@ namespace BDProject.Models
     {
         public int IdUser { get; set; }
         public string Username { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public byte[] Description { get; set; }
-        public byte[] Photo { get; set; }
-        public byte[] Salt { get; set; }
+        public string Description { get; set; }
+        public string Photo { get; set; }
+        public string token { get; set; }
     }
 }

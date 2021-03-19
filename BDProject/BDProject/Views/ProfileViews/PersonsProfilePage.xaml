@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDProject.Views.ProfilePage"
+             x:Class="BDProject.Views.ProfileViews.PersonsProfilePage"
+             xmlns:local="clr-namespace:BDProject.ViewModels.ProfileViewModels"
              
-             xmlns:local="clr-namespace:BDProject.ViewModels">
+             Shell.BackgroundColor="{StaticResource White}"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
 
     <ContentPage.Content>
+
         <RefreshView
             Margin="8,0"
             IsRefreshing="{Binding IsRefreshing}"
@@ -16,19 +20,18 @@
                     Orientation="Vertical">
 
                     <Grid 
-                        Grid.Row="0"
-                        Padding="0,8,8,0"
-                        ColumnDefinitions="*,auto">
+                        Padding="8,8,8,0"
+                        ColumnDefinitions="auto,*">
 
                         <Button 
-                            Grid.Column="1"
-                            HeightRequest="46"
-                            WidthRequest="46"
-                            Text="" 
+                            Grid.Column="0"
+                            HeightRequest="48"
+                            WidthRequest="38"
+                            Text="" 
                             FontFamily="FA-S"
                             FontSize="Large"
                             BackgroundColor="{StaticResource White}"
-                            Command="{Binding OpenSettingsCommand}"/>
+                            Command="{Binding BackCommand}"/>
 
                     </Grid>
 
@@ -46,10 +49,12 @@
                             <ImageButton
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
+                                Aspect="Fill"
                                 Scale="1.4"
                                 Source="{Binding ProfilePictureSource}"/>
 
                         </Frame>
+
 
                     </Grid>
 
@@ -118,7 +123,7 @@
                             Grid.Column="2"
                             HorizontalOptions="Center"
                             RowDefinitions="*,*">
-                            
+
                             <Label 
                                 Grid.Row="0"
                                 FontSize="Medium"
@@ -139,9 +144,8 @@
                             Grid.Column="3"
                             CornerRadius="100"
                             HeightRequest="0"
-                            Text="Edit"
-                            FontAttributes="Bold"
-                            Command="{Binding OpenEditProfileCommand}"/>
+                            Text="Follow"
+                            FontAttributes="Bold"/>
 
                     </Grid>
 
@@ -173,7 +177,7 @@
                                     BackgroundColor="{StaticResource White}"
                                     Source="{Binding PhotoSource}"
                                     HeightRequest="{Binding PostHeight, Source={
-                                        RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
+                                        RelativeSource AncestorType={x:Type local:PersonsProfilePageViewModel}
                                         }}"/>
 
                             </DataTemplate>
@@ -185,5 +189,5 @@
             </ScrollView>
         </RefreshView>
     </ContentPage.Content>
-    
+
 </ContentPage>

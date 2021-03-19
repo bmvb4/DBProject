@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace BDProject.ViewModels
+namespace BDProject.ViewModels.ProfileViewModels
 {
-    public class SettingsPageViewModel : BaseViewModel
+    public class ProfilePostPageViewModel : BaseViewModel
     {
 
-        public SettingsPageViewModel()
+        public ProfilePostPageViewModel()
         {
 
             // Assigning functions to the commands

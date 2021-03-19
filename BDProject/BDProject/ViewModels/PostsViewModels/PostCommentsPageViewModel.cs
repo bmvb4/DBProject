@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -20,7 +21,7 @@ namespace BDProject.ViewModels.PostsViewModels
             CommentsCount = $"{commentsCounter}";
 
             // Assigning functions to the commands
-            BackCommand = new Command(BackFunction);
+            BackCommand = new Command(async () => await BackFunction());
             LikePostItemCommand = new Command(LikePostItemFunction);
         }
 
@@ -111,9 +112,9 @@ namespace BDProject.ViewModels.PostsViewModels
         // Commands
         // Back to post command
         public ICommand BackCommand { get; set; }
-        private async void BackFunction(object user)
+        private async Task BackFunction()
         {
-            await Shell.Current.GoToAsync("//HomePage");
+            await Shell.Current.Navigation.PopAsync();
         }
 
         // Like Post command

@@ -19,7 +19,8 @@
                     Margin="0,0,0,16"
                     FontSize="Large"
                     HorizontalOptions="Center"
-                    Text="Sign Up Your Account" />
+                    Text="Sign Up Your Account"
+                    TextColor="{StaticResource Black}"/>
 
                 <Grid ColumnDefinitions="*,*">
 
