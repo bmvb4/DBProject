@@ -14,31 +14,56 @@ namespace BDProject.ModelWrappers
 
         }
 
+        public PostWrapper(int Id, byte[] Photo, string Description, string User, byte[] UserPhoto)
+        {
+            feedid = Id;
+            imageBytes = Photo;
+            description = Description;
+            username = User;
+            userImageBytes = UserPhoto;
+        }
+
+        public PostWrapper(Post post, string User, byte[] UserPhoto)
+        {
+            feedid = post.IdPost;
+            imageBytes = post.Photo;
+            description = post.Description;
+            username = User;
+            userImageBytes = UserPhoto;
+        }
+
         public PostWrapper(Post post)
         {
-            postID = post.IdPost;
-            base64Photo = post.Photo;
+            feedid = post.IdPost;
+            imageBytes = post.Photo;
             description = post.Description;
         }
 
-        private int postID;
-        public int PostID
+        private int feedid;
+        public int FeedID
         {
-            get => postID;
-            set => postID = value;
+            get => feedid;
+            set => feedid = value;
         }
 
-        private string base64Photo;
-        public string Base64Photo
+        private int myid;
+        public int MyID
         {
-            get => base64Photo;
-            set => base64Photo = value;
+            get => myid;
+            set => myid = value;
+        }
+
+        private byte[] imageBytes;
+        public byte[] ImageBytes
+        {
+            get => imageBytes;
+            set => imageBytes = value;
         }
         public ImageSource PhotoSource
         {
             get
             {
-                return ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(base64Photo)));
+                return ImageSource.FromStream(() => new MemoryStream(imageBytes));
             }
         }
 
@@ -58,17 +83,17 @@ namespace BDProject.ModelWrappers
 
 
         // user parameters
-        private string base64UserPhoto;
-        public string Base64UserPhoto
+        private byte[] userImageBytes;
+        public byte[] UserImageBytes
         {
-            get => base64UserPhoto;
-            set => base64UserPhoto = value;
+            get => userImageBytes;
+            set => userImageBytes = value;
         }
         public ImageSource UserPhotoSource
         {
             get
             {
-                return ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(base64UserPhoto)));
+                return ImageSource.FromStream(() => new MemoryStream(userImageBytes));
             }
         }
 
@@ -77,6 +102,13 @@ namespace BDProject.ModelWrappers
         {
             get => username;
             set => username = value;
+        }
+
+        private string isFollowed = "Follow";
+        public string IsFollowed
+        {
+            get => isFollowed;
+            set => isFollowed = value;
         }
     }
 }

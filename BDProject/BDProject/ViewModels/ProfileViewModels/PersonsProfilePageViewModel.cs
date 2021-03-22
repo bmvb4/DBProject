@@ -1,8 +1,7 @@
-﻿using BDProject.ModelWrappers;
+﻿using BDProject.Helpers;
+using BDProject.ModelWrappers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -19,8 +18,14 @@ namespace BDProject.ViewModels.ProfileViewModels
             try
             {
                 Name = user.FirstName + " " + user.LastName;
+                Username = "(" + user.Username + ")";
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
+
+                if (_Globals.GlobalMainUser.IsFollowerInside(Username))
+                { IsFollowed = "Follow"; }
+                else
+                { IsFollowed = "Following"; }
             }
             catch (Exception ex)
             {
@@ -42,14 +47,13 @@ namespace BDProject.ViewModels.ProfileViewModels
 
         public PersonsProfilePageViewModel()
         {
-            //========TEST=======
             SetUserData();
             SetCollection();
-            //========TEST=======
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
             RefreshCommand = new Command(async () => await RefreshFunction());
+            FollowProfileCommand = new Command(FollowProfileFunction);
         }
 
         // Parameters
@@ -114,6 +118,19 @@ namespace BDProject.ViewModels.ProfileViewModels
                 if (value == name) { return; }
                 name = value;
                 OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        // Your username parameter
+        private string username = "";
+        public string Username
+        {
+            get => username;
+            set
+            {
+                if (value == username) { return; }
+                username = value;
+                OnPropertyChanged(nameof(Username));
             }
         }
 
@@ -182,6 +199,19 @@ namespace BDProject.ViewModels.ProfileViewModels
             }
         }
 
+        // following parameter
+        private string isFollowed = "Follow";
+        public string IsFollowed
+        {
+            get => isFollowed;
+            set
+            {
+                if (value == isFollowed) { return; }
+                isFollowed = value;
+                OnPropertyChanged(nameof(IsFollowed));
+            }
+        }
+
         // Commands PostHeight
         // Back to post command
         public ICommand BackCommand { get; set; }
@@ -199,6 +229,22 @@ namespace BDProject.ViewModels.ProfileViewModels
             SetUserData();
             SetCollection();
             IsRefreshing = false;
+        }
+
+        // Follow profile command
+        public ICommand FollowProfileCommand { get; set; }
+        private void FollowProfileFunction()
+        {
+            if (_Globals.GlobalMainUser.IsFollowerInside(Username))
+            {
+                _Globals.GlobalMainUser.RemoveFollowing(Username);
+                IsFollowed = "Follow";
+            }
+            else
+            {
+                _Globals.GlobalMainUser.AddFollowing(Username);
+                IsFollowed = "Following";
+            }
         }
 
         // Functions

@@ -44,7 +44,7 @@
 
                         <Label 
                             FontSize="Medium"
-                            Text="{Binding PostDescription}"
+                            Text="{Binding Description}"
                             TextColor="{StaticResource Black}"/>
 
                         <Label 

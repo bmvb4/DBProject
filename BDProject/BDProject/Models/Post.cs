@@ -6,8 +6,14 @@ namespace BDProject.Models
 {
     public class Post
     {
+        public Post(byte[] photo, string description)
+        {
+            Photo = photo;
+            Description = description;
+        }
+
         public int IdPost { get; set; }
-        public string Photo { get; set; }
+        public byte[] Photo { get; set; }
         public string Description { get; set; }
         
         

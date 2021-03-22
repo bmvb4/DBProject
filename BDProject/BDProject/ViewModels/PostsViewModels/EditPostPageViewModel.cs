@@ -1,44 +1,38 @@
-﻿using BDProject.Models;
+﻿using BDProject.Helpers;
 using BDProject.ModelWrappers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels.PostsViewModels
 {
-    [QueryProperty(nameof(ID),"PostID")]
     public class EditPostPageViewModel : BaseViewModel
     {
+
         private void SetParameters()
         {
+            SelectedPost = _Globals.GetPost(_Globals.OpenID);
+
             PhotoSource = SelectedPost.PhotoSource;
             UserPhotoSource = SelectedPost.UserPhotoSource;
             Username = SelectedPost.Username;
             Description = SelectedPost.Description;
+
+            _Globals.OpenID = 0;
         }
 
         public EditPostPageViewModel()
         {
+            SetParameters();
+
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
             SaveChangesCommand = new Command(async () => await SaveChangesFunction());
         }
 
         // Parameters
-        // post parameter
-        private PostWrapper SelectedPost;
-        public int ID
-        {
-            set
-            {
-                SelectedPost = _Globals.GlobalMainUser.GetPost(value);
-                SetParameters();
-            }
-        }
-
+        // editet post
+        PostWrapper SelectedPost = new PostWrapper();
 
         // post Image parameter
         private ImageSource photoSource = null;
@@ -107,6 +101,7 @@ namespace BDProject.ViewModels.PostsViewModels
             SelectedPost.Description = Description;
 
             _Globals.GlobalMainUser.EditPost(SelectedPost);
+            _Globals.EditPost(SelectedPost);
 
             await Shell.Current.Navigation.PopAsync();
 

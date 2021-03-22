@@ -1,9 +1,7 @@
-﻿using BDProject.Models;
+﻿using BDProject.Helpers;
+using BDProject.Models;
 using BDProject.ModelWrappers;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -29,7 +27,7 @@ namespace BDProject.ViewModels
 
         // Parameters
         // Taken Image parameter
-        private string base64ImageRepresentation = "";
+        private byte[] imageBytes;
         private ImageSource takenPhoto = null;
         public ImageSource TakenPhoto
         {
@@ -88,15 +86,14 @@ namespace BDProject.ViewModels
         {
             await Shell.Current.GoToAsync("//HomePage");
 
-            base64ImageRepresentation = "";
             TakenPhoto = null;
+            Description = "";
         }
 
         // Take Photo command
         public ICommand TakePhotoCommand { get; set; }
         private async Task TakePhotoFunction()
         {
-            base64ImageRepresentation = "";
             TakenPhoto = null;
 
             var result = await MediaPicker.CapturePhotoAsync();
@@ -105,24 +102,21 @@ namespace BDProject.ViewModels
             // image path
             var path = Path.Combine(FileSystem.CacheDirectory, result.FileName);
 
-            //byte[] imageBytes = File.ReadAllBytes(path);
-            //base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+            imageBytes = File.ReadAllBytes(path);
 
-            TakenPhoto = ImageSource.FromFile(path);
+            TakenPhoto = ImageSource.FromStream(() => new MemoryStream(imageBytes));
         }
 
         // Pick Photo command
         public ICommand PickPhotoCommand { get; set; }
         private async Task PickPhotoFunction()
         {
-            base64ImageRepresentation = "";
             TakenPhoto = null;
 
             var result = await MediaPicker.PickPhotoAsync();
             if (result == null) { return; }
 
-            byte[] imageBytes = File.ReadAllBytes(result.FullPath);
-            base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+            imageBytes = File.ReadAllBytes(result.FullPath);
 
             //============TEST
             _Globals.GlobalMainUser = new UserWrapper(new User()
@@ -133,7 +127,7 @@ namespace BDProject.ViewModels
                 Password = "",
                 Email = "",
                 Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                Photo = base64ImageRepresentation
+                Photo = imageBytes
             });
             //============TEST
 
@@ -158,40 +152,32 @@ namespace BDProject.ViewModels
             }
 
             //=================TEST
-            _Globals.AddPost(new PostWrapper(new Post()
-            {
-                Photo = base64ImageRepresentation,
-                Description = "Test description 1"
-            })
-            {
-                Username = "Stranger1",
-                Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
-            });
-            _Globals.AddPost(new PostWrapper(new Post()
-            {
-                Photo = base64ImageRepresentation,
-                Description = "Test description 2"
-            })
-            {
-                Username = "Stranger2",
-                Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
-            });
+            _Globals.AddPost(new PostWrapper(new Post(imageBytes, "Test description 1"), "Stranger1", _Globals.GlobalMainUser.ImageBytes));
+            _Globals.AddPost(new PostWrapper(new Post(imageBytes, "Test description 2"), "Stranger2", _Globals.GlobalMainUser.ImageBytes));
+            // is followed go nqma
             //=================TEST
 
-            _Globals.GlobalMainUser.AddPost(new PostWrapper(new Post()
-            {
-                Photo = base64ImageRepresentation,
-                Description = description
-            })
-            {
-                Username = _Globals.GlobalMainUser.Username,
-                Base64UserPhoto = _Globals.GlobalMainUser.Base64Photo
-            });
+            _Globals.AddMyPost(new PostWrapper(new Post(imageBytes, Description), _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
+            _Globals.GlobalMainUser.AddPost(new PostWrapper(new Post(imageBytes, Description), _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
 
             await Shell.Current.GoToAsync("//HomePage");
 
-            base64ImageRepresentation = "";
+            /*
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
+            oJsonObject.Add("Photo", imageBytes);
+            oJsonObject.Add("Description", Description);
+
+            bool success = await ServerServices.SendRequestAsync("posts/image/post", oJsonObject);
+
+            if (success)
+            {
+                await Shell.Current.GoToAsync("//HomePage");
+            }
+            */
+
             TakenPhoto = null;
+            Description = "";
         }
 
     }

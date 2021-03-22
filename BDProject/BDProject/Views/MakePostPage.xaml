@@ -15,7 +15,7 @@
                     <Button 
                         Grid.Column="0"
                         HeightRequest="48"
-                        WidthRequest="48"
+                        WidthRequest="38"
                         Text="" 
                         FontFamily="FA-S"
                         FontSize="Large"
@@ -65,7 +65,8 @@
                 <StackLayout 
                     Orientation="Vertical">
 
-                    <Entry
+                    <Editor
+                        x:Name="descriptionEditor"
                         HeightRequest="100"
                         Placeholder="Add description"
                         Text="{Binding Description}"/>

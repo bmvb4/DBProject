@@ -61,6 +61,13 @@
                         TextColor="{StaticResource Black}"/>
 
                     <Label 
+                        Text="{Binding Username}"
+                        Margin="16,0"
+                        FontSize="Medium"
+                        HorizontalOptions="Center"
+                        TextColor="{StaticResource Black}"/>
+
+                    <Label 
                         Text="{Binding Description}" 
                         Margin="8,0"
                         FontSize="Small"

@@ -13,7 +13,8 @@ namespace BDProject.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Description { get; set; }
-        public string Photo { get; set; }
+        public byte[] Photo { get; set; }
+
         public string token { get; set; }
     }
 }

@@ -1,14 +1,6 @@
-﻿using BDProject.Models;
-using BDProject.ModelWrappers;
-using BDProject.Views;
-using Java.Net;
-using Newtonsoft.Json;
+﻿using BDProject.Helpers;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Net.Mail;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,25 +12,6 @@ namespace BDProject.ViewModels
     {
         public SignUpPageViewModel()
         {
-            /*
-            //==============================TEST
-            User user = new User()
-            {
-                FirstName = "Daniel",
-                LastName = "Kostov",
-                Username = "DanielRK",
-                Password = "",
-                Email = "",
-                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            };
-            _Globals.SetMainUser(new UserWrapper(user));*/
-
-            //var jsonStr = JsonConvert.SerializeObject(user);
-            //Shell.Current.GoToAsync($"//HomePage?user={jsonStr}").Wait();
-
-            Shell.Current.GoToAsync("//HomePage?").Wait();
-            //==============================TEST
-
             // Assigning functions to the commands
             SignUpCommand = new Command(async () => await SignUpFunction());
             CancelCommand = new Command(async () => await CancelFunction());
@@ -226,13 +199,6 @@ namespace BDProject.ViewModels
             // checking all parameters
             if (CheckParameters() == true) { return; }
 
-            const string URL = "https://10.0.2.2:5001/register";
-            const string sContentType = "application/json";
-
-            HttpClientHandler clientHandler = new HttpClientHandler();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-            HttpClient _client = new HttpClient(clientHandler);
-
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", Username);
             oJsonObject.Add("Password", Password);
@@ -240,14 +206,11 @@ namespace BDProject.ViewModels
             oJsonObject.Add("LastName", LastName);
             oJsonObject.Add("Email", Email);
 
-            var result = await _client.PostAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
+            bool success = await ServerServices.SendRequestAsync("register", oJsonObject);
 
-            if (result.IsSuccessStatusCode)
+            if (success)
             {
-                var earthquakesJson = result.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
-
-                await Shell.Current.GoToAsync($"//HomePage?user={rootobject}");
+                await Shell.Current.GoToAsync($"//HomePage");
             }
         }
 

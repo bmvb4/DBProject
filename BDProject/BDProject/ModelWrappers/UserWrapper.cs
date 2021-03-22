@@ -18,12 +18,11 @@ namespace BDProject.ModelWrappers
         {
             id = user.IdUser;
             username = user.Username;
-            password = user.Password;
             email = user.Email;
             firstname = user.FirstName;
             lastname = user.LastName;
             description = user.Description;
-            base64Photo = user.Photo;
+            imageBytes = user.Photo;
             token = user.token;
         }
 
@@ -39,13 +38,6 @@ namespace BDProject.ModelWrappers
         {
             get => username;
             set => username = value; 
-        }
-
-        private string password;
-        public string Password
-        {
-            get => password;
-            set => password = value; 
         }
 
         private string email;
@@ -76,42 +68,46 @@ namespace BDProject.ModelWrappers
             set => description = value;
         }
 
-        private string base64Photo;
-        public string Base64Photo
+        private byte[] imageBytes;
+        public byte[] ImageBytes
         {
-            get => base64Photo;
-            set => base64Photo = value;
+            get => imageBytes;
+            set => imageBytes = value;
         }
         public ImageSource PhotoSource
         {
             get
             {
-                return ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(base64Photo)));
+                return ImageSource.FromStream(() => new MemoryStream(imageBytes));
             }
         }
 
 
 
-        private List<string> followings;
+        private static List<string> followings = new List<string>();
         public List<string> Followings
         {
             get => followings;
+            set => followings = value;
         }
         public void AddFollowing(string username) { followings.Add(username); }
         public void RemoveFollowing(string username) { followings.Remove(username); }
+        public bool IsFollowerInside(string username) { return followings.Contains(username); }
 
 
 
 
-        private List<PostWrapper> myPosts = new List<PostWrapper>();
+        private static List<PostWrapper> myPosts = new List<PostWrapper>();
         public List<PostWrapper> MyPosts
         {
             get => myPosts;
+            set => myPosts = value;
         }
         public void AddPost(PostWrapper post) 
         {
-            post.PostID = myPosts.Count;
+            post.MyID = myPosts.Count;
             myPosts.Add(post); 
+            myPosts.Sort((x, y) => x.MyID.CompareTo(y.MyID));
         }
         public bool IsInside(PostWrapper post)
         {
@@ -124,27 +120,19 @@ namespace BDProject.ModelWrappers
         }
         public void EditPost(PostWrapper post)
         {
-            myPosts[post.PostID].Description = post.Description;
-            /*foreach (PostWrapper p in myPosts)
-            {
-                if (p.PostID == post.PostID)
-                {
-                    myPosts[post.PostID] = post;
-                    myPosts.Add(post);
-                }
-            }*/
+            myPosts[post.MyID].Description = post.Description;
         }
         public PostWrapper GetPost(int id)
         {
-            foreach (PostWrapper p in myPosts)
+            try
             {
-                if (p.PostID == id)
-                {
-                    return p;
-                }
+                return myPosts[id];
             }
-            // not found
-            return new PostWrapper();
+            catch(Exception ex)
+            {
+                // not found
+                return new PostWrapper();
+            }
         }
 
 

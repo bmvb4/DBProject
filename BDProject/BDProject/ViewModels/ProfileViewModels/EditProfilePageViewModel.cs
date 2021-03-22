@@ -1,9 +1,7 @@
-﻿using BDProject.ModelWrappers;
+﻿using BDProject.Helpers;
+using BDProject.ModelWrappers;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -46,7 +44,7 @@ namespace BDProject.ViewModels.ProfileViewModels
 
         // Parameters
         // profile image source parameter
-        private string base64ImageRepresentation = "";
+        private byte[] imageBytes;
         private ImageSource profilePictureSource;
         public ImageSource ProfilePictureSource
         {
@@ -111,7 +109,6 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand TakePhotoCommand { get; set; }
         private async Task TakePhotoFunction()
         {
-            base64ImageRepresentation = "";
             ProfilePictureSource = null;
 
             var result = await MediaPicker.CapturePhotoAsync();
@@ -131,16 +128,14 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand PickPhotoCommand { get; set; }
         private async Task PickPhotoFunction()
         {
-            base64ImageRepresentation = "";
             ProfilePictureSource = null;
 
             var result = await MediaPicker.PickPhotoAsync();
             if (result == null) { return; }
 
-            byte[] imageBytes = File.ReadAllBytes(result.FullPath);
-            base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+            imageBytes = File.ReadAllBytes(result.FullPath);
 
-            ProfilePictureSource = ImageSource.FromFile(result.FullPath);
+            ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
             isChanged = true;
         }
 
@@ -151,7 +146,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             // save photo
             if (isChanged == true)
             {
-                _Globals.GlobalMainUser.Base64Photo = base64ImageRepresentation;
+                _Globals.GlobalMainUser.ImageBytes = imageBytes;
             }
 
             // save first name
@@ -167,6 +162,22 @@ namespace BDProject.ViewModels.ProfileViewModels
             }
 
             await Shell.Current.Navigation.PopAsync();
+
+            /*
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
+            oJsonObject.Add("Photo", _Globals.GlobalMainUser.ImageBytes);
+            oJsonObject.Add("Description", _Globals.GlobalMainUser.Description);
+            oJsonObject.Add("FirstName", _Globals.GlobalMainUser.FirstName);
+            oJsonObject.Add("LastName", _Globals.GlobalMainUser.LastName);
+
+            bool success = await ServerServices.SendRequestAsync("profile/update/", oJsonObject);
+
+            if (success)
+            {
+                await Shell.Current.Navigation.PopAsync();
+            }
+            */
         }
 
     }

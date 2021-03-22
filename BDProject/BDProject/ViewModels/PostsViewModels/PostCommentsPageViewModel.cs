@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BDProject.Helpers;
+using BDProject.ModelWrappers;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -11,18 +10,30 @@ namespace BDProject.ViewModels.PostsViewModels
     public class PostCommentsPageViewModel : BaseViewModel
     {
 
+        private void SetParameters()
+        {
+            PostWrapper SelectedPost = _Globals.GetPost(_Globals.OpenID);
+
+            Username = SelectedPost.Username;
+            Description = SelectedPost.Description;
+
+            _Globals.OpenID = 0;
+        }
+
         public PostCommentsPageViewModel()
         {
             //========TEST=======
             CommentsCollection = new ObservableCollection<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             //========TEST=======
 
+            SetParameters();
+
             LikesCount = $"{likeCounter}";
             CommentsCount = $"{commentsCounter}";
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
-            LikePostItemCommand = new Command(LikePostItemFunction);
+            LikePostCommand = new Command(LikePostFunction);
         }
 
         // Parameters
@@ -82,8 +93,7 @@ namespace BDProject.ViewModels.PostsViewModels
         }
 
         // Username parameter
-        //=================================== za testvane
-        private string username = "Daniel";
+        private string username = "";
         public string Username
         {
             get => username;
@@ -96,16 +106,15 @@ namespace BDProject.ViewModels.PostsViewModels
         }
 
         // Post description parameter
-        //=================================== za testvane
-        private string postDescription = "tova e prosto nqkakvo opisanie za testvane na dizaina";
-        public string PostDescription
+        private string description = "";
+        public string Description
         {
-            get => postDescription;
+            get => description;
             set
             {
-                if (value == postDescription) { return; }
-                postDescription = value;
-                OnPropertyChanged(nameof(PostDescription));
+                if (value == description) { return; }
+                description = value;
+                OnPropertyChanged(nameof(Description));
             }
         }
 
@@ -118,8 +127,8 @@ namespace BDProject.ViewModels.PostsViewModels
         }
 
         // Like Post command
-        public ICommand LikePostItemCommand { get; set; }
-        private void LikePostItemFunction(object user)
+        public ICommand LikePostCommand { get; set; }
+        private void LikePostFunction()
         {
             likeCounter++;
             LikesCount = $"{likeCounter}";

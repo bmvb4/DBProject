@@ -4,7 +4,8 @@
              x:Class="BDProject.Views.PostsViews.EditPostPage"
              
              Shell.BackgroundColor="{StaticResource White}"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
 
     <ContentPage.Content>
         <StackLayout>

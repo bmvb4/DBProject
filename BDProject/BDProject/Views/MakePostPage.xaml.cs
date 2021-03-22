@@ -17,6 +17,8 @@ namespace BDProject.Views
         {
             InitializeComponent();
 
+            descriptionEditor.Unfocus();
+
             BindingContext = new MakePostPageViewModel();
         }
     }

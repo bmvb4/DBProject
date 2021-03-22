@@ -1,9 +1,7 @@
-﻿using BDProject.Models;
+﻿using BDProject.Helpers;
 using BDProject.ModelWrappers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -19,6 +17,7 @@ namespace BDProject.ViewModels
             try
             {
                 Name = user.FirstName + " " + user.LastName;
+                Username = "(" + user.Username + ")";
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
             }
@@ -30,6 +29,7 @@ namespace BDProject.ViewModels
 
         private void SetCollection()
         {
+            PostsCount = 0;
             YourPostsCollection.Clear();
             YourPostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalMainUser.MyPosts);
 
@@ -42,10 +42,8 @@ namespace BDProject.ViewModels
 
         public ProfilePageViewModel()
         {
-            //========TEST=======
             SetUserData();
             SetCollection();
-            //========TEST=======
 
             // Assigning functions to the commands
             OpenSettingsCommand = new Command(async () => await OpenSettingsFunction());
@@ -115,6 +113,19 @@ namespace BDProject.ViewModels
                 if (value == name) { return; }
                 name = value;
                 OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        // Your username parameter
+        private string username = "";
+        public string Username
+        {
+            get => username;
+            set
+            {
+                if (value == username) { return; }
+                username = value;
+                OnPropertyChanged(nameof(Username));
             }
         }
 

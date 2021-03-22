@@ -131,7 +131,7 @@
                         Text="{Binding Description}"
                         HeightRequest="100"
                         FontSize="Medium"
-                        HorizontalOptions="Center"
+                        HorizontalOptions="Fill"
                         TextColor="{StaticResource Black}"/>
 
                 </Grid>

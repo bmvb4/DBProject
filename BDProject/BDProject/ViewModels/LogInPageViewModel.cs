@@ -1,13 +1,5 @@
-﻿using Android.Widget;
-using BDProject.Models;
-using BDProject.Views;
-using Newtonsoft.Json;
+﻿using BDProject.Helpers;
 using Newtonsoft.Json.Linq;
-using Refit;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -90,24 +82,14 @@ namespace BDProject.ViewModels
         {
             if (CheckParameters() == true) { return; }
 
-            const string URL = "https://10.0.2.2:5001/login";
-            const string sContentType = "application/json";
-
-            HttpClientHandler clientHandler = new HttpClientHandler();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-            HttpClient _client = new HttpClient(clientHandler);
-
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", Username);
             oJsonObject.Add("Password", Password);
 
-            var result = await _client.PostAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
-            
-            if (result.IsSuccessStatusCode)
-            {
-                var earthquakesJson = result.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
+            bool success = await ServerServices.SendRequestAsync("login", oJsonObject);
 
+            if (success) 
+            {
                 await Shell.Current.GoToAsync("//HomePage");
             }
             else
@@ -120,6 +102,11 @@ namespace BDProject.ViewModels
         public ICommand SignUpCommand { get; set; }
         private async Task SignUpFunction()
         {
+            //==============================TEST
+            await Shell.Current.GoToAsync("//HomePage");
+            //==============================TEST
+
+            /*
             await Shell.Current.GoToAsync("//SignUpPage");
 
             Username = "";
@@ -127,6 +114,7 @@ namespace BDProject.ViewModels
 
             UsernameAlert = "";
             PasswordAlert = "";
+            */
         }
 
         // Functions

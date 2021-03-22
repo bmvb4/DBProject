@@ -30,16 +30,7 @@
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
                                 Scale="1.4"
-                                Source="{Binding UserPhotoSource}">
-
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding OpenPersonsProfileCommand, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}"
-                                        CommandParameter="{Binding .}"/>
-                                </Image.GestureRecognizers>
-                            </Image>
+                                Source="{Binding UserPhotoSource}"/>
 
                         </Frame>
 
@@ -52,16 +43,7 @@
                                 FontSize="Medium"
                                 FontAttributes="Bold"
                                 TextColor="{StaticResource Black}"
-                                Text="{Binding Username}">
-
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding OpenPersonsProfileCommand, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}"
-                                        CommandParameter="{Binding .}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
+                                Text="{Binding Username}"/>
 
                         </Grid>
 
@@ -74,7 +56,16 @@
                             BackgroundColor="{StaticResource White}"
                             Command="{Binding EditPostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                            }}"/>
+                            }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding OpenMyProfileCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                                CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
 
                     </Grid>
 
@@ -151,7 +142,7 @@
                             FontSize="Large"
                             FontFamily="FA-R"
                             BackgroundColor="{StaticResource White}"
-                            Command="{Binding OpenPostCommentsItemCommand, Source={
+                            Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
@@ -192,16 +183,7 @@
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
                                 Scale="1.4"
-                                Source="{Binding UserPhotoSource}">
-
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding OpenPersonsProfileCommand, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}"
-                                        CommandParameter="{Binding .}"/>
-                                </Image.GestureRecognizers>
-                            </Image>
+                                Source="{Binding UserPhotoSource}"/>
 
                         </Frame>
 
@@ -214,16 +196,7 @@
                                 FontSize="Medium"
                                 FontAttributes="Bold"
                                 TextColor="{StaticResource Black}"
-                                Text="{Binding Username}">
-
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding OpenPersonsProfileCommand, Source={
-                                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                        }}"
-                                        CommandParameter="{Binding .}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
+                                Text="{Binding Username}"/>
 
                         </Grid>
 
@@ -231,13 +204,20 @@
                             Grid.Column="3"
                             CornerRadius="100"
                             HeightRequest="0"
-                            Text="{Binding FollowButtonText, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                            }}"
+                            Text="{Binding IsFollowed}"
                             FontAttributes="Bold"
                             Command="{Binding FollowProfileCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                            }}"/>
+                            }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding OpenPersonsProfileCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                                CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
 
                     </Grid>
 
@@ -314,7 +294,7 @@
                             FontSize="Large"
                             FontFamily="FA-R"
                             BackgroundColor="{StaticResource White}"
-                            Command="{Binding OpenPostCommentsItemCommand, Source={
+                            Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
@@ -365,10 +345,7 @@
                     SelectionMode="None"
                     x:Name="PostsCollectionView"
                     ItemsSource="{Binding PostsCollection}"
-                    ItemTemplate="{StaticResource templateSelector}"
-                    SelectedItem="{Binding PostParameter, Source={
-                        RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                    }}"/>
+                    ItemTemplate="{StaticResource templateSelector}"/>
 
             </RefreshView>
 

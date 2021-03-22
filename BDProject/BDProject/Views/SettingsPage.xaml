@@ -37,8 +37,84 @@
                         TextColor="{StaticResource Black}"/>
 
                 </Grid>
-                
 
+                <Grid 
+                    RowDefinitions="auto,auto,*,auto">
+
+                    <Frame 
+                        Grid.Row="0"
+                        HasShadow="False">
+                        <StackLayout 
+                            Orientation="Horizontal">
+
+                            <Label 
+                                Text=""
+                                FontSize="Large"
+                                FontFamily="FA-R"
+                                TextColor="{StaticResource Black}"/>
+
+                            <Label 
+                                Text="Manage Account"
+                                Margin="16,0"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                TextColor="{StaticResource Black}"/>
+
+                        </StackLayout>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding OpenManageAccountCommand}"/>
+                        </Frame.GestureRecognizers>
+
+                    </Frame>
+
+                    <Frame 
+                        Grid.Row="1"
+                        HasShadow="False">
+                        <StackLayout 
+                            Orientation="Horizontal">
+
+                            <Label 
+                                Text=""
+                                FontSize="Large"
+                                FontFamily="FA-S"
+                                TextColor="{StaticResource Black}"/>
+
+                            <Label 
+                                Text="Themes"
+                                Margin="16,0"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                TextColor="{StaticResource Black}"/>
+
+                        </StackLayout>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding OpenThemes}"/>
+                        </Frame.GestureRecognizers>
+
+                    </Frame>
+
+                    <Frame 
+                        Grid.Row="3"
+                        HasShadow="False">
+
+                        <Label 
+                            Text="Delete Account"
+                            HorizontalOptions="End"
+                            FontSize="Medium"
+                            TextColor="Red"/>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding DeleteAccountCommand}"/>
+                        </Frame.GestureRecognizers>
+
+                    </Frame>
+
+                </Grid>
 
             </StackLayout>
         </ScrollView>

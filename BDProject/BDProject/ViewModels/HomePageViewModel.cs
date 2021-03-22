@@ -1,61 +1,15 @@
-﻿using BDProject.Models;
+﻿using BDProject.Helpers;
 using BDProject.ModelWrappers;
-using BDProject.Views;
-using BDProject.Views.PostsViews;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels
 {
-    //[QueryProperty(nameof(FName), "FirstName")]
-    //[QueryProperty(nameof(LName), "LastName")]
-    //[QueryProperty(nameof(UName), "Username")]
     public class HomePageViewModel : BaseViewModel
     {
-        // User data object
-        //private string fNameData; // users first name
-        //public string FName
-        //{
-        //    get => fNameData;
-        //    set
-        //    {
-        //        fNameData = Uri.UnescapeDataString(value);
-        //        OnPropertyChanged(nameof(FName));
-        //    }
-        //}
-        //private string lNameData; // users last name
-        //public string LName
-        //{
-        //    get => lNameData;
-        //    set
-        //    {
-        //        lNameData = Uri.UnescapeDataString(value);
-        //        OnPropertyChanged(nameof(LName));
-        //    }
-        //}
-        //private string uNameData; // users username
-        //public string UName
-        //{
-        //    get => uNameData;
-        //    set
-        //    {
-        //        uNameData = Uri.UnescapeDataString(value);
-        //        OnPropertyChanged(nameof(UName));
-        //    }
-        //}
-
-        //private void SetUserData()
-        //{
-        //    Username = UName;
-        //    PostDescription = FName = " " + LName;
-        //}
 
         private void SetCollection()
         {
@@ -68,7 +22,6 @@ namespace BDProject.ViewModels
         {            
             SetCollection();
 
-            FollowButtonText = "Follow";
             DaysCount = $"{daysCounter}";
             LikesCount = $"{likeCounter}";
             CommentsCount = $"{commentsCounter}";
@@ -85,15 +38,16 @@ namespace BDProject.ViewModels
             SendCommentToPostItemCommand = new Command(SendCommentToPostItemFunction);
             
             // open commands
-            OpenPostCommentsItemCommand = new Command(async () => await OpenPostCommentsItemFunction());
+            OpenPostCommentsCommand = new Command<PostWrapper>(OpenPostCommentsFunction);
             OpenSearchCommand = new Command(async () => await OpenSearchFunction());
             OpenPersonsProfileCommand = new Command(async () => await OpenPersonsProfileFunction());
+            OpenMyProfileCommand= new Command(async () => await OpenMyProfileFunction());
 
             // follow command
-            FollowProfileCommand= new Command(FollowProfileFunction);
+            FollowProfileCommand = new Command<PostWrapper>(FollowProfileFunction);
 
             // edit post command
-            EditPostCommand = new Command(async () => await EditPostFunction());
+            EditPostCommand = new Command<PostWrapper>(EditPostFunction);
         }
 
         // Parameters
@@ -204,32 +158,6 @@ namespace BDProject.ViewModels
             }
         }
 
-        // follow text parameter
-        private string followButtonText = "Follow";
-        public string FollowButtonText
-        {
-            get => followButtonText;
-            set
-            {
-                if (value == followButtonText) { return; }
-                followButtonText = value;
-                OnPropertyChanged(nameof(FollowButtonText));
-            }
-        }
-
-        // follow text parameter
-        private PostWrapper postParameter;
-        public PostWrapper PostParameter
-        {
-            get => postParameter;
-            set
-            {
-                if (value == postParameter) { return; }
-                postParameter = value;
-                OnPropertyChanged(nameof(PostParameter));
-            }
-        }
-
         // Commands
         // Like Post command
         public ICommand LikePostItemCommand { get; set; }
@@ -257,9 +185,10 @@ namespace BDProject.ViewModels
         }
 
         // Open Post Comments command
-        public ICommand OpenPostCommentsItemCommand { get; set; }
-        private async Task OpenPostCommentsItemFunction()
+        public ICommand OpenPostCommentsCommand { get; set; }
+        private async void OpenPostCommentsFunction(PostWrapper post)
         {
+            _Globals.OpenID = post.FeedID;
             await Shell.Current.GoToAsync("PostComments");
         }
 
@@ -287,31 +216,40 @@ namespace BDProject.ViewModels
             await Shell.Current.GoToAsync("PersonsProfilePage");
         }
 
+        // Open my profile command
+        public ICommand OpenMyProfileCommand { get; set; }
+        private async Task OpenMyProfileFunction()
+        {
+            await Shell.Current.GoToAsync("//ProfilePage");
+        }
+
         // Follow profile command
         public ICommand FollowProfileCommand { get; set; }
-        private void FollowProfileFunction()
+        private void FollowProfileFunction(PostWrapper post)
         {
-            if (FollowButtonText == "Follow")
+            if (post.IsFollowed == "Follow")
             {
-                _Globals.GlobalMainUser.AddFollowing(PostParameter.Username);
+                _Globals.GlobalMainUser.AddFollowing(post.Username);
 
-                FollowButtonText = "Following";
+                post.IsFollowed = "Following";
+                _Globals.EditPost(post);
             }
             else
             {
-                _Globals.GlobalMainUser.RemoveFollowing(PostParameter.Username);
+                _Globals.GlobalMainUser.RemoveFollowing(post.Username);
 
-                FollowButtonText = "Follow";
+                post.IsFollowed = "Follow";
+                _Globals.EditPost(post);
             }
-            //await Shell.Current.GoToAsync("PersonsProfilePage");
+            PostsCollection[post.FeedID].IsFollowed = post.IsFollowed;
         }
 
         // Follow profile command
         public ICommand EditPostCommand { get; set; }
-        private async Task EditPostFunction()
+        private async void EditPostFunction(PostWrapper post)
         {
-            int id = 2; //==================TEST
-            await Shell.Current.GoToAsync($"EditPostPage?PostID={id}");
+            _Globals.OpenID = post.FeedID;
+            await Shell.Current.GoToAsync("EditPostPage");
         }
     }
 }
