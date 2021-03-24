@@ -1,14 +1,23 @@
 ﻿using BDProject.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using Xamarin.Forms;
 
 namespace BDProject.ModelWrappers
 {
-    public class PostWrapper
+    public class PostWrapper : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged == null) { return; }
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public PostWrapper()
         {
 
@@ -57,7 +66,11 @@ namespace BDProject.ModelWrappers
         public byte[] ImageBytes
         {
             get => imageBytes;
-            set => imageBytes = value;
+            set
+            {
+                imageBytes = value;
+                OnPropertyChanged(nameof(ImageBytes));
+            }
         }
         public ImageSource PhotoSource
         {
@@ -71,7 +84,11 @@ namespace BDProject.ModelWrappers
         public string Description
         {
             get => description;
-            set => description = value;
+            set
+            {
+                description = value;
+                OnPropertyChanged(nameof(Description));
+            }
         }
 
 
@@ -87,7 +104,11 @@ namespace BDProject.ModelWrappers
         public byte[] UserImageBytes
         {
             get => userImageBytes;
-            set => userImageBytes = value;
+            set
+            {
+                userImageBytes = value;
+                OnPropertyChanged(nameof(UserImageBytes));
+            }
         }
         public ImageSource UserPhotoSource
         {
@@ -101,14 +122,24 @@ namespace BDProject.ModelWrappers
         public string Username
         {
             get => username;
-            set => username = value;
+            set
+            {
+                username = value;
+                OnPropertyChanged(nameof(Username));
+            }
         }
 
-        private string isFollowed = "Follow";
-        public string IsFollowed
+
+
+        private string following = "Follow";
+        public string Following
         {
-            get => isFollowed;
-            set => isFollowed = value;
+            get => following;
+            set
+            {
+                following = value;
+                OnPropertyChanged(nameof(Following));
+            }
         }
     }
 }

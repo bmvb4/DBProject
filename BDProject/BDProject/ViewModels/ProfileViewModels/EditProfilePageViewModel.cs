@@ -161,6 +161,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                 _Globals.GlobalMainUser.LastName = LName;
             }
 
+            _Globals.Refresh = true;
             await Shell.Current.Navigation.PopAsync();
 
             /*

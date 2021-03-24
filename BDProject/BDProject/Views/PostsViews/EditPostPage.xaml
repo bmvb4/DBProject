@@ -7,6 +7,10 @@
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+
     <ContentPage.Content>
         <StackLayout>
 
@@ -17,7 +21,7 @@
                 <Button 
                     Grid.Column="0"
                     HeightRequest="48"
-                    WidthRequest="48"
+                    WidthRequest="38"
                     Text="" 
                     FontFamily="FA-S"
                     FontSize="Large"

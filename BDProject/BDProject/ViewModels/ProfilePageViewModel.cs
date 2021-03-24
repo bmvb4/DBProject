@@ -10,7 +10,7 @@ namespace BDProject.ViewModels
 {
     public class ProfilePageViewModel : BaseViewModel
     {
-        private void SetUserData()
+        public void SetUserData()
         {
             UserWrapper user = _Globals.GlobalMainUser;
 
@@ -20,6 +20,8 @@ namespace BDProject.ViewModels
                 Username = "(" + user.Username + ")";
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
+
+                FollowingCount = _Globals.GlobalMainUser.Followings.Count;
             }
             catch(Exception ex)
             {
@@ -27,7 +29,7 @@ namespace BDProject.ViewModels
             }
         }
 
-        private void SetCollection()
+        public void SetCollection()
         {
             PostsCount = 0;
             YourPostsCollection.Clear();

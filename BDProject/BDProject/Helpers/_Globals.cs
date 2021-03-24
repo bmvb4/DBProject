@@ -7,6 +7,7 @@ namespace BDProject.Helpers
 {
     public static class _Globals
     {
+        // ================= Main User
         private static UserWrapper MainUser = new UserWrapper();
         public static UserWrapper GlobalMainUser
         {
@@ -14,6 +15,33 @@ namespace BDProject.Helpers
             set => MainUser = value;
         }
 
+
+        // ================= Other Users
+        private static List<UserWrapper> otherUsers = new List<UserWrapper>();
+        public static List<UserWrapper> OtherUsers
+        {
+            get => otherUsers;
+            set => otherUsers = value;
+        }
+        public static void AddUser(UserWrapper user)
+        {
+            user.ID = otherUsers.Count;
+            otherUsers.Add(user);
+        }
+        public static void RemoveUser(UserWrapper user)
+        {
+            otherUsers.RemoveAt(user.ID);
+        }
+        public static UserWrapper GetUser(string username)
+        {
+            foreach(UserWrapper user in otherUsers)
+            {
+                if (user.Username == username) { return user; }
+            }
+            return new UserWrapper();
+        }
+
+        // ================= Main Feed
         private static List<PostWrapper> FeedPosts = new List<PostWrapper>();
         public static List<PostWrapper> GlobalFeedPosts
         {
@@ -58,8 +86,6 @@ namespace BDProject.Helpers
                 if (FeedPosts[i].FeedID == post.FeedID)
                 {
                     FeedPosts[i].Description = post.Description;
-
-                    FeedPosts[i].IsFollowed = post.IsFollowed;
                 }
             }
         }
@@ -71,6 +97,13 @@ namespace BDProject.Helpers
         {
             get => openID;
             set => openID = value;
+        }
+
+        private static bool refresh = false;
+        public static bool Refresh
+        {
+            get => refresh;
+            set => refresh = value;
         }
     }
 }

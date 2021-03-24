@@ -152,14 +152,42 @@ namespace BDProject.ViewModels
             }
 
             //=================TEST
-            _Globals.AddPost(new PostWrapper(new Post(imageBytes, "Test description 1"), "Stranger1", _Globals.GlobalMainUser.ImageBytes));
-            _Globals.AddPost(new PostWrapper(new Post(imageBytes, "Test description 2"), "Stranger2", _Globals.GlobalMainUser.ImageBytes));
-            // is followed go nqma
+            UserWrapper temp1 = new UserWrapper(new User()
+            {
+                FirstName = "Some",
+                LastName = "Stranger",
+                Username = "Stranger1",
+                Password = "",
+                Email = "",
+                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                Photo = imageBytes
+            });
+            PostWrapper temp1post = new PostWrapper(new Post(imageBytes, "Test description 1"), temp1.Username, _Globals.GlobalMainUser.ImageBytes);
+            temp1.AddPost(temp1post);
+
+            UserWrapper temp2 = new UserWrapper(new User()
+            {
+                FirstName = "Other",
+                LastName = "Stranger",
+                Username = "Stranger2",
+                Password = "",
+                Email = "",
+                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                Photo = imageBytes
+            });
+            PostWrapper temp2post = new PostWrapper(new Post(imageBytes, "Test description 1"), temp2.Username, _Globals.GlobalMainUser.ImageBytes);
+            temp2.AddPost(temp2post);
+
+            _Globals.AddUser(temp1);
+            _Globals.AddUser(temp2);
+            _Globals.AddPost(temp1post);
+            _Globals.AddPost(temp2post);
             //=================TEST
 
             _Globals.AddMyPost(new PostWrapper(new Post(imageBytes, Description), _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
             _Globals.GlobalMainUser.AddPost(new PostWrapper(new Post(imageBytes, Description), _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
 
+            _Globals.Refresh = true;
             await Shell.Current.GoToAsync("//HomePage");
 
             /*

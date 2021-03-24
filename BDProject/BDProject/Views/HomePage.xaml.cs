@@ -1,4 +1,5 @@
-﻿using BDProject.Models;
+﻿using BDProject.Helpers;
+using BDProject.Models;
 using BDProject.ViewModels;
 using BDProject.ViewModels.SearchViewModels;
 using System;
@@ -26,6 +27,18 @@ namespace BDProject.Views
         {
             Searcher.Unfocus();
             await Shell.Current.GoToAsync("SearchPage");
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (_Globals.Refresh == true)
+            {
+                var vm = (HomePageViewModel)this.BindingContext;
+                vm.SetCollection();
+                _Globals.Refresh = false;
+            }
         }
     }
 }

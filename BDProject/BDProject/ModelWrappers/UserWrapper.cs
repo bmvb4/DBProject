@@ -1,14 +1,23 @@
 ﻿using BDProject.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using Xamarin.Forms;
 
 namespace BDProject.ModelWrappers
 {
-    public class UserWrapper
+    public class UserWrapper : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged == null) { return; }
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public UserWrapper()
         {
 
@@ -37,42 +46,66 @@ namespace BDProject.ModelWrappers
         public string Username
         {
             get => username;
-            set => username = value; 
+            set
+            {
+                username = value;
+                OnPropertyChanged(nameof(Username));
+            }
         }
 
         private string email;
         public string Email
         {
             get => email;
-            set => email = value; 
+            set
+            {
+                email = value;
+                OnPropertyChanged(nameof(Email));
+            }
         }
 
         private string firstname;
         public string FirstName
         {
             get => firstname;
-            set => firstname = value;
+            set
+            {
+                firstname = value;
+                OnPropertyChanged(nameof(FirstName));
+            }
         }
 
         private string lastname;
         public string LastName
         {
             get => lastname;
-            set => lastname = value;
+            set
+            {
+                lastname = value;
+                OnPropertyChanged(nameof(LastName));
+            }
         }
 
         private string description;
         public string Description
         {
             get => description;
-            set => description = value;
+            set
+            {
+                description = value;
+                OnPropertyChanged(nameof(Description));
+            }
         }
 
         private byte[] imageBytes;
         public byte[] ImageBytes
         {
             get => imageBytes;
-            set => imageBytes = value;
+            set
+            {
+                imageBytes = value;
+                OnPropertyChanged(nameof(ImageBytes));
+            }
         }
         public ImageSource PhotoSource
         {
@@ -84,11 +117,15 @@ namespace BDProject.ModelWrappers
 
 
 
-        private static List<string> followings = new List<string>();
+        private List<string> followings = new List<string>();
         public List<string> Followings
         {
             get => followings;
-            set => followings = value;
+            set
+            {
+                followings = value;
+                OnPropertyChanged(nameof(Followings));
+            }
         }
         public void AddFollowing(string username) { followings.Add(username); }
         public void RemoveFollowing(string username) { followings.Remove(username); }
@@ -97,11 +134,15 @@ namespace BDProject.ModelWrappers
 
 
 
-        private static List<PostWrapper> myPosts = new List<PostWrapper>();
+        private List<PostWrapper> myPosts = new List<PostWrapper>();
         public List<PostWrapper> MyPosts
         {
             get => myPosts;
-            set => myPosts = value;
+            set
+            {
+                myPosts = value;
+                OnPropertyChanged(nameof(MyPosts));
+            }
         }
         public void AddPost(PostWrapper post) 
         {

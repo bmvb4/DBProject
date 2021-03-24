@@ -6,6 +6,10 @@
              Shell.BackgroundColor="{StaticResource White}"
              Shell.NavBarIsVisible="False">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+
     <ContentPage.Content>
         <StackLayout>
             

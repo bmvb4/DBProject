@@ -13,19 +13,18 @@ namespace BDProject.ViewModels.ProfileViewModels
 
         private void SetUserData()
         {
-            UserWrapper user = _Globals.GlobalMainUser;
+            string uName = _Globals.GlobalFeedPosts[_Globals.OpenID].Username;
+            UserWrapper user = _Globals.GetUser(uName);
 
             try
             {
                 Name = user.FirstName + " " + user.LastName;
+                realUsername = user.Username;
                 Username = "(" + user.Username + ")";
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
 
-                if (_Globals.GlobalMainUser.IsFollowerInside(Username))
-                { IsFollowed = "Follow"; }
-                else
-                { IsFollowed = "Following"; }
+                Following = _Globals.GlobalFeedPosts[_Globals.OpenID].Following;
             }
             catch (Exception ex)
             {
@@ -122,6 +121,7 @@ namespace BDProject.ViewModels.ProfileViewModels
         }
 
         // Your username parameter
+        private string realUsername = "";
         private string username = "";
         public string Username
         {
@@ -200,15 +200,15 @@ namespace BDProject.ViewModels.ProfileViewModels
         }
 
         // following parameter
-        private string isFollowed = "Follow";
-        public string IsFollowed
+        private string following = "Follow";
+        public string Following
         {
-            get => isFollowed;
+            get => following;
             set
             {
-                if (value == isFollowed) { return; }
-                isFollowed = value;
-                OnPropertyChanged(nameof(IsFollowed));
+                if (value == following) { return; }
+                following = value;
+                OnPropertyChanged(nameof(Following));
             }
         }
 
@@ -217,7 +217,8 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand BackCommand { get; set; }
         private async Task BackFunction()
         {
-            await Shell.Current.Navigation.PopAsync();
+            _Globals.OpenID = 0;
+            await Shell.Current.GoToAsync("..");
         }
 
         // Refresh collection view command
@@ -235,15 +236,17 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand FollowProfileCommand { get; set; }
         private void FollowProfileFunction()
         {
-            if (_Globals.GlobalMainUser.IsFollowerInside(Username))
+            if (Following == "Follow")
             {
-                _Globals.GlobalMainUser.RemoveFollowing(Username);
-                IsFollowed = "Follow";
+                _Globals.GlobalMainUser.AddFollowing(realUsername);
+                _Globals.GlobalFeedPosts[_Globals.OpenID].Following = "Following";
+                Following = "Following";
             }
             else
             {
-                _Globals.GlobalMainUser.AddFollowing(Username);
-                IsFollowed = "Following";
+                _Globals.GlobalMainUser.RemoveFollowing(realUsername);
+                _Globals.GlobalFeedPosts[_Globals.OpenID].Following = "Follow";
+                Following = "Follow";
             }
         }
 

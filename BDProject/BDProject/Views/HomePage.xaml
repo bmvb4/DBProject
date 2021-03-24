@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.HomePage"
              xmlns:local="clr-namespace:BDProject.ViewModels"
-             xmlns:selector="clr-namespace:BDProject.Helpers">
+             xmlns:selector="clr-namespace:BDProject.Helpers"
+             
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -18,34 +20,19 @@
                         Grid.Row="0"
                         ColumnDefinitions="auto,auto,*,auto">
 
-                        <Frame
+                        <controls:CircleImage
                             Grid.Column="0"
-                            HeightRequest="40"
-                            WidthRequest="40"
-                            CornerRadius="100"
-                            Padding="0"
-                            IsClippedToBounds="True">
+                            Source="{Binding UserPhotoSource}"
+                            HeightRequest="50"
+                            WidthRequest="35"/>
 
-                            <Image 
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"
-                                Scale="1.4"
-                                Source="{Binding UserPhotoSource}"/>
-
-                        </Frame>
-
-                        <Grid
+                        <Label 
                             Grid.Column="1"
-                            RowDefinitions="auto,auto">
-
-                            <Label 
-                                Grid.Row="0"
-                                FontSize="Medium"
-                                FontAttributes="Bold"
-                                TextColor="{StaticResource Black}"
-                                Text="{Binding Username}"/>
-
-                        </Grid>
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding Username}"/>
 
                         <Button 
                             Grid.Column="3"
@@ -171,49 +158,34 @@
                         Grid.Row="0"
                         ColumnDefinitions="auto,auto,*,auto">
 
-                        <Frame
+                        <controls:CircleImage
                             Grid.Column="0"
-                            HeightRequest="40"
-                            WidthRequest="40"
-                            CornerRadius="100"
-                            Padding="0"
-                            IsClippedToBounds="True">
-
-                            <Image 
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"
-                                Scale="1.4"
-                                Source="{Binding UserPhotoSource}"/>
-
-                        </Frame>
-
-                        <Grid
+                            Source="{Binding UserPhotoSource}"
+                            HeightRequest="50"
+                            WidthRequest="35"/>
+                        
+                        <Label 
                             Grid.Column="1"
-                            RowDefinitions="auto,auto">
-
-                            <Label 
-                                Grid.Row="0"
-                                FontSize="Medium"
-                                FontAttributes="Bold"
-                                TextColor="{StaticResource Black}"
-                                Text="{Binding Username}"/>
-
-                        </Grid>
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding Username}"/>
 
                         <Button 
                             Grid.Column="3"
                             CornerRadius="100"
                             HeightRequest="0"
-                            Text="{Binding IsFollowed}"
+                            Text="{Binding Following}"
                             FontAttributes="Bold"
                             Command="{Binding FollowProfileCommand, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                            }}"
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
                             CommandParameter="{Binding .}"/>
 
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer 
-                                Command="{Binding OpenPersonsProfileCommand, Source={
+                                Command="{Binding OpenProfileCommand, Source={
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                                 CommandParameter="{Binding .}"/>

@@ -1,4 +1,5 @@
-﻿using BDProject.ViewModels.ProfileViewModels;
+﻿using BDProject.Helpers;
+using BDProject.ViewModels.ProfileViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,21 @@ namespace BDProject.Views.ProfileViews
 
             BindingContext = new PersonsProfilePageViewModel();
         }
+
+        //private void FollowProfileFunction_Click(object sender, EventArgs e)
+        //{
+        //    if (FollowButton.Text == "Follow")
+        //    {
+        //        _Globals.GlobalMainUser.AddFollowing(UsernameLabel.Text);
+
+        //        FollowButton.Text = "Following";
+        //    }
+        //    else
+        //    {
+        //        _Globals.GlobalMainUser.RemoveFollowing(UsernameLabel.Text);
+
+        //        FollowButton.Text = "Follow";
+        //    }
+        //}
     }
 }

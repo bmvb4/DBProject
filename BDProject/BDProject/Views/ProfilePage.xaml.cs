@@ -1,4 +1,5 @@
-﻿using BDProject.ViewModels;
+﻿using BDProject.Helpers;
+using BDProject.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,19 @@ namespace BDProject.Views
             InitializeComponent();
 
             BindingContext = new ProfilePageViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (_Globals.Refresh == true)
+            {
+                var vm = (ProfilePageViewModel)this.BindingContext;
+                vm.SetUserData();
+                vm.SetCollection();
+                _Globals.Refresh = false;
+            }
         }
     }
 }

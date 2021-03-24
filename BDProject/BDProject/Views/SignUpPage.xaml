@@ -5,6 +5,10 @@
              
              Shell.NavBarIsVisible="False">
     
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding CancelCommand}"/>
+    </Shell.BackButtonBehavior>
+
     <ContentPage.Content>
 
         <Grid

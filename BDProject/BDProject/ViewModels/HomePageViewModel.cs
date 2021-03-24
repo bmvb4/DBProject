@@ -11,7 +11,7 @@ namespace BDProject.ViewModels
     public class HomePageViewModel : BaseViewModel
     {
 
-        private void SetCollection()
+        public void SetCollection()
         {
             PostsCollection.Clear();
             PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
@@ -40,14 +40,13 @@ namespace BDProject.ViewModels
             // open commands
             OpenPostCommentsCommand = new Command<PostWrapper>(OpenPostCommentsFunction);
             OpenSearchCommand = new Command(async () => await OpenSearchFunction());
-            OpenPersonsProfileCommand = new Command(async () => await OpenPersonsProfileFunction());
             OpenMyProfileCommand= new Command(async () => await OpenMyProfileFunction());
-
-            // follow command
-            FollowProfileCommand = new Command<PostWrapper>(FollowProfileFunction);
+            OpenProfileCommand = new Command<PostWrapper>(OpenProfileFunction);
 
             // edit post command
             EditPostCommand = new Command<PostWrapper>(EditPostFunction);
+
+            FollowProfileCommand = new Command<PostWrapper>(FollowProfileFunction);
         }
 
         // Parameters
@@ -209,13 +208,6 @@ namespace BDProject.ViewModels
             await Shell.Current.GoToAsync("SearchPage");
         }
 
-        // Open Persons profile command
-        public ICommand OpenPersonsProfileCommand { get; set; }
-        private async Task OpenPersonsProfileFunction()
-        {
-            await Shell.Current.GoToAsync("PersonsProfilePage");
-        }
-
         // Open my profile command
         public ICommand OpenMyProfileCommand { get; set; }
         private async Task OpenMyProfileFunction()
@@ -223,33 +215,36 @@ namespace BDProject.ViewModels
             await Shell.Current.GoToAsync("//ProfilePage");
         }
 
-        // Follow profile command
-        public ICommand FollowProfileCommand { get; set; }
-        private void FollowProfileFunction(PostWrapper post)
+        // open profile command
+        public ICommand OpenProfileCommand { get; set; }
+        private async void OpenProfileFunction(PostWrapper post)
         {
-            if (post.IsFollowed == "Follow")
-            {
-                _Globals.GlobalMainUser.AddFollowing(post.Username);
-
-                post.IsFollowed = "Following";
-                _Globals.EditPost(post);
-            }
-            else
-            {
-                _Globals.GlobalMainUser.RemoveFollowing(post.Username);
-
-                post.IsFollowed = "Follow";
-                _Globals.EditPost(post);
-            }
-            PostsCollection[post.FeedID].IsFollowed = post.IsFollowed;
+            _Globals.OpenID = post.FeedID;
+            await Shell.Current.GoToAsync("PersonsProfilePage");
         }
 
-        // Follow profile command
+        // Edit profile command
         public ICommand EditPostCommand { get; set; }
         private async void EditPostFunction(PostWrapper post)
         {
             _Globals.OpenID = post.FeedID;
             await Shell.Current.GoToAsync("EditPostPage");
+        }
+
+        // Follow profile command 
+        public ICommand FollowProfileCommand { get; set; }
+        private void FollowProfileFunction(PostWrapper post)
+        {
+            if (post.Following == "Follow")
+            {
+                _Globals.GlobalMainUser.AddFollowing(post.Username);
+                post.Following = "Following";
+            }
+            else
+            {
+                _Globals.GlobalMainUser.RemoveFollowing(post.Username);
+                post.Following = "Follow";
+            }
         }
     }
 }
