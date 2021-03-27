@@ -1,4 +1,5 @@
-﻿using BDProject.Models;
+﻿using BDProject.Helpers;
+using BDProject.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -92,11 +93,81 @@ namespace BDProject.ModelWrappers
         }
 
 
-        //private List<Comments> comments=new List<Comments>();
-        //public List<Comments> Comments{
-        // get=>comments;
-        // set=>comments=value;
-        //}
+
+        private int commentsCount;
+        public int CommentsCount
+        {
+            get => commentsCount;
+            set
+            {
+                commentsCount = value;
+                OnPropertyChanged(nameof(CommentsCount));
+            }
+        }
+        private List<CommentWrapper> comments = new List<CommentWrapper>();
+        public List<CommentWrapper> Comments
+        {
+            get => comments;
+            set
+            {
+                comments = value;
+                OnPropertyChanged(nameof(Comments));
+            }
+        }
+        public void AddComment(CommentWrapper comment) { comments.Add(comment); CommentsCount = comments.Count; }
+        public void RemoveComment(CommentWrapper comment) { comments.Remove(comment); CommentsCount = comments.Count; }
+        public bool IsCommentInside(CommentWrapper comment) { return comments.Contains(comment); }
+
+
+
+        private int likesCount;
+        public int LikesCount
+        {
+            get => likesCount;
+            set
+            {
+                likesCount = value;
+                OnPropertyChanged(nameof(LikesCount));
+            }
+        }
+        private List<LikeWrapper> likes = new List<LikeWrapper>();
+        public List<LikeWrapper> Likes
+        {
+            get => likes;
+            set
+            {
+                likes = value;
+                OnPropertyChanged(nameof(Likes));
+            }
+        }
+        public void AddLike(LikeWrapper like) 
+        {
+            likes.Add(like); 
+            LikesCount = likes.Count; 
+        }
+        public void RemoveLike(LikeWrapper like) 
+        {
+            int i = 0;
+            for (i=0; i<likes.Count; i++)
+            {
+                if (likes[i].Username == like.Username) { break; }
+            }
+            likes.RemoveAt(i);
+            LikesCount = likes.Count; 
+        }
+        public bool IsLikeInside(LikeWrapper like) { return likes.Contains(like); }
+        public bool IsLikeUsernameInside(string username) 
+        { 
+            foreach(LikeWrapper like in likes)
+            {
+                if (like.Username == username)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
 
         // user parameters

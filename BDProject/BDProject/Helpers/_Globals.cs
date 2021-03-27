@@ -40,6 +40,26 @@ namespace BDProject.Helpers
             }
             return new UserWrapper();
         }
+        public static void SetFollowing(string username)
+        {
+            for(int i=0; i<otherUsers.Count; i++)
+            {
+                if (otherUsers[i].Username == username)
+                {
+                    otherUsers[i].AddFollower(GlobalMainUser.Username);
+                }
+            }
+        }
+        public static void UndoFollowing(string username)
+        {
+            for (int i = 0; i < otherUsers.Count; i++)
+            {
+                if (otherUsers[i].Username == username)
+                {
+                    otherUsers[i].RemoveFollower(GlobalMainUser.Username);
+                }
+            }
+        }
 
         // ================= Main Feed
         private static List<PostWrapper> FeedPosts = new List<PostWrapper>();

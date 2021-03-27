@@ -3,6 +3,7 @@ using BDProject.Views.MakePostViews;
 using BDProject.Views.PostsViews;
 using BDProject.Views.ProfileViews;
 using BDProject.Views.SearchViews;
+using BDProject.Views.SettingsViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,8 @@ namespace BDProject
 
             // pages for settings
             Routing.RegisterRoute("SettingsPage", typeof(SettingsPage));
-            
+            Routing.RegisterRoute("ManageAccountPage", typeof(ManageAccountPage));
+
             // pages for making a post
             Routing.RegisterRoute("AddTagsPage", typeof(AddTagsPage));
             

@@ -70,7 +70,7 @@
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer 
                                 NumberOfTapsRequired="2"
-                                Command="{Binding DoubleTapLikePostItemCommand, Source={
+                                Command="{Binding LikePostCommand, Source={
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
@@ -106,7 +106,7 @@
                             FontSize="Large"
                             FontFamily="FA-R"
                             BackgroundColor="{StaticResource White}"
-                            Command="{Binding LikePostItemCommand, Source={
+                            Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
@@ -117,9 +117,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{StaticResource Black}"
-                            Text="{Binding LikesCount, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}" />
+                            Text="{Binding LikesCount}" />
 
                         <Button 
                             Grid.Column="5"
@@ -139,9 +137,135 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{StaticResource Black}"
-                            Text="{Binding CommentsCount, Source={
+                            Text="{Binding CommentsCount}" />
+
+                    </Grid>
+
+                </Grid>
+            </DataTemplate>
+
+            <!--===============MY TEMPLATE WITHOUT DESCRIPTION===============-->
+            <DataTemplate x:Key="MyTemplateWithoutDescription">
+                <Grid 
+                    Padding="8,16"
+                    RowDefinitions="auto,*,auto">
+
+                    <Grid
+                        Grid.Row="0"
+                        ColumnDefinitions="auto,auto,*,auto">
+
+                        <controls:CircleImage
+                            Grid.Column="0"
+                            Source="{Binding UserPhotoSource}"
+                            HeightRequest="50"
+                            WidthRequest="35"/>
+
+                        <Label 
+                            Grid.Column="1"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding Username}"/>
+
+                        <Button 
+                            Grid.Column="3"
+                            HeightRequest="0"
+                            WidthRequest="38"
+                            Text=""
+                            FontFamily="FA-S"
+                            BackgroundColor="{StaticResource White}"
+                            Command="{Binding EditPostCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                            }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding OpenMyProfileCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                                CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
+
+                    </Grid>
+
+                    <Image 
+                        Grid.Row="1"
+                        Aspect="Fill"
+                        Source="{Binding PhotoSource}">
+
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="2"
+                                Command="{Binding LikePostCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
+                        </Image.GestureRecognizers>
+
+                    </Image>
+
+                    <Grid 
+                        Grid.Row="2"
+                        ColumnDefinitions="auto,auto,*,auto,auto,auto,auto">
+
+                        <Label 
+                            Grid.Column="0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="Days" />
+
+                        <Label 
+                            Grid.Column="1"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding DaysCount, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}" />
+
+                        <Button 
+                            Grid.Column="3"
+                            HeightRequest="46"
+                            WidthRequest="46"
+                            Text=""
+                            FontSize="Large"
+                            FontFamily="FA-R"
+                            BackgroundColor="{StaticResource White}"
+                            Command="{Binding LikePostCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Label 
+                            Grid.Column="4"
+                            Margin="0,0,16,0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding LikesCount}" />
+
+                        <Button 
+                            Grid.Column="5"
+                            HeightRequest="46"
+                            WidthRequest="46"
+                            Text="" 
+                            FontSize="Large"
+                            FontFamily="FA-R"
+                            BackgroundColor="{StaticResource White}"
+                            Command="{Binding OpenPostCommentsCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Label 
+                            Grid.Column="6"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding CommentsCount}" />
 
                     </Grid>
 
@@ -207,7 +331,7 @@
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer 
                                 NumberOfTapsRequired="2"
-                                Command="{Binding DoubleTapLikePostItemCommand, Source={
+                                Command="{Binding LikePostCommand, Source={
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
@@ -243,7 +367,7 @@
                             FontSize="Large"
                             FontFamily="FA-R"
                             BackgroundColor="{StaticResource White}"
-                            Command="{Binding LikePostItemCommand, Source={
+                            Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
@@ -254,9 +378,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{StaticResource Black}"
-                            Text="{Binding LikesCount, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}" />
+                            Text="{Binding LikesCount}" />
 
                         <Button 
                             Grid.Column="5"
@@ -276,19 +398,146 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{StaticResource Black}"
-                            Text="{Binding CommentsCount, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}" />
+                            Text="{Binding CommentsCount}" />
 
                     </Grid>
 
                 </Grid>
             </DataTemplate>
-            
+
+            <!--==============OTHERS TEMPLATE WITHOUT DESCRIPTION===================-->
+            <DataTemplate x:Key="OthersTemplateWithoutDescription">
+                <Grid 
+                    Padding="8,16"
+                    RowDefinitions="auto,*,auto">
+
+                    <Grid
+                        Grid.Row="0"
+                        ColumnDefinitions="auto,auto,*,auto">
+
+                        <controls:CircleImage
+                            Grid.Column="0"
+                            Source="{Binding UserPhotoSource}"
+                            HeightRequest="50"
+                            WidthRequest="35"/>
+
+                        <Label 
+                            Grid.Column="1"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding Username}"/>
+
+                        <Button 
+                            Grid.Column="3"
+                            CornerRadius="100"
+                            HeightRequest="0"
+                            Text="{Binding Following}"
+                            FontAttributes="Bold"
+                            Command="{Binding FollowProfileCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding OpenProfileCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                                CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
+
+                    </Grid>
+
+                    <Image 
+                        Grid.Row="1"
+                        Aspect="Fill"
+                        Source="{Binding PhotoSource}">
+
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="2"
+                                Command="{Binding LikePostCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
+                        </Image.GestureRecognizers>
+
+                    </Image>
+
+                    <Grid 
+                        Grid.Row="2"
+                        ColumnDefinitions="auto,auto,*,auto,auto,auto,auto">
+
+                        <Label 
+                            Grid.Column="0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="Days" />
+
+                        <Label 
+                            Grid.Column="1"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding DaysCount, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}" />
+
+                        <Button 
+                            Grid.Column="3"
+                            HeightRequest="46"
+                            WidthRequest="46"
+                            Text=""
+                            FontSize="Large"
+                            FontFamily="FA-R"
+                            BackgroundColor="{StaticResource White}"
+                            Command="{Binding LikePostCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Label 
+                            Grid.Column="4"
+                            Margin="0,0,16,0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding LikesCount}" />
+
+                        <Button 
+                            Grid.Column="5"
+                            HeightRequest="46"
+                            WidthRequest="46"
+                            Text="" 
+                            FontSize="Large"
+                            FontFamily="FA-R"
+                            BackgroundColor="{StaticResource White}"
+                            Command="{Binding OpenPostCommentsCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+
+                        <Label 
+                            Grid.Column="6"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{StaticResource Black}"
+                            Text="{Binding CommentsCount}" />
+
+                    </Grid>
+
+                </Grid>
+            </DataTemplate>
+
             <!--===================DATA TEMPLATE SELECTOR=====================-->
             <selector:ProfilePostsDataTemplateSelector x:Key="templateSelector"
                 MyPosts="{StaticResource MyTemplate}"
-                OthersPosts="{StaticResource OthersTemplate}"/>
+                OthersPosts="{StaticResource OthersTemplate}"
+                MyPostsWithoutDescription="{StaticResource MyTemplateWithoutDescription}"
+                OthersPostsWithoutDescription="{StaticResource OthersTemplateWithoutDescription}"/>
 
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -314,6 +563,7 @@
                 Command="{Binding RefreshCommand}">
 
                 <CollectionView 
+                    VerticalScrollBarVisibility="Never"
                     SelectionMode="None"
                     x:Name="PostsCollectionView"
                     ItemsSource="{Binding PostsCollection}"

@@ -22,20 +22,12 @@ namespace BDProject.ViewModels
         {            
             SetCollection();
 
-            DaysCount = $"{daysCounter}";
-            LikesCount = $"{likeCounter}";
-            CommentsCount = $"{commentsCounter}";
-
             // Assigning functions to the commands
             // refresh command
             RefreshCommand = new Command(async () => await RefreshFunction());
-            
+
             // like commands
-            LikePostItemCommand = new Command(LikePostItemFunction);
-            DoubleTapLikePostItemCommand = new Command(DoubleTapLikePostItemFunction);
-            
-            // ========
-            SendCommentToPostItemCommand = new Command(SendCommentToPostItemFunction);
+            LikePostCommand = new Command<PostWrapper>(LikePostFunction);
             
             // open commands
             OpenPostCommentsCommand = new Command<PostWrapper>(OpenPostCommentsFunction);
@@ -76,48 +68,6 @@ namespace BDProject.ViewModels
             }
         }
 
-        // Days count parameter
-        private int daysCounter = 0;
-        private string daysCount = "";
-        public string DaysCount
-        {
-            get => daysCount;
-            set
-            {
-                if (value == daysCount) { return; }
-                daysCount = value;
-                OnPropertyChanged(nameof(DaysCount));
-            }
-        }
-
-        // Likes count parameter
-        private int likeCounter = 0;
-        private string likesCount = "";
-        public string LikesCount
-        {
-            get => likesCount;
-            set
-            {
-                if (value == likesCount) { return; }
-                likesCount = value;
-                OnPropertyChanged(nameof(LikesCount));
-            }
-        }
-
-        // Comments count parameter
-        private int commentsCounter = 0;
-        private string commentsCount = "";
-        public string CommentsCount
-        {
-            get => commentsCount;
-            set
-            {
-                if (value == commentsCount) { return; }
-                commentsCount = value;
-                OnPropertyChanged(nameof(CommentsCount));
-            }
-        }
-
         // Username parameter
         private string username = "";
         public string Username
@@ -128,19 +78,6 @@ namespace BDProject.ViewModels
                 if (value == username) { return; }
                 username = value;
                 OnPropertyChanged(nameof(Username));
-            }
-        }
-
-        // Comment parameter
-        private string comment = "";
-        public string Comment
-        {
-            get => comment;
-            set
-            {
-                if (value == comment) { return; }
-                comment = value;
-                OnPropertyChanged(nameof(Comment));
             }
         }
 
@@ -159,28 +96,17 @@ namespace BDProject.ViewModels
 
         // Commands
         // Like Post command
-        public ICommand LikePostItemCommand { get; set; }
-        private void LikePostItemFunction()
+        public ICommand LikePostCommand { get; set; }
+        private void LikePostFunction(PostWrapper post)
         {
-            likeCounter++;
-            LikesCount = $"{likeCounter}";
-        }
-
-        //DubleTapLikePostItemCommand
-        public ICommand DoubleTapLikePostItemCommand { get; set; }
-        private void DoubleTapLikePostItemFunction()
-        {
-            likeCounter++;
-            LikesCount = $"{likeCounter}";
-        }
-
-        // Send Post Comment command
-        public ICommand SendCommentToPostItemCommand { get; set; }
-        private void SendCommentToPostItemFunction()
-        {
-            Comment = "";
-            commentsCounter++;
-            CommentsCount = $"{commentsCounter}";
+            if (post.IsLikeUsernameInside(_Globals.GlobalMainUser.Username) == false)
+            {
+                _Globals.GlobalFeedPosts[post.FeedID].AddLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+            }
+            else
+            {
+                _Globals.GlobalFeedPosts[post.FeedID].RemoveLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+            }
         }
 
         // Open Post Comments command
@@ -238,11 +164,13 @@ namespace BDProject.ViewModels
             if (post.Following == "Follow")
             {
                 _Globals.GlobalMainUser.AddFollowing(post.Username);
+                _Globals.SetFollowing(post.Username);
                 post.Following = "Following";
             }
             else
             {
                 _Globals.GlobalMainUser.RemoveFollowing(post.Username);
+                _Globals.UndoFollowing(post.Username);
                 post.Following = "Follow";
             }
         }

@@ -22,6 +22,7 @@ namespace BDProject.ViewModels
                 ProfilePictureSource = user.PhotoSource;
 
                 FollowingCount = _Globals.GlobalMainUser.Followings.Count;
+                FollowersCount = _Globals.GlobalMainUser.Followers.Count;
             }
             catch(Exception ex)
             {

@@ -18,8 +18,8 @@ namespace BDProject.ViewModels.ProfileViewModels
 
             try
             {
-                FName = user.FirstName;
-                LName = user.LastName;
+                FirstName = user.FirstName;
+                LastName = user.LastName;
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
             }
@@ -31,9 +31,7 @@ namespace BDProject.ViewModels.ProfileViewModels
 
         public EditProfilePageViewModel()
         {
-            //========TEST=======
             SetUserData();
-            //========TEST=======
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
@@ -58,28 +56,28 @@ namespace BDProject.ViewModels.ProfileViewModels
         }
 
         // Your first Name parameter
-        private string fname = "";
-        public string FName
+        private string firstname = "";
+        public string FirstName
         {
-            get => fname;
+            get => firstname;
             set
             {
-                if (value == fname) { return; }
-                fname = value;
-                OnPropertyChanged(nameof(FName));
+                if (value == firstname) { return; }
+                firstname = value;
+                OnPropertyChanged(nameof(FirstName));
             }
         }
 
         // Your last Name parameter
-        private string lname = "";
-        public string LName
+        private string lastname = "";
+        public string LastName
         {
-            get => lname;
+            get => lastname;
             set
             {
-                if (value == lname) { return; }
-                lname = value;
-                OnPropertyChanged(nameof(LName));
+                if (value == lastname) { return; }
+                lastname = value;
+                OnPropertyChanged(nameof(LastName));
             }
         }
 
@@ -150,15 +148,15 @@ namespace BDProject.ViewModels.ProfileViewModels
             }
 
             // save first name
-            if (_Globals.GlobalMainUser.FirstName != FName) 
+            if (_Globals.GlobalMainUser.FirstName != FirstName) 
             { 
-                _Globals.GlobalMainUser.FirstName = FName; 
+                _Globals.GlobalMainUser.FirstName = FirstName; 
             }
 
             // save last name
-            if(_Globals.GlobalMainUser.LastName != LName)
+            if(_Globals.GlobalMainUser.LastName != LastName)
             {
-                _Globals.GlobalMainUser.LastName = LName;
+                _Globals.GlobalMainUser.LastName = LastName;
             }
 
             _Globals.Refresh = true;

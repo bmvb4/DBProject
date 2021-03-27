@@ -1,5 +1,4 @@
 ﻿using BDProject.ModelWrappers;
-using BDProject.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,8 +9,10 @@ namespace BDProject.Helpers
     public class ProfilePostsDataTemplateSelector : DataTemplateSelector 
     {
         public DataTemplate MyPosts { get; set; }
+        public DataTemplate MyPostsWithoutDescription { get; set; }
 
         public DataTemplate OthersPosts { get; set; }
+        public DataTemplate OthersPostsWithoutDescription { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
@@ -19,11 +20,25 @@ namespace BDProject.Helpers
 
             if (_Globals.GlobalMainUser.IsInside(post) == true)
             {
-                return MyPosts;
+                if(string.IsNullOrEmpty(post.Description) || string.IsNullOrWhiteSpace(post.Description))
+                {
+                    return MyPostsWithoutDescription;
+                }
+                else
+                {
+                    return MyPosts;
+                }
             }
             else
             {
-                return OthersPosts;
+                if (string.IsNullOrEmpty(post.Description) || string.IsNullOrWhiteSpace(post.Description))
+                {
+                    return OthersPostsWithoutDescription;
+                }
+                else
+                {
+                    return OthersPosts;
+                }
             }
         }
     }

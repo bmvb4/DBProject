@@ -164,6 +164,14 @@ namespace BDProject.ViewModels
             });
             PostWrapper temp1post = new PostWrapper(new Post(imageBytes, "Test description 1"), temp1.Username, _Globals.GlobalMainUser.ImageBytes);
             temp1.AddPost(temp1post);
+            temp1post.AddComment(new CommentWrapper(imageBytes, temp1.Username, "Test message 1"));
+            temp1post.AddComment(new CommentWrapper(imageBytes, _Globals.GlobalMainUser.Username, "my test message"));
+            temp1post.AddComment(new CommentWrapper(imageBytes, temp1.Username, "Test message 2"));
+            temp1post.AddComment(new CommentWrapper(imageBytes, temp1.Username, "Test message 3"));
+            temp1post.AddComment(new CommentWrapper(imageBytes, temp1.Username, "Test message 4"));
+            temp1post.AddComment(new CommentWrapper(imageBytes, temp1.Username, "Test message 5"));
+            temp1post.AddComment(new CommentWrapper(imageBytes, temp1.Username, "Test message 6"));
+            temp1post.AddComment(new CommentWrapper(imageBytes, temp1.Username, "Test message 7"));
 
             UserWrapper temp2 = new UserWrapper(new User()
             {

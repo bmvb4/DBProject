@@ -25,6 +25,8 @@ namespace BDProject.ViewModels.ProfileViewModels
                 ProfilePictureSource = user.PhotoSource;
 
                 Following = _Globals.GlobalFeedPosts[_Globals.OpenID].Following;
+                FollowingCount = user.Followings.Count;
+                FollowersCount = user.Followers.Count;
             }
             catch (Exception ex)
             {

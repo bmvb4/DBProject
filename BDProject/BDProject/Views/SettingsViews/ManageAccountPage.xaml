@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDProject.Views.ProfileViews.EditProfilePage"
+             x:Class="BDProject.Views.SettingsViews.ManageAccountPage"
              
              Shell.BackgroundColor="{StaticResource White}"
              Shell.NavBarIsVisible="False"
@@ -34,63 +34,22 @@
 
                 </Grid>
 
-                <Grid 
-                    ColumnDefinitions="*,auto,*">
-
-                    <Frame
-                        Grid.Column="1"
-                        Padding="0"
-                        CornerRadius="100"
-                        HeightRequest="150"
-                        WidthRequest="150"
-                        IsClippedToBounds="True">
-
-                        <ImageButton
-                            HorizontalOptions="Center"
-                            VerticalOptions="Center"
-                            Aspect="Fill"
-                            Scale="1.4"
-                            Source="{Binding ProfilePictureSource}"/>
-
-                    </Frame>
-
-
-                </Grid>
-
-                <Grid
-                    ColumnDefinitions="*,*">
-
-                    <Button 
-                        Grid.Column="0"
-                        Text="Take Photo"
-                        HorizontalOptions="Center"
-                        TextColor="{StaticResource Black}"
-                        Command="{Binding TakePhotoCommand}"/>
-
-                    <Button 
-                        Grid.Column="1"
-                        Text="Pick Photo"
-                        HorizontalOptions="Center"
-                        TextColor="{StaticResource Black}"
-                        Command="{Binding PickPhotoCommand}"/>
-
-                </Grid>
-
                 <Grid
                     Margin="8,16,8,8"
                     ColumnDefinitions="auto,*">
 
                     <Label 
                         Grid.Column="0"
-                        Text="First Name"
+                        Text="Username"
                         Margin="0,10,0,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"
+                        WidthRequest="85"
                         TextColor="{StaticResource Black}"/>
 
                     <Editor 
                         Grid.Column="1"
-                        Text="{Binding FirstName}"
+                        Text="{Binding Username}"
                         FontSize="Medium"
                         HorizontalOptions="Fill"
                         TextColor="{StaticResource Black}"/>
@@ -103,37 +62,16 @@
 
                     <Label 
                         Grid.Column="0"
-                        Text="Last Name"
+                        Text="Email"
                         Margin="0,10,0,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"
+                        WidthRequest="85"
                         TextColor="{StaticResource Black}"/>
 
                     <Editor
                         Grid.Column="1"
-                        Text="{Binding LastName}"
-                        FontSize="Medium"
-                        HorizontalOptions="Fill"
-                        TextColor="{StaticResource Black}"/>
-
-                </Grid>
-
-                <Grid
-                    Margin="8,8"
-                    ColumnDefinitions="auto,*">
-
-                    <Label 
-                        Grid.Column="0"
-                        Text="Description"
-                        Margin="0,10,0,0"
-                        FontSize="Medium"
-                        HorizontalOptions="Center"
-                        TextColor="{StaticResource Black}"/>
-
-                    <Editor
-                        Grid.Column="1"
-                        Text="{Binding Description}"
-                        HeightRequest="100"
+                        Text="{Binding Email}"
                         FontSize="Medium"
                         HorizontalOptions="Fill"
                         TextColor="{StaticResource Black}"/>
@@ -150,5 +88,5 @@
         </ScrollView>
 
     </ContentPage.Content>
-    
+
 </ContentPage>

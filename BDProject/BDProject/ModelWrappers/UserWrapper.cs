@@ -129,8 +129,23 @@ namespace BDProject.ModelWrappers
         }
         public void AddFollowing(string username) { followings.Add(username); }
         public void RemoveFollowing(string username) { followings.Remove(username); }
-        public bool IsFollowerInside(string username) { return followings.Contains(username); }
+        public bool IsFollowingInside(string username) { return followings.Contains(username); }
 
+
+
+        private List<string> followers = new List<string>();
+        public List<string> Followers
+        {
+            get => followers;
+            set
+            { 
+                followers = value;
+                OnPropertyChanged(nameof(Followers));
+            }
+        }
+        public void AddFollower(string username) { followers.Add(username); }
+        public void RemoveFollower(string username) { followers.Remove(username); }
+        public bool IsFollowerInside(string username) { return followers.Contains(username); }
 
 
 

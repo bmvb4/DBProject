@@ -31,7 +31,7 @@ namespace BDProject.ViewModels
         public ICommand OpenManageAccountCommand { get; set; }
         private async Task OpenManageAccountFunction()
         {
-            await Shell.Current.GoToAsync("EditProfilePage");
+            await Shell.Current.GoToAsync("ManageAccountPage");
         }
 
         // Edit profile command
