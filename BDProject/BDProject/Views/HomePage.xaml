@@ -14,7 +14,7 @@
             <DataTemplate x:Key="MyTemplate">
                 <Grid 
                     Padding="8,16"
-                    RowDefinitions="auto,auto,*,auto">
+                    RowDefinitions="auto,*,auto,auto">
 
                     <Grid
                         Grid.Row="0"
@@ -55,15 +55,11 @@
                         </Grid.GestureRecognizers>
 
                     </Grid>
-
-                    <Label 
-                        Grid.Row="1"
-                        FontSize="Medium"
-                        TextColor="{StaticResource Black}"
-                        Text="{Binding Description}" />
+                    
+                    
 
                     <Image 
-                        Grid.Row="2"
+                        Grid.Row="1"
                         Aspect="Fill"
                         Source="{Binding PhotoSource}">
 
@@ -78,28 +74,18 @@
 
                     </Image>
 
+                    <Label 
+                        Grid.Row="2"
+                        FontSize="Medium"
+                        TextColor="{StaticResource Black}"
+                        Text="{Binding Description}" />
+
                     <Grid 
                         Grid.Row="3"
-                        ColumnDefinitions="auto,auto,*,auto,auto,auto,auto">
-
-                        <Label 
-                            Grid.Column="0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
-                            Text="Days" />
-
-                        <Label 
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
-                            Text="{Binding DaysCount, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}" />
+                        ColumnDefinitions="*,auto,auto,auto,auto">
 
                         <Button 
-                            Grid.Column="3"
+                            Grid.Column="1"
                             HeightRequest="46"
                             WidthRequest="46"
                             Text=""
@@ -112,7 +98,7 @@
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="4"
+                            Grid.Column="2"
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
@@ -120,7 +106,7 @@
                             Text="{Binding LikesCount}" />
 
                         <Button 
-                            Grid.Column="5"
+                            Grid.Column="3"
                             HeightRequest="46"
                             WidthRequest="46"
                             Text="" 
@@ -133,7 +119,7 @@
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="6"
+                            Grid.Column="4"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{StaticResource Black}"

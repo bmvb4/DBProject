@@ -1,7 +1,9 @@
 ﻿using BDProject.Helpers;
 using BDProject.ModelWrappers;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -97,15 +99,27 @@ namespace BDProject.ViewModels
         // Commands
         // Like Post command
         public ICommand LikePostCommand { get; set; }
-        private void LikePostFunction(PostWrapper post)
+        private async void LikePostFunction(PostWrapper post)
         {
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("idUser", post.Username);
+            oJsonObject.Add("idPost", post.PostID);
+
             if (post.IsLikeUsernameInside(_Globals.GlobalMainUser.Username) == false)
             {
-                _Globals.GlobalFeedPosts[post.FeedID].AddLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+                var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
+                if (success.IsSuccessStatusCode)
+                {
+                    _Globals.GlobalFeedPosts.First(x => x.PostID==post.PostID).AddLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+                }
             }
             else
             {
-                _Globals.GlobalFeedPosts[post.FeedID].RemoveLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+                var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
+                if (success.IsSuccessStatusCode)
+                {
+                    _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).RemoveLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+                }
             }
         }
 
@@ -113,7 +127,7 @@ namespace BDProject.ViewModels
         public ICommand OpenPostCommentsCommand { get; set; }
         private async void OpenPostCommentsFunction(PostWrapper post)
         {
-            _Globals.OpenID = post.FeedID;
+            _Globals.OpenID = (int)post.PostID;
             await Shell.Current.GoToAsync("PostComments");
         }
 
@@ -145,7 +159,7 @@ namespace BDProject.ViewModels
         public ICommand OpenProfileCommand { get; set; }
         private async void OpenProfileFunction(PostWrapper post)
         {
-            _Globals.OpenID = post.FeedID;
+            _Globals.OpenID = post.PostID;
             await Shell.Current.GoToAsync("PersonsProfilePage");
         }
 
@@ -153,7 +167,7 @@ namespace BDProject.ViewModels
         public ICommand EditPostCommand { get; set; }
         private async void EditPostFunction(PostWrapper post)
         {
-            _Globals.OpenID = post.FeedID;
+            _Globals.OpenID = post.PostID;
             await Shell.Current.GoToAsync("EditPostPage");
         }
 

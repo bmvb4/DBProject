@@ -2,6 +2,7 @@
 using BDProject.ModelWrappers;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace BDProject.ViewModels.ProfileViewModels
 
         private void SetUserData()
         {
-            string uName = _Globals.GlobalFeedPosts[_Globals.OpenID].Username;
+            string uName = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Username;
             UserWrapper user = _Globals.GetUser(uName);
 
             try
@@ -24,7 +25,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
 
-                Following = _Globals.GlobalFeedPosts[_Globals.OpenID].Following;
+                Following = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following;
                 FollowingCount = user.Followings.Count;
                 FollowersCount = user.Followers.Count;
             }
@@ -241,13 +242,13 @@ namespace BDProject.ViewModels.ProfileViewModels
             if (Following == "Follow")
             {
                 _Globals.GlobalMainUser.AddFollowing(realUsername);
-                _Globals.GlobalFeedPosts[_Globals.OpenID].Following = "Following";
+                _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Following";
                 Following = "Following";
             }
             else
             {
                 _Globals.GlobalMainUser.RemoveFollowing(realUsername);
-                _Globals.GlobalFeedPosts[_Globals.OpenID].Following = "Follow";
+                _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Follow";
                 Following = "Follow";
             }
         }

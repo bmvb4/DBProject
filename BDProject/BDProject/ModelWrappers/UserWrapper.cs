@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -25,7 +26,6 @@ namespace BDProject.ModelWrappers
 
         public UserWrapper(User user)
         {
-            id = user.IdUser;
             username = user.Username;
             email = user.Email;
             firstname = user.FirstName;
@@ -33,13 +33,6 @@ namespace BDProject.ModelWrappers
             description = user.Description;
             imageBytes = user.Photo;
             token = user.token;
-        }
-
-        private int id;
-        public int ID
-        {
-            get => id;
-            set => id = value; 
         }
 
         private string username;
@@ -161,28 +154,21 @@ namespace BDProject.ModelWrappers
         }
         public void AddPost(PostWrapper post) 
         {
-            post.MyID = myPosts.Count;
-            myPosts.Add(post); 
-            myPosts.Sort((x, y) => x.MyID.CompareTo(y.MyID));
+            myPosts.Insert(0, post); 
         }
         public bool IsInside(PostWrapper post)
         {
-            foreach(PostWrapper p in myPosts)
-            {
-                if (p.Username == post.Username) { return true; }
-            }
-            // not found
-            return false;
+            return myPosts.Any(x => x.Username == post.Username);
         }
         public void EditPost(PostWrapper post)
         {
-            myPosts[post.MyID].Description = post.Description;
+            myPosts.First(x => x.PostID==post.PostID).Description = post.Description;
         }
-        public PostWrapper GetPost(int id)
+        public PostWrapper GetPost(long id)
         {
             try
             {
-                return myPosts[id];
+                return myPosts.First(x => x.PostID == id);
             }
             catch(Exception ex)
             {
@@ -190,6 +176,14 @@ namespace BDProject.ModelWrappers
                 return new PostWrapper();
             }
         }
+        public void AddPostsFromDB(List<PostUser> posts)
+        {
+            foreach(PostUser p in posts)
+            {
+                AddPost(new PostWrapper(p));
+            }
+        }
+
 
 
 

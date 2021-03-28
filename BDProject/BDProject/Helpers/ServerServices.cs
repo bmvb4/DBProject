@@ -15,7 +15,7 @@ namespace BDProject.Helpers
     public class ServerServices
     {
 
-        public static async Task<bool> SendRequestAsync(string path, JObject oJsonObject)
+        public static async Task<HttpResponseMessage> SendPostRequestAsync(string path, JObject oJsonObject)
         {
             string URL = "https://10.0.2.2:5001/" + path;
             const string sContentType = "application/json";
@@ -24,61 +24,75 @@ namespace BDProject.Helpers
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient _client = new HttpClient(clientHandler);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Username);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
 
-            var result = await _client.PostAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
-
-            if (result.IsSuccessStatusCode)
-            {
-                if (path == "login")
-                {
-                    var earthquakesJson = result.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
-
-                    _Globals.GlobalMainUser = new UserWrapper(rootobject);
-
-                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", rootobject.token);
-                    result = await _client.GetAsync("https://10.0.2.2:5001/posts/image/getAll/" + rootobject.Username);
-
-                    if (result.IsSuccessStatusCode)
-                    {
-                        earthquakesJson = result.Content.ReadAsStringAsync().Result;
-                        var postList = JsonConvert.DeserializeObject<List<Post>>(earthquakesJson);
-                        //_Globals.GlobalMainUser.MyPosts = postList;
-                    }
-
-                    return true;
-                }
-
-                if (path == "register")
-                {
-                    var earthquakesJson = result.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
-
-                    _Globals.GlobalMainUser = new UserWrapper(rootobject);
-
-                    return true;
-                }
-
-                if (path == "posts/image/post") 
-                {
-                    var earthquakesJson = result.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<Post>(earthquakesJson);
-
-                    return true;
-                }
-
-                if (path == "profile/update/")
-                {
-                    var earthquakesJson = result.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<Post>(earthquakesJson);
-
-                    return true;
-                }
-            }
-
-            return false;
+            return await _client.PostAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
         }
 
+        public static async Task<HttpResponseMessage> SendGetRequestAsync(string path, JObject oJsonObject)
+        {
+            string URL = "https://10.0.2.2:5001/" + path;
+            const string sContentType = "application/json";
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            HttpClient _client = new HttpClient(clientHandler);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(URL),
+                Content = new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType)
+            };
+            return await _client.SendAsync(request).ConfigureAwait(false);
+        }
+
+        public static async Task<HttpResponseMessage> SendPost2RequestAsync(string path, JObject oJsonObject)
+        {
+            string URL = "https://10.0.2.2:5001/" + path;
+            const string sContentType = "application/json";
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            HttpClient _client = new HttpClient(clientHandler);
+
+            return await _client.PostAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
+        }
+
+        public static async Task<HttpResponseMessage> SendPutRequestAsync(string path, JObject oJsonObject)
+        {
+            string URL = "https://10.0.2.2:5001/" + path;
+            const string sContentType = "application/json";
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            HttpClient _client = new HttpClient(clientHandler);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
+
+            return await _client.PutAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
+        }
+
+        public static async Task<HttpResponseMessage> SendDeleteRequestAsync(string path, JObject oJsonObject)
+        {
+            string URL = "https://10.0.2.2:5001/" + path;
+            const string sContentType = "application/json";
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            HttpClient _client = new HttpClient(clientHandler);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(URL),
+                Content = new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType)
+            };
+            return await _client.SendAsync(request).ConfigureAwait(false);
+        }
     }
 }

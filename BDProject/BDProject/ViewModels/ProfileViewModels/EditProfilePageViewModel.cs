@@ -1,5 +1,8 @@
 ﻿using BDProject.Helpers;
+using BDProject.Models;
 using BDProject.ModelWrappers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -159,10 +162,14 @@ namespace BDProject.ViewModels.ProfileViewModels
                 _Globals.GlobalMainUser.LastName = LastName;
             }
 
-            _Globals.Refresh = true;
-            await Shell.Current.Navigation.PopAsync();
+            // save description
+            if (_Globals.GlobalMainUser.Description != Description)
+            {
+                _Globals.GlobalMainUser.Description = Description;
+            }
 
-            /*
+            _Globals.Refresh = true;
+
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
             oJsonObject.Add("Photo", _Globals.GlobalMainUser.ImageBytes);
@@ -170,13 +177,12 @@ namespace BDProject.ViewModels.ProfileViewModels
             oJsonObject.Add("FirstName", _Globals.GlobalMainUser.FirstName);
             oJsonObject.Add("LastName", _Globals.GlobalMainUser.LastName);
 
-            bool success = await ServerServices.SendRequestAsync("profile/update/", oJsonObject);
+            var success = await ServerServices.SendPutRequestAsync($"profile/{_Globals.GlobalMainUser.Username}", oJsonObject);
 
-            if (success)
+            if (success.IsSuccessStatusCode)
             {
                 await Shell.Current.Navigation.PopAsync();
             }
-            */
         }
 
     }

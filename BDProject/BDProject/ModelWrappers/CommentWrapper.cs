@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BDProject.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -24,9 +25,32 @@ namespace BDProject.ModelWrappers
             message = msg;
         }
 
+        public CommentWrapper(Comment comment)
+        {
+            id = comment.IdComment;
+            username = comment.IdUser;
+            userImageBytes = comment.UserPhoto;
+            message = comment.CommentText;
+            postID = comment.IdPost;
+        }
+
         public CommentWrapper()
         {
 
+        }
+
+        private long id;
+        public long ID
+        {
+            get => id;
+            set => id = value;
+        }
+
+        private long postID;
+        public long PostID
+        {
+            get => postID;
+            set => postID = value;
         }
 
         private byte[] userImageBytes;

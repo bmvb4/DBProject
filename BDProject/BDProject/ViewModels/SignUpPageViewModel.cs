@@ -1,4 +1,7 @@
 ﻿using BDProject.Helpers;
+using BDProject.Models;
+using BDProject.ModelWrappers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -206,11 +209,15 @@ namespace BDProject.ViewModels
             oJsonObject.Add("LastName", LastName);
             oJsonObject.Add("Email", Email);
 
-            bool success = await ServerServices.SendRequestAsync("register", oJsonObject);
+            var success = await ServerServices.SendPost2RequestAsync("register", oJsonObject);
 
-            if (success)
+            if (success.IsSuccessStatusCode)
             {
-                await Shell.Current.GoToAsync($"//HomePage");
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
+
+                //_Globals.GlobalMainUser = new UserWrapper(rootobject);
+                await Shell.Current.GoToAsync("//HomePage");
             }
         }
 

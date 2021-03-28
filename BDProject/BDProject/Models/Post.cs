@@ -12,11 +12,10 @@ namespace BDProject.Models
             Description = description;
         }
 
-        public int IdPost { get; set; }
+        public long IdPost { get; set; }
+        public string IdUser { get; set; }
         public byte[] Photo { get; set; }
         public string Description { get; set; }
-        
-        
-        public int IdUser { get; set; }
+
     }
 }

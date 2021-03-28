@@ -1,5 +1,9 @@
 ﻿using BDProject.Helpers;
+using BDProject.Models;
+using BDProject.ModelWrappers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -86,15 +90,26 @@ namespace BDProject.ViewModels
             oJsonObject.Add("Username", Username);
             oJsonObject.Add("Password", Password);
 
-            bool success = await ServerServices.SendRequestAsync("login", oJsonObject);
+            var success = await ServerServices.SendPostRequestAsync("login", oJsonObject);
 
-            if (success) 
+            if (success.IsSuccessStatusCode)
             {
-                await Shell.Current.GoToAsync("//HomePage");
-            }
-            else
-            {
-                PasswordAlert = "Username or Pasword are incrrect";
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
+
+                _Globals.GlobalMainUser = new UserWrapper(rootobject);
+                
+                success = await ServerServices.SendGetRequestAsync($"posts/getAll/{rootobject.Username}", oJsonObject);
+
+                if (success.IsSuccessStatusCode)
+                {
+                    earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                    var postList = JsonConvert.DeserializeObject<List<PostUser>>(earthquakesJson);
+                    _Globals.GlobalMainUser.AddPostsFromDB(postList);
+                    _Globals.AddPostsFromDB(postList);
+
+                    await Shell.Current.GoToAsync("//HomePage");
+                }
             }
         }
 
@@ -102,11 +117,6 @@ namespace BDProject.ViewModels
         public ICommand SignUpCommand { get; set; }
         private async Task SignUpFunction()
         {
-            //==============================TEST
-            await Shell.Current.GoToAsync("//HomePage");
-            //==============================TEST
-
-            /*
             await Shell.Current.GoToAsync("//SignUpPage");
 
             Username = "";
@@ -114,7 +124,6 @@ namespace BDProject.ViewModels
 
             UsernameAlert = "";
             PasswordAlert = "";
-            */
         }
 
         // Functions

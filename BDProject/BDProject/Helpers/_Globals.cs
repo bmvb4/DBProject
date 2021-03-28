@@ -1,6 +1,8 @@
-﻿using BDProject.ModelWrappers;
+﻿using BDProject.Models;
+using BDProject.ModelWrappers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BDProject.Helpers
@@ -25,12 +27,16 @@ namespace BDProject.Helpers
         }
         public static void AddUser(UserWrapper user)
         {
-            user.ID = otherUsers.Count;
             otherUsers.Add(user);
         }
         public static void RemoveUser(UserWrapper user)
         {
-            otherUsers.RemoveAt(user.ID);
+            int i = 0;
+            for (i=0; i< otherUsers.Count; i++)
+            {
+                if (otherUsers[i].Username == user.Username) { break; }
+            }
+            otherUsers.RemoveAt(i);
         }
         public static UserWrapper GetUser(string username)
         {
@@ -70,28 +76,17 @@ namespace BDProject.Helpers
         }
         public static void AddPost(PostWrapper post)
         {
-            post.FeedID = FeedPosts.Count;
             FeedPosts.Add(post);
-            FeedPosts.Sort((x, y) => x.FeedID.CompareTo(y.FeedID));
         }
         public static void AddMyPost(PostWrapper post)
         {
-            if (FeedPosts.Count != 0)
-            {
-                for (int i = FeedPosts.Count - 1; i >= 0; i--)
-                {
-                    FeedPosts[i].FeedID++;
-                }
-            }
-            post.FeedID = 0;
-            FeedPosts.Add(post);
-            FeedPosts.Sort((x, y) => x.FeedID.CompareTo(y.FeedID));
+            FeedPosts.Insert(0, post);
         }
-        public static PostWrapper GetPost(int id)
+        public static PostWrapper GetPost(long id)
         {
             try
             {
-                return FeedPosts[id];
+                return FeedPosts.First(x => x.PostID == id);
             }
             catch (Exception ex)
             {
@@ -101,19 +96,20 @@ namespace BDProject.Helpers
         }
         public static void EditPost(PostWrapper post)
         {
-            for (int i = 0; i < FeedPosts.Count; i++)
+            FeedPosts.First(x => x.PostID == post.PostID).Description = post.Description;
+        }
+        public static void AddPostsFromDB(List<PostUser> posts)
+        {
+            foreach (PostUser p in posts)
             {
-                if (FeedPosts[i].FeedID == post.FeedID)
-                {
-                    FeedPosts[i].Description = post.Description;
-                }
+                AddPost(new PostWrapper(p));
             }
         }
 
 
 
-        private static int openID = 0;
-        public static int OpenID
+        private static long openID = 0;
+        public static long OpenID
         {
             get => openID;
             set => openID = value;

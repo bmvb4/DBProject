@@ -1,7 +1,12 @@
 ﻿using BDProject.Helpers;
+using BDProject.Models;
 using BDProject.ModelWrappers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -19,13 +24,29 @@ namespace BDProject.ViewModels.PostsViewModels
             Description = SelectedPost.Description;
         }
 
-        public void SetCollection()
+        public async void SetCollection()
         {
-            PostWrapper SelectedPost = _Globals.GetPost(_Globals.OpenID);
-            CommentsCollection.Clear();
-            CommentsCollection = new ObservableCollection<CommentWrapper>(SelectedPost.Comments);
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
 
-            CollectionHeight = 77 * CommentsCollection.Count;
+            var success = await ServerServices.SendGetRequestAsync($"posts/comment/get/{_Globals.OpenID}", oJsonObject);
+
+            if (success.IsSuccessStatusCode)
+            {
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var rootobject = JsonConvert.DeserializeObject<List<Comment>>(earthquakesJson);
+
+                List<CommentWrapper> lc = new List<CommentWrapper>();
+                foreach(Comment c in rootobject)
+                {
+                    lc.Add(new CommentWrapper(c));
+                }
+
+                CommentsCollection.Clear();
+                CommentsCollection = new ObservableCollection<CommentWrapper>(lc);
+
+                CollectionHeight = 77 * CommentsCollection.Count;
+            }
         }
 
         public PostCommentsPageViewModel()
@@ -148,13 +169,22 @@ namespace BDProject.ViewModels.PostsViewModels
         }
 
         public ICommand CommentCommand { get; set; }
-        private void CommentFunction()
+        private async void CommentFunction()
         {
             if (string.IsNullOrEmpty(Comment) || string.IsNullOrWhiteSpace(Comment)) { return; }
-            
             PostWrapper post = _Globals.GetPost(_Globals.OpenID);
-            _Globals.GlobalFeedPosts[_Globals.OpenID].AddComment(new CommentWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username, Comment));
-            SetCollection();
+
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("IdPost", post.PostID);
+            oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
+            oJsonObject.Add("CommentText", Comment);
+
+            var success = await ServerServices.SendPostRequestAsync("posts/comment", oJsonObject);
+            if (success.IsSuccessStatusCode)
+            {
+                _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).AddComment(new CommentWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username, Comment));
+                SetCollection();
+            }
         }
     }
 }

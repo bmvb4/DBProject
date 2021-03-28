@@ -24,43 +24,40 @@ namespace BDProject.ModelWrappers
 
         }
 
-        public PostWrapper(int Id, byte[] Photo, string Description, string User, byte[] UserPhoto)
-        {
-            feedid = Id;
-            imageBytes = Photo;
-            description = Description;
-            username = User;
-            userImageBytes = UserPhoto;
-        }
-
         public PostWrapper(Post post, string User, byte[] UserPhoto)
         {
-            feedid = post.IdPost;
+            postID = post.IdPost;
             imageBytes = post.Photo;
             description = post.Description;
             username = User;
             userImageBytes = UserPhoto;
+        }
+
+        public PostWrapper(PostUser post)
+        {
+            postID = post.IdPost;
+            username = post.IdUser;
+            imageBytes = post.Photo;
+            userImageBytes = post.UserPhoto;
+            description = post.Description;
+            likesCount = post.LikesCounter;
+            commentsCount = post.CommentsCounter;
+            if (post.isFollow) { following = "Following"; }
+            else { following = "Follow"; }
         }
 
         public PostWrapper(Post post)
         {
-            feedid = post.IdPost;
+            postID = post.IdPost;
             imageBytes = post.Photo;
             description = post.Description;
         }
 
-        private int feedid;
-        public int FeedID
+        private long postID;
+        public long PostID
         {
-            get => feedid;
-            set => feedid = value;
-        }
-
-        private int myid;
-        public int MyID
-        {
-            get => myid;
-            set => myid = value;
+            get => postID;
+            set => postID = value;
         }
 
         private byte[] imageBytes;
