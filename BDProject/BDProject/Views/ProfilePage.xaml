@@ -11,7 +11,8 @@
             Margin="8,0"
             IsRefreshing="{Binding IsRefreshing}"
             Command="{Binding RefreshCommand}">
-            <ScrollView>
+            <ScrollView
+                VerticalScrollBarVisibility="Never">
 
                 <StackLayout 
                     Orientation="Vertical">
@@ -61,7 +62,7 @@
                     <Label 
                         Text="{Binding Description}" 
                         Margin="8,0"
-                        FontSize="Small"
+                        FontSize="Medium"
                         HeightRequest="60"
                         HorizontalOptions="Center"
                         HorizontalTextAlignment="Center"

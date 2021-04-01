@@ -41,7 +41,7 @@
                             Text=""
                             FontFamily="FA-S"
                             BackgroundColor="{StaticResource White}"
-                            Command="{Binding EditPostCommand, Source={
+                            Command="{Binding MoreCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                             }}"
                             CommandParameter="{Binding .}"/>
@@ -161,7 +161,7 @@
                             Text=""
                             FontFamily="FA-S"
                             BackgroundColor="{StaticResource White}"
-                            Command="{Binding EditPostCommand, Source={
+                            Command="{Binding MoreCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                             }}"
                             CommandParameter="{Binding .}"/>

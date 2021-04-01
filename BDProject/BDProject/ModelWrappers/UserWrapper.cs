@@ -176,6 +176,7 @@ namespace BDProject.ModelWrappers
                 return new PostWrapper();
             }
         }
+        public void RemovePost(long id) { myPosts.RemoveAll(x => x.PostID == id); }
         public void AddPostsFromDB(List<PostUser> posts)
         {
             foreach(PostUser p in posts)

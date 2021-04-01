@@ -25,45 +25,22 @@ namespace BDProject.Helpers
             get => otherUsers;
             set => otherUsers = value;
         }
-        public static void AddUser(UserWrapper user)
+        public static void AddUser(UserWrapper user) { otherUsers.Add(user); }
+        public static void RemoveUser(UserWrapper user) { otherUsers.RemoveAll(x => x.Username == user.Username); }
+        public static UserWrapper GetUser(string username) { return otherUsers.First(x => x.Username == username); }
+        public static void AddFollowing(string username) 
         {
-            otherUsers.Add(user);
-        }
-        public static void RemoveUser(UserWrapper user)
-        {
-            int i = 0;
-            for (i=0; i< otherUsers.Count; i++)
+            //otherUsers.Where(x => x.Username == username).First().AddFollower(GlobalMainUser.Username);
+            for (int i=0; i<otherUsers.Count; i++)
             {
-                if (otherUsers[i].Username == user.Username) { break; }
-            }
-            otherUsers.RemoveAt(i);
-        }
-        public static UserWrapper GetUser(string username)
-        {
-            foreach(UserWrapper user in otherUsers)
-            {
-                if (user.Username == username) { return user; }
-            }
-            return new UserWrapper();
-        }
-        public static void SetFollowing(string username)
-        {
-            for(int i=0; i<otherUsers.Count; i++)
-            {
-                if (otherUsers[i].Username == username)
-                {
-                    otherUsers[i].AddFollower(GlobalMainUser.Username);
-                }
+                if (otherUsers[i].Username == username) { otherUsers[i].AddFollower(GlobalMainUser.Username); }
             }
         }
-        public static void UndoFollowing(string username)
+        public static void RemoveFollowing(string username) 
         {
             for (int i = 0; i < otherUsers.Count; i++)
             {
-                if (otherUsers[i].Username == username)
-                {
-                    otherUsers[i].RemoveFollower(GlobalMainUser.Username);
-                }
+                if (otherUsers[i].Username == username) { otherUsers[i].RemoveFollower(GlobalMainUser.Username); }
             }
         }
 
@@ -74,14 +51,8 @@ namespace BDProject.Helpers
             get => FeedPosts;
             set => FeedPosts = value;
         }
-        public static void AddPost(PostWrapper post)
-        {
-            FeedPosts.Add(post);
-        }
-        public static void AddMyPost(PostWrapper post)
-        {
-            FeedPosts.Insert(0, post);
-        }
+        public static void AddPost(PostWrapper post) { FeedPosts.Add(post); }
+        public static void AddMyPost(PostWrapper post) { FeedPosts.Insert(0, post); }
         public static PostWrapper GetPost(long id)
         {
             try
@@ -94,12 +65,12 @@ namespace BDProject.Helpers
                 return new PostWrapper();
             }
         }
-        public static void EditPost(PostWrapper post)
-        {
-            FeedPosts.First(x => x.PostID == post.PostID).Description = post.Description;
-        }
+        public static void EditPost(PostWrapper post) { FeedPosts.First(x => x.PostID == post.PostID).Description = post.Description; }
+        public static void RemovePost(PostWrapper post) { FeedPosts.RemoveAll(x => x.PostID == post.PostID); }
+        public static void RemovePost(long id) { FeedPosts.RemoveAll(x => x.PostID == id); }
         public static void AddPostsFromDB(List<PostUser> posts)
         {
+            FeedPosts.Clear();
             foreach (PostUser p in posts)
             {
                 AddPost(new PostWrapper(p));
@@ -120,6 +91,16 @@ namespace BDProject.Helpers
         {
             get => refresh;
             set => refresh = value;
+        }
+
+        public static List<PostWrapper> FromPostToWrapperList(List<Post> posts)
+        {
+            List<PostWrapper> list = new List<PostWrapper>();
+            foreach (Post p in posts)
+            {
+                list.Add(new PostWrapper(p));
+            }
+            return list;
         }
     }
 }

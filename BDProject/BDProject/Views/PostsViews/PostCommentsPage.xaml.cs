@@ -17,6 +17,8 @@ namespace BDProject.Views.PostsViews
         {
             InitializeComponent();
 
+            CommentEntry.Unfocus();
+
             BindingContext = new PostCommentsPageViewModel();
         }
     }

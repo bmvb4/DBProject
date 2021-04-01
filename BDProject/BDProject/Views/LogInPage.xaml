@@ -31,12 +31,29 @@
                     FontSize="Small"
                     TextColor="Red"/>
 
-                <Entry 
-                    x:Name="PasswordEntry"
-                    Text="{Binding Password}"
-                    Placeholder="Password" 
-                    IsPassword="True" />
-                
+                <Grid 
+                    ColumnDefinitions="*,auto">
+
+                    <Entry 
+                        Grid.Column="0"
+                        Margin="0"
+                        x:Name="PasswordEntry"
+                        Text="{Binding Password}"
+                        Placeholder="Password" 
+                        IsPassword="{Binding HidePassword}" />
+
+                    <Button 
+                        Grid.Column="1"
+                        WidthRequest="45"
+                        Margin="0"
+                        Text="{Binding Eye}"
+                        FontSize="Medium"
+                        FontFamily="FA-S"
+                        BackgroundColor="{StaticResource White}"
+                        Command="{Binding ShowHidePasswordCommand}"/>
+
+                </Grid>
+
                 <Label 
                     Text="{Binding PasswordAlert}" 
                     FontSize="Small"

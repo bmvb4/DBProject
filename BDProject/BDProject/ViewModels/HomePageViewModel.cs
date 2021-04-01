@@ -1,7 +1,12 @@
 ﻿using BDProject.Helpers;
+using BDProject.Models;
 using BDProject.ModelWrappers;
+using BDProject.Views._PopUps;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +18,23 @@ namespace BDProject.ViewModels
     public class HomePageViewModel : BaseViewModel
     {
 
-        public void SetCollection()
+        public async void SetCollection()
         {
             PostsCollection.Clear();
-            PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
+
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
+
+            var success = await ServerServices.SendGetRequestAsync("posts/getlast", oJsonObject);
+
+            if (success.IsSuccessStatusCode)
+            {
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var rootobject = JsonConvert.DeserializeObject<List<PostUser>>(earthquakesJson);
+
+                _Globals.AddPostsFromDB(rootobject);
+                PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
+            }
         }
 
         // setting application defaults
@@ -37,8 +55,8 @@ namespace BDProject.ViewModels
             OpenMyProfileCommand= new Command(async () => await OpenMyProfileFunction());
             OpenProfileCommand = new Command<PostWrapper>(OpenProfileFunction);
 
-            // edit post command
-            EditPostCommand = new Command<PostWrapper>(EditPostFunction);
+            // More command
+            MoreCommand = new Command<PostWrapper>(MoreFunction);
 
             FollowProfileCommand = new Command<PostWrapper>(FollowProfileFunction);
         }
@@ -164,28 +182,48 @@ namespace BDProject.ViewModels
         }
 
         // Edit profile command
-        public ICommand EditPostCommand { get; set; }
-        private async void EditPostFunction(PostWrapper post)
+        public ICommand MoreCommand { get; set; }
+        private async void MoreFunction(PostWrapper post)
         {
             _Globals.OpenID = post.PostID;
-            await Shell.Current.GoToAsync("EditPostPage");
+            await PopupNavigation.Instance.PushAsync(new PostPopUp());
+
+            //await Shell.Current.GoToAsync("EditPostPage");
         }
 
         // Follow profile command 
         public ICommand FollowProfileCommand { get; set; }
-        private void FollowProfileFunction(PostWrapper post)
+        private async void FollowProfileFunction(PostWrapper post)
         {
             if (post.Following == "Follow")
             {
-                _Globals.GlobalMainUser.AddFollowing(post.Username);
-                _Globals.SetFollowing(post.Username);
-                post.Following = "Following";
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("idFollowed", post.Username);
+                oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
+
+                var success = await ServerServices.SendPostRequestAsync("follow", oJsonObject);
+
+                if (success.IsSuccessStatusCode)
+                {
+                    _Globals.GlobalMainUser.AddFollowing(post.Username);
+                    _Globals.AddFollowing(post.Username);
+                    post.Following = "Following";
+                }
             }
             else
             {
-                _Globals.GlobalMainUser.RemoveFollowing(post.Username);
-                _Globals.UndoFollowing(post.Username);
-                post.Following = "Follow";
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("idFollowed", post.Username);
+                oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
+
+                var success = await ServerServices.SendDeleteRequestAsync("follow", oJsonObject);
+
+                if (success.IsSuccessStatusCode)
+                {
+                    _Globals.GlobalMainUser.RemoveFollowing(post.Username);
+                    _Globals.RemoveFollowing(post.Username);
+                    post.Following = "Follow";
+                }
             }
         }
     }

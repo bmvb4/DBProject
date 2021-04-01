@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.PostsViews.PostCommentsPage"
              xmlns:selector="clr-namespace:BDProject.Helpers"
+             xmlns:local="clr-namespace:BDProject.ViewModels.PostsViewModels"
              
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
              
@@ -22,7 +23,7 @@
                 <Grid
                     Padding="8"
                     HeightRequest="60"
-                    ColumnDefinitions="auto,*,auto">
+                    ColumnDefinitions="auto,*">
 
                     <controls:CircleImage
                         Grid.Column="0"
@@ -49,9 +50,14 @@
 
                     </Grid>
 
-                    <Button
-                        Grid.Column="2"
-                        Text="Edit"/>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer
+                            NumberOfTapsRequired="2"
+                            Command="{Binding DeleteCommentCommand, Source={
+                                RelativeSource AncestorType={x:Type local:PostCommentsPageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+                    </Grid.GestureRecognizers>
 
                 </Grid>
             </DataTemplate>
@@ -87,10 +93,6 @@
                             TextColor="{StaticResource Black}"/>
 
                     </Grid>
-
-                    <Button
-                        Grid.Column="2"
-                        Text="Report"/>
 
                 </Grid>
             </DataTemplate>
@@ -174,6 +176,7 @@
 
                     <Entry 
                         Grid.Column="0"
+                        x:Name="CommentEntry"
                         Placeholder="Comment"
                         Text="{Binding Comment}"/>
 

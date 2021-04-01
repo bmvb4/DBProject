@@ -59,6 +59,7 @@ namespace BDProject.ViewModels.PostsViewModels
             //LikePostCommand = new Command(LikePostFunction);
             RefreshCommand = new Command(async () => await RefreshFunction());
             CommentCommand = new Command(CommentFunction);
+            DeleteCommentCommand = new Command<CommentWrapper>(DeleteCommentFunction);
         }
 
         // Parameters
@@ -168,6 +169,25 @@ namespace BDProject.ViewModels.PostsViewModels
             IsRefreshing = false;
         }
 
+        public ICommand DeleteCommentCommand { get; set; }
+        private async void DeleteCommentFunction(CommentWrapper comment)
+        {
+            bool result = await App.Current.MainPage.DisplayAlert("Warning", "Do you want to delete this comment", "Yes", "No");
+            if (result == false) { return; }
+
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("idUser", _Globals.GlobalMainUser.Username);
+            oJsonObject.Add("idPost", comment.PostID);
+            oJsonObject.Add("idcomment", comment.ID);
+
+            var success = await ServerServices.SendDeleteRequestAsync("posts/comment", oJsonObject);
+            if (success.IsSuccessStatusCode)
+            {
+                _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).RemoveComment(comment);
+                SetCollection();
+            }
+        }
+
         public ICommand CommentCommand { get; set; }
         private async void CommentFunction()
         {
@@ -184,6 +204,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).AddComment(new CommentWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username, Comment));
                 SetCollection();
+                Comment = "";
             }
         }
     }

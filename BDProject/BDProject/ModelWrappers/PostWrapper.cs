@@ -24,26 +24,26 @@ namespace BDProject.ModelWrappers
 
         }
 
-        public PostWrapper(Post post, string User, byte[] UserPhoto)
+        public PostWrapper(byte[] Photo, string Descript, string User, byte[] UserPhoto)
         {
-            postID = post.IdPost;
-            imageBytes = post.Photo;
-            description = post.Description;
+            imageBytes = Photo;
+            description = Descript;
             username = User;
             userImageBytes = UserPhoto;
         }
 
         public PostWrapper(PostUser post)
         {
-            postID = post.IdPost;
-            username = post.IdUser;
-            imageBytes = post.Photo;
-            userImageBytes = post.UserPhoto;
-            description = post.Description;
-            likesCount = post.LikesCounter;
-            commentsCount = post.CommentsCounter;
-            if (post.isFollow) { following = "Following"; }
-            else { following = "Follow"; }
+            PostID = post.IdPost;
+            Username = post.IdUser;
+            ImageBytes = post.Photo;
+            UserImageBytes = post.UserPhoto;
+            Description = post.Description;
+            LikesCount = post.LikesCounter;
+            CommentsCount = post.CommentsCounter;
+
+            if (post.isFollow) { Following = "Following"; }
+            else { Following = "Follow"; }
         }
 
         public PostWrapper(Post post)
@@ -112,7 +112,7 @@ namespace BDProject.ModelWrappers
             }
         }
         public void AddComment(CommentWrapper comment) { comments.Add(comment); CommentsCount = comments.Count; }
-        public void RemoveComment(CommentWrapper comment) { comments.Remove(comment); CommentsCount = comments.Count; }
+        public void RemoveComment(CommentWrapper comment) { comments.RemoveAll(x => x.ID == comment.ID); CommentsCount = comments.Count; }
         public bool IsCommentInside(CommentWrapper comment) { return comments.Contains(comment); }
 
 
@@ -137,33 +137,10 @@ namespace BDProject.ModelWrappers
                 OnPropertyChanged(nameof(Likes));
             }
         }
-        public void AddLike(LikeWrapper like) 
-        {
-            likes.Add(like); 
-            LikesCount = likes.Count; 
-        }
-        public void RemoveLike(LikeWrapper like) 
-        {
-            int i = 0;
-            for (i=0; i<likes.Count; i++)
-            {
-                if (likes[i].Username == like.Username) { break; }
-            }
-            likes.RemoveAt(i);
-            LikesCount = likes.Count; 
-        }
+        public void AddLike(LikeWrapper like) { likes.Add(like); LikesCount = likes.Count; }
+        public void RemoveLike(LikeWrapper like) { likes.RemoveAll(x => x.Username == like.Username); LikesCount = likes.Count; }
         public bool IsLikeInside(LikeWrapper like) { return likes.Contains(like); }
-        public bool IsLikeUsernameInside(string username) 
-        { 
-            foreach(LikeWrapper like in likes)
-            {
-                if (like.Username == username)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        public bool IsLikeUsernameInside(string username) { return likes.Exists(x => x.Username == username); }
 
 
 

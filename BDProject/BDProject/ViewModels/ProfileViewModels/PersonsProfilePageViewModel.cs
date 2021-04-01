@@ -1,7 +1,11 @@
 ﻿using BDProject.Helpers;
+using BDProject.Models;
 using BDProject.ModelWrappers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,45 +16,44 @@ namespace BDProject.ViewModels.ProfileViewModels
     public class PersonsProfilePageViewModel : BaseViewModel
     {
 
-        private void SetUserData()
-        {
-            string uName = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Username;
-            UserWrapper user = _Globals.GetUser(uName);
-
-            try
-            {
-                Name = user.FirstName + " " + user.LastName;
-                realUsername = user.Username;
-                Username = "(" + user.Username + ")";
-                Description = user.Description;
-                ProfilePictureSource = user.PhotoSource;
-
-                Following = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following;
-                FollowingCount = user.Followings.Count;
-                FollowersCount = user.Followers.Count;
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        private void SetCollection()
+        private async void SetUserData()
         {
             YourPostsCollection.Clear();
-            YourPostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
+            string uName = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Username;
+            JObject oJsonObject = new JObject();
 
-            if (YourPostsCollection.Count != 0)
+            var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{uName}", oJsonObject);
+
+            if (success.IsSuccessStatusCode)
             {
-                this.SetCollectionHeight();
-                PostsCount = YourPostsCollection.Count;
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var rootobject = JsonConvert.DeserializeObject<Profile>(earthquakesJson);
+
+                Name = rootobject.FirstName + " " + rootobject.LastName;
+                realUsername = rootobject.Username;
+                Username = "(" + rootobject.Username + ")";
+                Description = rootobject.Description;
+                ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(rootobject.Photo));
+
+                FollowingCount = rootobject.Followed;
+                FollowersCount = rootobject.Follower;
+
+                Following = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following;
+
+                YourPostsCollection = new ObservableCollection<PostWrapper>(_Globals.FromPostToWrapperList(rootobject.Posts));
+
+                if (YourPostsCollection.Count != 0)
+                {
+                    PostsCount = YourPostsCollection.Count;
+                }
+
+                SetCollectionHeight();
             }
         }
 
         public PersonsProfilePageViewModel()
         {
             SetUserData();
-            SetCollection();
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
@@ -231,25 +234,42 @@ namespace BDProject.ViewModels.ProfileViewModels
             IsRefreshing = true;
             await Task.Delay(TimeSpan.FromSeconds(1));
             SetUserData();
-            SetCollection();
             IsRefreshing = false;
         }
 
         // Follow profile command
         public ICommand FollowProfileCommand { get; set; }
-        private void FollowProfileFunction()
+        private async void FollowProfileFunction()
         {
             if (Following == "Follow")
             {
-                _Globals.GlobalMainUser.AddFollowing(realUsername);
-                _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Following";
-                Following = "Following";
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("idFollowed", Username);
+                oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
+
+                var success = await ServerServices.SendPostRequestAsync("follow", oJsonObject);
+
+                if (success.IsSuccessStatusCode)
+                {
+                    _Globals.GlobalMainUser.AddFollowing(realUsername);
+                    _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Following";
+                    Following = "Following";
+                }
             }
             else
             {
-                _Globals.GlobalMainUser.RemoveFollowing(realUsername);
-                _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Follow";
-                Following = "Follow";
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("idFollowed", Username);
+                oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
+
+                var success = await ServerServices.SendDeleteRequestAsync("follow", oJsonObject);
+
+                if (success.IsSuccessStatusCode)
+                {
+                    _Globals.GlobalMainUser.RemoveFollowing(realUsername);
+                    _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Follow";
+                    Following = "Follow";
+                }
             }
         }
 

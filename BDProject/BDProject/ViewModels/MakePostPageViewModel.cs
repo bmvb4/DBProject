@@ -150,13 +150,8 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.AddPost(new PostWrapper(new Post(imageBytes, Description), _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
-                    _Globals.AddMyPost(new PostWrapper(new Post(imageBytes, Description), _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
-
-                    //=======================TEST
-                    _Globals.AddPost(new PostWrapper(new Post(imageBytes, "test description 1"), "Sranger1", _Globals.GlobalMainUser.ImageBytes));
-                    _Globals.AddPost(new PostWrapper(new Post(imageBytes, ""), "Sranger1", _Globals.GlobalMainUser.ImageBytes));
-                    //=======================TEST
+                    _Globals.GlobalMainUser.AddPost(new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
+                    _Globals.AddMyPost(new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
 
                     _Globals.Refresh = true;
                     await Shell.Current.GoToAsync("//HomePage");

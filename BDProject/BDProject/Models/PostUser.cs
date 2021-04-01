@@ -16,5 +16,6 @@ namespace BDProject.Models
         public int LikesCounter { get; set; }
         public int CommentsCounter { get; set; }
         public bool isFollow { get; set; }
+        public bool isLiked { get; set; }
     }
 }

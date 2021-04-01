@@ -18,6 +18,7 @@ namespace BDProject.ViewModels
             // Assigning functions to the commands
             LogInCommand = new Command(async () => await LogInFunction());
             SignUpCommand = new Command(async () => await SignUpFunction());
+            ShowHidePasswordCommand = new Command(ShowHidePasswordFunction);
         }
 
         // Parameters
@@ -79,6 +80,32 @@ namespace BDProject.ViewModels
             }
         }
 
+        // Show password parameter
+        private bool hidePassword = true;
+        public bool HidePassword
+        {
+            get => hidePassword;
+            set
+            {
+                if (value == hidePassword) { return; }
+                hidePassword = value;
+                OnPropertyChanged(nameof(HidePassword));
+            }
+        }
+
+        // Password parameter
+        private string eye = "";
+        public string Eye
+        {
+            get => eye;
+            set
+            {
+                if (value == eye) { return; }
+                eye = value;
+                OnPropertyChanged(nameof(Eye));
+            }
+        }
+
         // Commands
         // Log In command
         public ICommand LogInCommand { get; set; }
@@ -109,7 +136,17 @@ namespace BDProject.ViewModels
                     _Globals.AddPostsFromDB(postList);
 
                     await Shell.Current.GoToAsync("//HomePage");
+
+                    PasswordAlert = "";
                 }
+                else
+                {
+                    PasswordAlert = "Something went wrong";
+                }
+            }
+            else
+            {
+                PasswordAlert = "Username or Password is incorrect";
             }
         }
 
@@ -124,6 +161,23 @@ namespace BDProject.ViewModels
 
             UsernameAlert = "";
             PasswordAlert = "";
+        }
+
+        // Show Hide Password command
+        public ICommand ShowHidePasswordCommand { get; set; }
+        private void ShowHidePasswordFunction()
+        {
+
+            if (HidePassword == true)
+            {
+                HidePassword = false;
+                Eye = "";
+            }
+            else
+            {
+                HidePassword = true;
+                Eye = "";
+            }
         }
 
         // Functions

@@ -216,8 +216,13 @@ namespace BDProject.ViewModels
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                 var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
 
-                //_Globals.GlobalMainUser = new UserWrapper(rootobject);
+                _Globals.GlobalMainUser = new UserWrapper(rootobject);
                 await Shell.Current.GoToAsync("//HomePage");
+            }
+            else
+            {
+                UsernameAlert = "Username is already taken";
+                EmailAlert = "Email is already taken";
             }
         }
 
