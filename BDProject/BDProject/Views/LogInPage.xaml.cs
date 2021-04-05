@@ -17,10 +17,10 @@ namespace BDProject.Views
         {
             InitializeComponent();
 
-            BindingContext = new LogInPageViewModel();
-
             UsernameEntry.Unfocus();
             PasswordEntry.Unfocus();
+
+            BindingContext = new LogInPageViewModel();
         }
     }
 }

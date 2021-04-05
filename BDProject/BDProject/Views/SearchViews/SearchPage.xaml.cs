@@ -1,4 +1,5 @@
-﻿using BDProject.ViewModels.SearchViewModels;
+﻿using BDProject.Helpers;
+using BDProject.ViewModels.SearchViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,14 @@ namespace BDProject.Views.SearchViews
             InitializeComponent();
             
             BindingContext = new SearchPageViewModel();
+        }
+
+        private async void Searcher_TextChangedAsync(object sender, TextChangedEventArgs e)
+        {
+            if (EmojiHandler.HasUnsoppertedCharacter(Searcher.Text))
+            {
+                await App.Current.MainPage.DisplayAlert("===TEST===", "Has Emoji", "OK");
+            }
         }
     }
 }

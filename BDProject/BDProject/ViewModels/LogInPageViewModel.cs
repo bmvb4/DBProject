@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels
@@ -121,6 +122,9 @@ namespace BDProject.ViewModels
 
             if (success.IsSuccessStatusCode)
             {
+                Preferences.Set("UsernameKey", Username);
+                Preferences.Set("PasswordKey", Password);
+
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                 var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
 
@@ -137,6 +141,9 @@ namespace BDProject.ViewModels
 
                     await Shell.Current.GoToAsync("//HomePage");
 
+                    Username = "";
+                    Password = "";
+                    UsernameAlert = "";
                     PasswordAlert = "";
                 }
                 else

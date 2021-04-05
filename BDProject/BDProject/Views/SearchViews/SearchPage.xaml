@@ -32,6 +32,7 @@
                     Grid.Column="1"
                     x:Name="Searcher"
                     Text="{Binding Search}"
+                    TextChanged="Searcher_TextChangedAsync" 
                     Placeholder=""
                     FontFamily="FA-S"/>
 

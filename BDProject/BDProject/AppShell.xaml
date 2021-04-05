@@ -17,21 +17,17 @@
             <Setter Property="Shell.TabBarBackgroundColor" Value="White"/>
             <Setter Property="Shell.TabBarUnselectedColor" Value="LightSlateGray"/>
             <Setter Property="Shell.TabBarTitleColor" Value="Black"/>
-            
+
         </Style>
         <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
     </Shell.Resources>
 
     <ShellContent 
-        Route="LogInPage" 
-        Shell.BackgroundColor="{StaticResource White}"
-        Shell.NavBarIsVisible="False"
+        Route="LogInPage"
         ContentTemplate="{DataTemplate local:LogInPage}"/>
 
     <ShellContent 
-        Route="SignUpPage" 
-        Shell.BackgroundColor="{StaticResource White}"
-        Shell.NavBarIsVisible="False"
+        Route="SignUpPage"
         ContentTemplate="{DataTemplate local:SignUpPage}"/>
 
     <TabBar>

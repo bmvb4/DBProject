@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.LogInPage"
              
-             Shell.NavBarIsVisible="False">
+             BackgroundColor="{StaticResource White}"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
     
     <ContentPage.Content>
         <Grid

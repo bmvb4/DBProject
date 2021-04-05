@@ -43,7 +43,7 @@
                 </Grid>
 
                 <Grid 
-                    RowDefinitions="auto,auto,*,auto">
+                    RowDefinitions="auto,auto,*,auto,auto">
 
                     <Frame 
                         Grid.Row="0"
@@ -103,6 +103,23 @@
 
                     <Frame 
                         Grid.Row="3"
+                        HasShadow="False">
+
+                        <Label 
+                            Text="Log Out"
+                            HorizontalOptions="End"
+                            FontSize="Medium"
+                            TextColor="Red"/>
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding LogOutCommand}"/>
+                        </Frame.GestureRecognizers>
+
+                    </Frame>
+
+                    <Frame 
+                        Grid.Row="4"
                         HasShadow="False">
 
                         <Label 

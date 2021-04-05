@@ -22,6 +22,10 @@ namespace BDProject
         {
             InitializeComponent();
 
+            // First main pages
+            Routing.RegisterRoute("LogInPage", typeof(LogInPage));
+            Routing.RegisterRoute("SignUpPage", typeof(SignUpPage));
+
             // pages for posts
             Routing.RegisterRoute("PostComments", typeof(PostCommentsPage));
             Routing.RegisterRoute("EditPostPage", typeof(EditPostPage));
@@ -40,6 +44,8 @@ namespace BDProject
             Routing.RegisterRoute("PersonsProfilePage", typeof(PersonsProfilePage));
             Routing.RegisterRoute("EditProfilePage", typeof(EditProfilePage));
             Routing.RegisterRoute("ProfilePostPage", typeof(ProfilePostPage));
+
+            this.CurrentItem.CurrentItem = new SplashScreenPage();
         }
     }
 }
