@@ -38,6 +38,10 @@
 
             </Grid>
 
+            <Label x:Name="emojicode" Text="Emoji code" />
+
+            <Label x:Name="emojiicon" Text="Emoji icon" />
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
