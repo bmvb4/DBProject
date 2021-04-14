@@ -51,7 +51,8 @@ namespace BDProject.ViewModels
             // Assigning functions to the commands
             OpenSettingsCommand = new Command(async () => await OpenSettingsFunction());
             OpenEditProfileCommand=new Command(async () => await OpenEditProfileFunction());
-            RefreshCommand = new Command(async () => await RefreshFunction());
+            RefreshCommand = new Command(RefreshFunction);
+            OpenPostsCommand = new Command<PostWrapper>(OpenPostsFunction);
         }
 
         // Parameters
@@ -214,13 +215,20 @@ namespace BDProject.ViewModels
 
         // Refresh collection view command
         public ICommand RefreshCommand { get; set; }
-        private async Task RefreshFunction()
+        private void RefreshFunction()
         {
             IsRefreshing = true;
-            await Task.Delay(TimeSpan.FromSeconds(1));
             SetUserData();
             SetCollection();
             IsRefreshing = false;
+        }
+
+        // Open Posts command
+        public ICommand OpenPostsCommand { get; set; }
+        private async void OpenPostsFunction(PostWrapper post)
+        {
+            _Globals.OpenID = post.PostID;
+            await Shell.Current.GoToAsync("MyProfilePostPage");
         }
 
         // Functions

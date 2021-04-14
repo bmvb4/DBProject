@@ -144,6 +144,31 @@ namespace BDProject.ModelWrappers
 
 
 
+        private int tagsCount;
+        public int TagsCount
+        {
+            get => tagsCount;
+            set
+            {
+                tagsCount = value;
+                OnPropertyChanged(nameof(TagsCount));
+            }
+        }
+        private List<Tag> tags = new List<Tag>();
+        public List<Tag> Tags
+        {
+            get => tags;
+            set
+            {
+                tags = value;
+                OnPropertyChanged(nameof(Tags));
+            }
+        }
+        public void AddTag(Tag tag) { tags.Add(tag); TagsCount = tags.Count; }
+        public void RemoveTag(Tag tag) { tags.RemoveAll(x => x.TagName == tag.TagName); TagsCount = tags.Count; }
+
+
+
         // user parameters
         private byte[] userImageBytes;
         public byte[] UserImageBytes

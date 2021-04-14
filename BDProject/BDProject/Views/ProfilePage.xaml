@@ -173,7 +173,11 @@
                                     Source="{Binding PhotoSource}"
                                     HeightRequest="{Binding PostHeight, Source={
                                         RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
-                                        }}"/>
+                                        }}"
+                                    Command="{Binding OpenPostsCommand, Source={
+                                        RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
+                                        }}"
+                                    CommandParameter="{Binding .}"/>
 
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

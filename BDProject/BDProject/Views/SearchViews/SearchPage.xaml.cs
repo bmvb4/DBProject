@@ -21,27 +21,32 @@ namespace BDProject.Views.SearchViews
             InitializeComponent();
             
             BindingContext = new SearchPageViewModel();
+
+            SearchAll.BackgroundColor = Color.LightGray;
         }
 
-        private void Searcher_TextChangedAsync(object sender, TextChangedEventArgs e)
+        private void SearchAll_Tapped(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(Searcher.Text)) { return; }
+            SearchAll.BackgroundColor = Color.LightGray;
 
-            UTF8Encoding utf8 = new UTF8Encoding(true, true);
-            Byte[] encodedBytes = utf8.GetBytes(Searcher.Text);
+            SearchPeople.BackgroundColor = Color.Black;
+            SearchTags.BackgroundColor = Color.Black;
+        }
 
-            string encodedBytesString = "";
-            for(int i=0; i<encodedBytes.Length; i++)
-            {
-                if (i == 0) { encodedBytesString = encodedBytesString + encodedBytes[i]; }
+        private void SearchPeople_Tapped(object sender, EventArgs e)
+        {
+            SearchPeople.BackgroundColor = Color.LightGray;
 
-                encodedBytesString = encodedBytesString + " " + encodedBytes[i];
-            }
+            SearchAll.BackgroundColor = Color.Black;
+            SearchTags.BackgroundColor = Color.Black;
+        }
 
-            emojicode.Text = encodedBytesString;
+        private void SearchTags_Tapped(object sender, EventArgs e)
+        {
+            SearchTags.BackgroundColor = Color.LightGray;
 
-            String decodedString = utf8.GetString(encodedBytes);
-            emojiicon.Text = decodedString;
+            SearchPeople.BackgroundColor = Color.Black;
+            SearchAll.BackgroundColor = Color.Black;
         }
     }
 }

@@ -44,6 +44,7 @@ namespace BDProject
             Routing.RegisterRoute("PersonsProfilePage", typeof(PersonsProfilePage));
             Routing.RegisterRoute("EditProfilePage", typeof(EditProfilePage));
             Routing.RegisterRoute("ProfilePostPage", typeof(ProfilePostPage));
+            Routing.RegisterRoute("MyProfilePostPage", typeof(MyProfilePostPage));
 
             this.CurrentItem.CurrentItem = new SplashScreenPage();
         }

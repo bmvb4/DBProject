@@ -3,6 +3,7 @@ using BDProject.Models;
 using BDProject.ModelWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -23,7 +24,6 @@ namespace BDProject.ViewModels
             BackCommand = new Command(async () => await BackFunction());
             TakePhotoCommand = new Command(async () => await TakePhotoFunction());
             PickPhotoCommand = new Command(async () => await PickPhotoFunction());
-            AddTagsCommand = new Command(async () => await AddTagsFunction());
             PostCommand = new Command(async () => await PostFunction());
         }
 
@@ -81,6 +81,32 @@ namespace BDProject.ViewModels
             }
         }
 
+        // All tagsheight
+        private int allTagsHeight = 0;
+        public int AllTagsHeight
+        {
+            get => allTagsHeight;
+            set
+            {
+                if (value == allTagsHeight) { return; }
+                allTagsHeight = value;
+                OnPropertyChanged(nameof(AllTagsHeight));
+            }
+        }
+
+        // All tags
+        private ObservableCollection<string> allTags = new ObservableCollection<string>();
+        public ObservableCollection<string> AllTags
+        {
+            get => allTags;
+            set
+            {
+                if (value == allTags) { return; }
+                allTags = value;
+                OnPropertyChanged(nameof(AllTags));
+            }
+        }
+
         // Commands
         // Back to post command
         public ICommand BackCommand { get; set; }
@@ -90,6 +116,8 @@ namespace BDProject.ViewModels
 
             TakenPhoto = null;
             Description = "";
+            AllTags.Clear();
+            AllTagsHeight = 0;
         }
 
         // Take Photo command
@@ -101,10 +129,7 @@ namespace BDProject.ViewModels
             var result = await MediaPicker.CapturePhotoAsync();
             if (result == null) { return; }
 
-            // image path
-            var path = Path.Combine(FileSystem.CacheDirectory, result.FileName);
-
-            imageBytes = File.ReadAllBytes(path);
+            imageBytes = File.ReadAllBytes(result.FullPath);
 
             TakenPhoto = ImageSource.FromStream(() => new MemoryStream(imageBytes));
         }
@@ -121,13 +146,6 @@ namespace BDProject.ViewModels
             imageBytes = File.ReadAllBytes(result.FullPath);
 
             TakenPhoto = ImageSource.FromFile(result.FullPath);
-        }
-
-        // add tags command
-        public ICommand AddTagsCommand { get; set; }
-        private async Task AddTagsFunction()
-        {
-            await Shell.Current.GoToAsync("AddTagsPage");
         }
 
         // post command
@@ -150,8 +168,14 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.AddPost(new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
-                    _Globals.AddMyPost(new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes));
+                    PostWrapper post = new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes);
+                    foreach(string t in AllTags)
+                    {
+                        post.AddTag(new Tag(t));
+                    }
+
+                    _Globals.GlobalMainUser.AddPost(post);
+                    _Globals.AddMyPost(post);
 
                     _Globals.Refresh = true;
                     await Shell.Current.GoToAsync("//HomePage");

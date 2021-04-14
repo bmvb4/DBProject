@@ -18,8 +18,20 @@ namespace BDProject.Views
             InitializeComponent();
 
             descriptionEditor.Unfocus();
+            tagsEditor.Unfocus();
 
             BindingContext = new MakePostPageViewModel();
+        }
+
+        private void tagsEditor_TextChangesd(object sender, TextChangedEventArgs e)
+        {
+            if (e.NewTextValue.EndsWith("\n") && e.NewTextValue.Length >= 2)
+            {
+                var vm = (MakePostPageViewModel)this.BindingContext;
+                vm.AllTags.Add(tagsEditor.Text);
+                vm.AllTagsHeight += 45;
+                tagsEditor.Text = "";
+            }
         }
     }
 }

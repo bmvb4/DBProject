@@ -42,12 +42,26 @@ namespace BDProject.ViewModels.PostsViewModels
                     lc.Add(new CommentWrapper(c));
                 }
 
+                AllComments = new ObservableCollection<CommentWrapper>(lc);
+
                 CommentsCollection.Clear();
-                CommentsCollection = new ObservableCollection<CommentWrapper>(lc);
+                if (AllComments.Count >= 20)
+                {
+                    for (int i = 0; i < 20; i++)
+                    {
+                        CommentsCollection.Add(AllComments[i]);
+                    }
+                }
+                else
+                {
+                    CommentsCollection = AllComments;
+                }
 
                 CollectionHeight = 77 * CommentsCollection.Count;
             }
         }
+
+        private ObservableCollection<CommentWrapper> AllComments = new ObservableCollection<CommentWrapper>();
 
         public PostCommentsPageViewModel()
         {
@@ -56,15 +70,14 @@ namespace BDProject.ViewModels.PostsViewModels
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
-            //LikePostCommand = new Command(LikePostFunction);
-            RefreshCommand = new Command(async () => await RefreshFunction());
+            RefreshCommand = new Command(RefreshFunction);
             CommentCommand = new Command(CommentFunction);
             DeleteCommentCommand = new Command<CommentWrapper>(DeleteCommentFunction);
+            LoadMoreCommand = new Command(LoadMoreFunction);
         }
 
         // Parameters
         // Posts Collection parameter
-        // ================= zadaden e int za testvane na dizaina
         private ObservableCollection<CommentWrapper> commentsCollection = new ObservableCollection<CommentWrapper>();
         public ObservableCollection<CommentWrapper> CommentsCollection
         {
@@ -152,23 +165,16 @@ namespace BDProject.ViewModels.PostsViewModels
             _Globals.OpenID = 0;
         }
 
-        // Like Post command
-        /*public ICommand LikePostCommand { get; set; }
-        private void LikePostFunction()
-        {
-            
-        }*/
-
         // Refresh collection view command
         public ICommand RefreshCommand { get; set; }
-        private async Task RefreshFunction()
+        private void RefreshFunction()
         {
             IsRefreshing = true;
-            await Task.Delay(TimeSpan.FromSeconds(1));
             SetCollection();
             IsRefreshing = false;
         }
 
+        // delete command
         public ICommand DeleteCommentCommand { get; set; }
         private async void DeleteCommentFunction(CommentWrapper comment)
         {
@@ -188,10 +194,31 @@ namespace BDProject.ViewModels.PostsViewModels
             }
         }
 
+        // comment command
         public ICommand CommentCommand { get; set; }
         private async void CommentFunction()
         {
             if (string.IsNullOrEmpty(Comment) || string.IsNullOrWhiteSpace(Comment)) { return; }
+
+            // ======= ZA TESVANE NA LAZY LOAD =============
+            //for(int i=0; i < 100; i++)
+            //{
+            //    PostWrapper post = _Globals.GetPost(_Globals.OpenID);
+
+            //    JObject oJsonObject = new JObject();
+            //    oJsonObject.Add("IdPost", post.PostID);
+            //    oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
+            //    oJsonObject.Add("CommentText", i.ToString());
+
+            //    var success = await ServerServices.SendPostRequestAsync("posts/comment", oJsonObject);
+            //    if (success.IsSuccessStatusCode)
+            //    {
+            //        _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).AddComment(new CommentWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username, Comment));
+            //        SetCollection();
+            //        Comment = "";
+            //    }
+            //}
+
             PostWrapper post = _Globals.GetPost(_Globals.OpenID);
 
             JObject oJsonObject = new JObject();
@@ -205,6 +232,21 @@ namespace BDProject.ViewModels.PostsViewModels
                 _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).AddComment(new CommentWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username, Comment));
                 SetCollection();
                 Comment = "";
+            }
+        }
+
+        // load more command 
+        public ICommand LoadMoreCommand { get; set; }
+        private void LoadMoreFunction()
+        {
+            if (CommentsCollection.Count == AllComments.Count) { return; }
+
+            int start = CommentsCollection.Count + 10;
+            for (int i = CommentsCollection.Count; i < start; i++)
+            {
+                if(CommentsCollection.Count == AllComments.Count) { break; }
+
+                CommentsCollection.Add(AllComments[i]);
             }
         }
     }

@@ -69,15 +69,27 @@
                 <StackLayout 
                     Orientation="Vertical">
 
+                    <Label 
+                        Text="Descripton"
+                        FontSize="Medium"/>
+
                     <Editor
                         x:Name="descriptionEditor"
                         HeightRequest="100"
-                        Placeholder="Add description"
                         Text="{Binding Description}"/>
 
-                    <Button 
-                        Text="Add Tags" 
-                        Command="{Binding AddTagsCommand}"/>
+                    <Label 
+                        Text="Tags"
+                        FontSize="Medium"/>
+
+                    <Editor
+                        x:Name="tagsEditor"
+                        TextChanged="tagsEditor_TextChangesd"/>
+
+                    <ListView 
+                        SelectionMode="None"
+                        HeightRequest="{Binding AllTagsHeight}"
+                        ItemsSource="{Binding AllTags}"/>
 
                 </StackLayout>
 

@@ -115,13 +115,9 @@ namespace BDProject.ViewModels.ProfileViewModels
             var result = await MediaPicker.CapturePhotoAsync();
             if (result == null) { return; }
 
-            // image path
-            var path = Path.Combine(FileSystem.CacheDirectory, result.FileName);
+            imageBytes = File.ReadAllBytes(result.FullPath);
 
-            //byte[] imageBytes = File.ReadAllBytes(path);
-            //base64ImageRepresentation = Convert.ToBase64String(imageBytes);
-
-            ProfilePictureSource = ImageSource.FromFile(path);
+            ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
             isChanged = true;
         }
 

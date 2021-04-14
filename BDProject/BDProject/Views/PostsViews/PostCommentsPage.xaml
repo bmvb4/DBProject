@@ -162,6 +162,11 @@
                         <CollectionView 
                             Grid.Row="2"
                             SelectionMode="None" 
+                            VerticalScrollBarVisibility="Never"
+                            
+                            RemainingItemsThreshold="5"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                            
                             HeightRequest="{Binding CollectionHeight}"
                             ItemsSource="{Binding CommentsCollection}"
                             ItemTemplate="{StaticResource templateSelector}"/>

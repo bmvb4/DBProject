@@ -2,6 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.SearchViews.SearchPage"
+             xmlns:selector="clr-namespace:BDProject.Helpers"
+             
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
              
              Shell.BackgroundColor="{StaticResource White}"
              Shell.NavBarIsVisible="False"
@@ -10,6 +13,61 @@
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
     </Shell.BackButtonBehavior>
+
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <!--===============ACCOUNT===============-->
+            <DataTemplate x:Key="AccountTemplate">
+                <Grid 
+                    ColumnDefinitions="auto,*">
+
+                    <controls:CircleImage
+                        Grid.Column="0"
+                        Source="{Binding PhotoSource}"
+                        HeightRequest="60"
+                        WidthRequest="40"/>
+
+                    <Label 
+                        Grid.Column="1"
+                        Text="{Binding Name}"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Black}"/>
+
+                </Grid>
+            </DataTemplate>
+
+            <!--==============TAG===================-->
+            <DataTemplate x:Key="TagTemplate">
+                <Grid 
+                    ColumnDefinitions="auto,*">
+
+                    <Frame
+                        CornerRadius="100"
+                        BackgroundColor="Black"/>
+
+                    <Label 
+                        Grid.Column="1"
+                        Text="{Binding Name}"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Black}"/>
+
+                </Grid>
+            </DataTemplate>
+
+            <!--===================DATA TEMPLATE SELECTOR=====================-->
+            <selector:SearcherDataTemplate x:Key="templateSelector"
+                Accounts="{StaticResource AccountTemplate}"
+                Tags="{StaticResource TagTemplate}"/>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    
 
     <ContentPage.Content>
         <StackLayout>
@@ -31,16 +89,85 @@
                 <Entry
                     Grid.Column="1"
                     x:Name="Searcher"
-                    Text="{Binding Search}"
-                    TextChanged="Searcher_TextChangedAsync" 
+                    Text="{Binding Search}" 
                     Placeholder=""
                     FontFamily="FA-S"/>
 
             </Grid>
 
-            <Label x:Name="emojicode" Text="Emoji code" />
+            <Grid ColumnDefinitions="auto,auto,auto">
 
-            <Label x:Name="emojiicon" Text="Emoji icon" />
+                <Frame
+                    Grid.Column="0"
+                    x:Name="SearchAll"
+                    CornerRadius="100"
+                    Padding="0"
+                    BackgroundColor="Black">
+                    
+                    <Label 
+                        Text="All"
+                        Margin="5"
+                        HeightRequest="25"
+                        TextColor="Orange"/>
+
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Tapped="SearchAll_Tapped"
+                            Command="{Binding SearchAllCommand}"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame
+                    Grid.Column="1"
+                    x:Name="SearchPeople"
+                    CornerRadius="100"
+                    Padding="0"
+                    BackgroundColor="Black">
+                    
+                    <Label 
+                        Text="People"
+                        Margin="5"
+                        HeightRequest="25"
+                        TextColor="Orange"/>
+
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Tapped="SearchPeople_Tapped"
+                            Command="{Binding SearchPeopleCommand}"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame
+                    Grid.Column="2"
+                    x:Name="SearchTags"
+                    CornerRadius="100"
+                    Padding="0"
+                    BackgroundColor="Black">
+                    
+                    <Label 
+                        Text="Tags"
+                        Margin="5"
+                        HeightRequest="25"
+                        TextColor="Orange"/>
+
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Tapped="SearchTags_Tapped"
+                            Command="{Binding SearchTagsCommand}"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+            </Grid>
+
+            <CollectionView 
+                SelectionMode="None" 
+                VerticalScrollBarVisibility="Never"
+                            
+                RemainingItemsThreshold="5"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                
+                ItemsSource="{Binding BubblesCollection}"
+                ItemTemplate="{StaticResource templateSelector}"/>
 
         </StackLayout>
     </ContentPage.Content>

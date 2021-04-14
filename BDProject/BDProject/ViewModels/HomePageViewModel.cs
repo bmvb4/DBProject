@@ -44,7 +44,7 @@ namespace BDProject.ViewModels
 
             // Assigning functions to the commands
             // refresh command
-            RefreshCommand = new Command(async () => await RefreshFunction());
+            RefreshCommand = new Command(RefreshFunction);
 
             // like commands
             LikePostCommand = new Command<PostWrapper>(LikePostFunction);
@@ -85,19 +85,6 @@ namespace BDProject.ViewModels
                 if (value == search) { return; }
                 search = value;
                 OnPropertyChanged(nameof(Search));
-            }
-        }
-
-        // Username parameter
-        private string username = "";
-        public string Username
-        {
-            get => username;
-            set
-            {
-                if (value == username) { return; }
-                username = value;
-                OnPropertyChanged(nameof(Username));
             }
         }
 
@@ -151,10 +138,9 @@ namespace BDProject.ViewModels
 
         // Refresh collection view command
         public ICommand RefreshCommand { get; set; }
-        private async Task RefreshFunction()
+        private void RefreshFunction()
         {
             IsRefreshing = true;
-            await Task.Delay(TimeSpan.FromSeconds(1));
             SetCollection();
             IsRefreshing = false;
         }
@@ -187,8 +173,6 @@ namespace BDProject.ViewModels
         {
             _Globals.OpenID = post.PostID;
             await PopupNavigation.Instance.PushAsync(new PostPopUp());
-
-            //await Shell.Current.GoToAsync("EditPostPage");
         }
 
         // Follow profile command 
