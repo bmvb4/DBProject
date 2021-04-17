@@ -17,5 +17,7 @@ namespace BDProject.Models
         public byte[] Photo { get; set; }
         public string Description { get; set; }
 
+        public List<string> tags { get; set; }
+
     }
 }

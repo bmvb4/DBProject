@@ -32,7 +32,8 @@ namespace BDProject.ModelWrappers
             lastname = user.LastName;
             description = user.Description;
             imageBytes = user.Photo;
-            token = user.token;
+            accessToken = user.AccessToken;
+            refreshToken = user.RefreshToken;
         }
 
         private string username;
@@ -187,12 +188,18 @@ namespace BDProject.ModelWrappers
 
 
 
-
-        private string token;
-        public string Token
+        private string accessToken;
+        public string AccessToken
         {
-            get => token;
-            set => token = value; 
+            get => accessToken;
+            set => accessToken = value;
+        }
+
+        private string refreshToken;
+        public string RefreshToken
+        {
+            get => refreshToken;
+            set => refreshToken = value; 
         }
     }
 }

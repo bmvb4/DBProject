@@ -24,7 +24,7 @@ namespace BDProject.Helpers
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient _client = new HttpClient(clientHandler);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.AccessToken);
 
             return await _client.PostAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
         }
@@ -38,7 +38,7 @@ namespace BDProject.Helpers
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient _client = new HttpClient(clientHandler);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.AccessToken);
 
             var request = new HttpRequestMessage
             {
@@ -70,7 +70,7 @@ namespace BDProject.Helpers
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient _client = new HttpClient(clientHandler);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.AccessToken);
 
             return await _client.PutAsync(URL, new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType));
         }
@@ -84,7 +84,7 @@ namespace BDProject.Helpers
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient _client = new HttpClient(clientHandler);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.Token);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _Globals.GlobalMainUser.AccessToken);
 
             var request = new HttpRequestMessage
             {
@@ -93,6 +93,38 @@ namespace BDProject.Helpers
                 Content = new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType)
             };
             return await _client.SendAsync(request).ConfigureAwait(false);
+        }
+
+        public static async Task RefreshTokenAsync()
+        {
+            string URL = "https://10.0.2.2:5001/token/refresh";
+            const string sContentType = "application/json";
+
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("AccessToken", _Globals.GlobalMainUser.AccessToken);
+            oJsonObject.Add("RefreshToken", _Globals.GlobalMainUser.RefreshToken);
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            HttpClient _client = new HttpClient(clientHandler);
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(URL),
+                Content = new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType)
+            };
+
+            var success = await _client.SendAsync(request).ConfigureAwait(false);
+
+            if (success.IsSuccessStatusCode)
+            {
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var user = JsonConvert.DeserializeObject<User>(earthquakesJson);
+
+                _Globals.GlobalMainUser.AccessToken = user.AccessToken;
+                _Globals.GlobalMainUser.RefreshToken = user.RefreshToken;
+            }
         }
     }
 }

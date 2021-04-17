@@ -3,8 +3,10 @@ using BDProject.Models;
 using BDProject.ModelWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -159,17 +161,24 @@ namespace BDProject.ViewModels
             }
             else
             {
+                List<string> tags = new List<string>();
+                foreach (string t in AllTags)
+                {
+                    tags.Add(t);
+                }
+
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
                 oJsonObject.Add("Photo", imageBytes);
                 oJsonObject.Add("Description", Description);
+                oJsonObject.Add("tags", JToken.FromObject(tags));
 
                 var success = await ServerServices.SendPostRequestAsync("posts/post", oJsonObject);
 
                 if (success.IsSuccessStatusCode)
                 {
                     PostWrapper post = new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes);
-                    foreach(string t in AllTags)
+                    foreach (string t in tags)
                     {
                         post.AddTag(new Tag(t));
                     }
@@ -180,9 +189,16 @@ namespace BDProject.ViewModels
                     _Globals.Refresh = true;
                     await Shell.Current.GoToAsync("//HomePage");
                 }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
+                }
+                
 
                 TakenPhoto = null;
                 Description = "";
+                AllTags.Clear();
+                AllTagsHeight = 0;
             }
         }
 

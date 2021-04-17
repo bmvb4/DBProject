@@ -25,10 +25,13 @@ namespace BDProject.Views
 
         private void tagsEditor_TextChangesd(object sender, TextChangedEventArgs e)
         {
-            if (e.NewTextValue.EndsWith("\n") && e.NewTextValue.Length >= 2)
+            if (e.NewTextValue.EndsWith("\n") && !string.IsNullOrEmpty(e.NewTextValue) && !string.IsNullOrWhiteSpace(e.NewTextValue))
             {
+                string temp = tagsEditor.Text;
+                temp = temp.Replace("\n", string.Empty);
+
                 var vm = (MakePostPageViewModel)this.BindingContext;
-                vm.AllTags.Add(tagsEditor.Text);
+                vm.AllTags.Add(temp);
                 vm.AllTagsHeight += 45;
                 tagsEditor.Text = "";
             }
