@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BDProject.Helpers
+namespace BDProject.Models
 {
     public class Tag
     {
@@ -16,6 +16,6 @@ namespace BDProject.Helpers
 
         }
 
-        public string TagName;
+        public string TagName { get; set; }
     }
 }

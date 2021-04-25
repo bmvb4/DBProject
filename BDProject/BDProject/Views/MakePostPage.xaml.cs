@@ -1,4 +1,5 @@
-﻿using BDProject.ViewModels;
+﻿using BDProject.Helpers;
+using BDProject.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace BDProject.Views
                 temp = temp.Replace("\n", string.Empty);
 
                 var vm = (MakePostPageViewModel)this.BindingContext;
-                vm.AllTags.Add(temp);
+                vm.AllTags.Add(new Tag(temp));
                 vm.AllTagsHeight += 45;
                 tagsEditor.Text = "";
             }

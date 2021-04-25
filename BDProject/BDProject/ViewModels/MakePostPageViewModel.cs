@@ -16,6 +16,13 @@ namespace BDProject.ViewModels
 {
     public class MakePostPageViewModel : BaseViewModel
     {
+        private void ClearEveryting()
+        {
+            TakenPhoto = null;
+            Description = "";
+            AllTags.Clear();
+            AllTagsHeight = 0;
+        }
 
         public MakePostPageViewModel()
         {
@@ -24,6 +31,7 @@ namespace BDProject.ViewModels
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
+            DeleteTagCommand = new Command<Tag>(DeleteTagFunction);
             TakePhotoCommand = new Command(async () => await TakePhotoFunction());
             PickPhotoCommand = new Command(async () => await PickPhotoFunction());
             PostCommand = new Command(async () => await PostFunction());
@@ -97,8 +105,8 @@ namespace BDProject.ViewModels
         }
 
         // All tags
-        private ObservableCollection<string> allTags = new ObservableCollection<string>();
-        public ObservableCollection<string> AllTags
+        private ObservableCollection<Tag> allTags = new ObservableCollection<Tag>();
+        public ObservableCollection<Tag> AllTags
         {
             get => allTags;
             set
@@ -115,11 +123,15 @@ namespace BDProject.ViewModels
         private async Task BackFunction()
         {
             await Shell.Current.GoToAsync("//HomePage");
+            ClearEveryting();
+        }
 
-            TakenPhoto = null;
-            Description = "";
-            AllTags.Clear();
-            AllTagsHeight = 0;
+        // Back to post command
+        public ICommand DeleteTagCommand { get; set; }
+        private void DeleteTagFunction(Tag tag)
+        {
+            AllTags.Remove(tag);
+            AllTagsHeight -= 45;
         }
 
         // Take Photo command
@@ -162,9 +174,9 @@ namespace BDProject.ViewModels
             else
             {
                 List<string> tags = new List<string>();
-                foreach (string t in AllTags)
+                foreach (Tag t in AllTags)
                 {
-                    tags.Add(t);
+                    tags.Add(t.TagName);
                 }
 
                 JObject oJsonObject = new JObject();
@@ -193,12 +205,8 @@ namespace BDProject.ViewModels
                 {
                     await ServerServices.RefreshTokenAsync();
                 }
-                
 
-                TakenPhoto = null;
-                Description = "";
-                AllTags.Clear();
-                AllTagsHeight = 0;
+                ClearEveryting();
             }
         }
 

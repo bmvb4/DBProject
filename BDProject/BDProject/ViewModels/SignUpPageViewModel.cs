@@ -411,9 +411,9 @@ namespace BDProject.ViewModels
                 UsernameAlert = "Username should be less than 30 characters";
                 flag = true;
             }
-            else if (Username.Length < 6) // min letter length
+            else if (Username.Length <= 4) // min letter length
             {
-                UsernameAlert = "Userame should be more than 6 characters";
+                UsernameAlert = "Userame should be more than 4 characters";
                 flag = true;
             }
             else
@@ -432,9 +432,9 @@ namespace BDProject.ViewModels
                 PasswordAlert = "Password should be less than 128 characters";
                 flag = true;
             }
-            else if (Password.Length < 12) // min letter length
+            else if (Password.Length <= 6) // min letter length
             {
-                PasswordAlert = "Password should be more than 12 characters";
+                PasswordAlert = "Password should be more than 6 characters";
                 flag = true;
             }
             else
