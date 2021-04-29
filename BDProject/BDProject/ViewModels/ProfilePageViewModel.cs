@@ -1,7 +1,9 @@
 ﻿using BDProject.Helpers;
 using BDProject.ModelWrappers;
+using MvvmHelpers;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -23,6 +25,21 @@ namespace BDProject.ViewModels
 
                 FollowingCount = _Globals.GlobalMainUser.Followings.Count;
                 FollowersCount = _Globals.GlobalMainUser.Followers.Count;
+
+                AllPostsCollection = new ObservableRangeCollection<PostWrapper>(_Globals.GlobalMainUser.MyPosts);
+                PostsCount = AllPostsCollection.Count;
+
+                YourPostsCollection.Clear();
+                if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
+                {
+                    YourPostsCollection.AddRange(AllPostsCollection);
+                    this.SetCollectionHeight();
+                }
+                else
+                {
+                    YourPostsCollection.AddRange(AllPostsCollection.Take(3 * 10));
+                    this.SetCollectionHeight();
+                }
             }
             catch(Exception ex)
             {
@@ -30,35 +47,24 @@ namespace BDProject.ViewModels
             }
         }
 
-        public void SetCollection()
-        {
-            PostsCount = 0;
-            YourPostsCollection.Clear();
-            YourPostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalMainUser.MyPosts);
-
-            if (YourPostsCollection.Count != 0)
-            {
-                this.SetCollectionHeight();
-                PostsCount = YourPostsCollection.Count;
-            }
-        }
-
         public ProfilePageViewModel()
         {
             SetUserData();
-            SetCollection();
 
             // Assigning functions to the commands
             OpenSettingsCommand = new Command(async () => await OpenSettingsFunction());
             OpenEditProfileCommand=new Command(async () => await OpenEditProfileFunction());
             RefreshCommand = new Command(RefreshFunction);
             OpenPostsCommand = new Command<PostWrapper>(OpenPostsFunction);
+            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
         }
+
+        private ObservableRangeCollection<PostWrapper> AllPostsCollection = new ObservableRangeCollection<PostWrapper>();
 
         // Parameters
         // Your Posts Collection parameter
-        private ObservableCollection<PostWrapper> yourPostsCollection = new ObservableCollection<PostWrapper>();
-        public ObservableCollection<PostWrapper> YourPostsCollection
+        private ObservableRangeCollection<PostWrapper> yourPostsCollection = new ObservableRangeCollection<PostWrapper>();
+        public ObservableRangeCollection<PostWrapper> YourPostsCollection
         {
             get => yourPostsCollection;
             set
@@ -215,11 +221,12 @@ namespace BDProject.ViewModels
 
         // Refresh collection view command
         public ICommand RefreshCommand { get; set; }
-        private void RefreshFunction()
+        public void RefreshFunction()
         {
             IsRefreshing = true;
+
             SetUserData();
-            SetCollection();
+
             IsRefreshing = false;
         }
 
@@ -229,6 +236,28 @@ namespace BDProject.ViewModels
         {
             _Globals.OpenID = post.PostID;
             await Shell.Current.GoToAsync("MyProfilePostPage");
+        }
+
+        // load more command 
+        public ICommand LoadMoreCommand { get; set; }
+        private async Task LoadMoreFunction()
+        {
+            if (_Globals.IsBusy) { return; }
+            _Globals.IsBusy = true;
+
+            await Task.Delay(1000);
+
+            if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
+            {
+                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count));
+            }
+            else
+            {
+                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count).Take(3 * 10));
+            }
+
+            this.SetCollectionHeight();
+            _Globals.IsBusy = false;
         }
 
         // Functions

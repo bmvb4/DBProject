@@ -5,10 +5,9 @@
     
     <Application.Resources>
 
-        <!--<Color x:Key="Black">#1c1c1e</Color>
-        <Color x:Key="White">#f2f2f7</Color>-->
-        <Color x:Key="Black">#000000</Color>
-        <Color x:Key="White">#ffffff</Color>
+        <Color x:Key="IconsColor">#000000</Color>
+        <Color x:Key="TextColor">#000000</Color>
+        <Color x:Key="BackgroundColor">#ffffff</Color>
 
     </Application.Resources>
 

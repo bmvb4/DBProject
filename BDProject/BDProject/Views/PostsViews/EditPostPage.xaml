@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.PostsViews.EditPostPage"
              
-             Shell.BackgroundColor="{StaticResource White}"
+             Shell.BackgroundColor="{StaticResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -23,9 +23,10 @@
                     HeightRequest="48"
                     WidthRequest="38"
                     Text="" 
+                    TextColor="{StaticResource IconsColor}"
                     FontFamily="FA-S"
                     FontSize="Large"
-                    BackgroundColor="{StaticResource White}"
+                    BackgroundColor="Transparent"
                     Command="{Binding BackCommand}"/>
 
                 <Button 
@@ -33,9 +34,10 @@
                     HeightRequest="48"
                     WidthRequest="48"
                     Text="" 
+                    TextColor="{StaticResource IconsColor}"
                     FontFamily="FA-S"
                     FontSize="Large"
-                    BackgroundColor="{StaticResource White}"
+                    BackgroundColor="Transparent"
                     Command="{Binding SaveChangesCommand}"/>
 
             </Grid>
@@ -72,8 +74,8 @@
                             Grid.Row="0"
                             FontSize="Medium"
                             FontAttributes="Bold"
-                            TextColor="{StaticResource Black}"
-                            Text="{Binding Username}"/>
+                            Text="{Binding Username}"
+                            TextColor="{StaticResource TextColor}"/>
 
                     </Grid>
 
@@ -82,8 +84,8 @@
                 <Entry 
                     Grid.Row="1"
                     FontSize="Medium"
-                    TextColor="{StaticResource Black}"
-                    Text="{Binding Description}" />
+                    Text="{Binding Description}"
+                    TextColor="{StaticResource TextColor}"/>
 
                 <Image 
                     Grid.Row="2"

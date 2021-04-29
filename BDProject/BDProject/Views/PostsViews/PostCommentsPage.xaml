@@ -2,12 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.PostsViews.PostCommentsPage"
+             
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:selector="clr-namespace:BDProject.Helpers"
              xmlns:local="clr-namespace:BDProject.ViewModels.PostsViewModels"
              
-             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
-             
-             Shell.BackgroundColor="{StaticResource White}"
+             Shell.BackgroundColor="{StaticResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -22,31 +22,29 @@
             <DataTemplate x:Key="MyTemplate">
                 <Grid
                     Padding="8"
-                    HeightRequest="60"
                     ColumnDefinitions="auto,*">
 
-                    <controls:CircleImage
+                    <xct:AvatarView 
                         Grid.Column="0"
                         Source="{Binding UserPhotoSource}"
-                        HeightRequest="60"
-                        WidthRequest="40"/>
+                        Size="40"/>
 
                     <Grid 
                         Grid.Column="1"
-                        RowDefinitions="auto,auto">
+                        ColumnDefinitions="auto,*">
 
                         <Label 
-                            Grid.Row="1"
+                            Grid.Column="0"
                             Text="{Binding Username}"
+                            TextColor="{StaticResource TextColor}"
                             FontSize="Medium"
-                            FontAttributes="Bold"
-                            TextColor="{StaticResource Black}"/>
+                            FontAttributes="Bold"/>
 
                         <Label 
-                            Grid.Row="2"
+                            Grid.Column="1"
                             Text="{Binding Message}"
-                            FontSize="Medium"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{StaticResource TextColor}"
+                            FontSize="Medium"/>
 
                     </Grid>
 
@@ -66,14 +64,12 @@
             <DataTemplate x:Key="OthersTemplate">
                 <Grid
                     Padding="8"
-                    HeightRequest="60"
                     ColumnDefinitions="auto,*,auto">
 
-                    <controls:CircleImage
+                    <xct:AvatarView 
                         Grid.Column="0"
                         Source="{Binding UserPhotoSource}"
-                        HeightRequest="60"
-                        WidthRequest="40"/>
+                        Size="60"/>
 
                     <Grid 
                         Grid.Column="1"
@@ -82,15 +78,15 @@
                         <Label 
                             Grid.Row="1"
                             Text="{Binding Username}"
+                            TextColor="{StaticResource TextColor}"
                             FontSize="Medium"
-                            FontAttributes="Bold"
-                            TextColor="{StaticResource Black}"/>
+                            FontAttributes="Bold"/>
 
                         <Label 
                             Grid.Row="2"
                             Text="{Binding Message}"
-                            FontSize="Medium"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{StaticResource TextColor}"
+                            FontSize="Medium"/>
 
                     </Grid>
 
@@ -123,19 +119,20 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
+                        TextColor="{StaticResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
-                        BackgroundColor="{StaticResource White}"
+                        BackgroundColor="Transparent"
                         Command="{Binding BackCommand}"/>
 
                     <Label 
                         Grid.Column="1"
                         Margin="10,5,0,0"
                         Text="Comments" 
+                        TextColor="{StaticResource TextColor}"
                         FontAttributes="Bold"
                         FontSize="Large"
-                        HorizontalOptions="Center"
-                        TextColor="{StaticResource Black}"/>
+                        HorizontalOptions="Center"/>
 
                 </Grid>
 
@@ -151,13 +148,13 @@
                             FontSize="Medium"
                             FontAttributes="Bold"
                             Text="{Binding Username}"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{StaticResource TextColor}"/>
 
                         <Label 
                             Grid.Row="1"
                             FontSize="Medium"
                             Text="{Binding Description}"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{StaticResource TextColor}"/>
 
                         <CollectionView 
                             Grid.Row="2"
@@ -183,15 +180,17 @@
                         Grid.Column="0"
                         x:Name="CommentEntry"
                         Placeholder="Comment"
-                        Text="{Binding Comment}"/>
+                        Text="{Binding Comment}"
+                        TextColor="{StaticResource TextColor}"/>
 
                     <Button 
                         Grid.Column="1"
                         Text="Send"
+                        TextColor="{StaticResource IconsColor}"
                         FontSize="Medium"
                         FontAttributes="Bold"
                         WidthRequest="70"
-                        BackgroundColor="{StaticResource White}"
+                        BackgroundColor="Transparent"
                         Command="{Binding CommentCommand}"/>
 
                 </Grid>

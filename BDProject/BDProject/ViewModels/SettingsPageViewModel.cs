@@ -18,6 +18,9 @@ namespace BDProject.ViewModels
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
             OpenManageAccountCommand = new Command(async () => await OpenManageAccountFunction());
+            OpenColorsCommand = new Command(async () => await OpenColorsFunction());
+
+            // red labels
             DeleteAccountCommand = new Command(async () => await DeleteAccountFunction());
             LogOutCommand = new Command(async () => await LogOutFunction());
         }
@@ -35,6 +38,13 @@ namespace BDProject.ViewModels
         private async Task OpenManageAccountFunction()
         {
             await Shell.Current.GoToAsync("ManageAccountPage");
+        }
+
+        // Edit profile command
+        public ICommand OpenColorsCommand { get; set; }
+        private async Task OpenColorsFunction()
+        {
+            await Shell.Current.GoToAsync("ColorsPage");
         }
 
         // log out profile command LogOutCommand

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popups:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views._PopUps.ColorPickerPopUp"
+             
+             xmlns:popups="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                  
+             CloseWhenBackgroundIsClicked="True">
+
+    <popups:PopupPage.Content>
+        
+        <Frame 
+            BackgroundColor="White" 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center">
+
+            <StackLayout Spacing="5">
+
+                <Grid 
+                    BackgroundColor="White" 
+                    HeightRequest="348" 
+                    WidthRequest="250">
+
+                    <CollectionView
+                        x:Name="Colors"
+                        SelectionMode="None">
+
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout 
+                                Orientation="Vertical"
+                                Span="4"
+                                HorizontalItemSpacing="8"
+                                VerticalItemSpacing="8"/>
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <Button
+                                    Padding="0"
+                                    Margin="0"
+                                    CornerRadius="100"
+                                    HeightRequest="58"
+                                    BackgroundColor="{Binding Color}"
+                                    Clicked="Button_Clicked"/>
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </Grid>
+
+                <Button 
+                    Text="Cancel" 
+                    TextColor="{StaticResource TextColor}"
+                    Clicked="OnClose" 
+                    HorizontalOptions="End"
+                    BackgroundColor="Transparent"/>
+                
+            </StackLayout>
+            
+        </Frame>
+        
+    </popups:PopupPage.Content>
+    
+</popups:PopupPage>

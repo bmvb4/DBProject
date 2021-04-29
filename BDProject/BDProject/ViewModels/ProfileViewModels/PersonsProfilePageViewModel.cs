@@ -1,6 +1,7 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
 using BDProject.ModelWrappers;
+using MvvmHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -40,14 +41,20 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                 Following = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following;
 
-                YourPostsCollection = new ObservableCollection<PostWrapper>(_Globals.FromPostToWrapperList(rootobject.Posts));
+                AllPostsCollection = new ObservableRangeCollection<PostWrapper>(_Globals.FromPostToWrapperList(rootobject.Posts));
+                PostsCount = AllPostsCollection.Count;
 
-                if (YourPostsCollection.Count != 0)
+                YourPostsCollection.Clear();
+                if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
                 {
-                    PostsCount = YourPostsCollection.Count;
+                    YourPostsCollection.AddRange(AllPostsCollection);
+                    SetCollectionHeight();
                 }
-
-                SetCollectionHeight();
+                else
+                {
+                    YourPostsCollection.AddRange(AllPostsCollection.Take(3 * 10));
+                    SetCollectionHeight();
+                }
             }
         }
 
@@ -59,12 +66,15 @@ namespace BDProject.ViewModels.ProfileViewModels
             BackCommand = new Command(async () => await BackFunction());
             RefreshCommand = new Command(async () => await RefreshFunction());
             FollowProfileCommand = new Command(FollowProfileFunction);
+            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
         }
+
+        private ObservableRangeCollection<PostWrapper> AllPostsCollection = new ObservableRangeCollection<PostWrapper>();
 
         // Parameters
         // Your Posts Collection parameter
-        private ObservableCollection<PostWrapper> yourPostsCollection = new ObservableCollection<PostWrapper>();
-        public ObservableCollection<PostWrapper> YourPostsCollection
+        private ObservableRangeCollection<PostWrapper> yourPostsCollection = new ObservableRangeCollection<PostWrapper>();
+        public ObservableRangeCollection<PostWrapper> YourPostsCollection
         {
             get => yourPostsCollection;
             set
@@ -271,6 +281,27 @@ namespace BDProject.ViewModels.ProfileViewModels
                     Following = "Follow";
                 }
             }
+        }
+
+        // load more command 
+        public ICommand LoadMoreCommand { get; set; }
+        private async Task LoadMoreFunction()
+        {
+            if (_Globals.IsBusy) { return; }
+            _Globals.IsBusy = true;
+
+            await Task.Delay(1000);
+
+            if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
+            {
+                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count));
+            }
+            else
+            {
+                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count).Take(3 * 10));
+            }
+
+            _Globals.IsBusy = false;
         }
 
         // Functions

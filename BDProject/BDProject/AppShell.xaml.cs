@@ -21,18 +21,22 @@ namespace BDProject
         {
             InitializeComponent();
 
-            // First main pages
+            // First main pages 
             Routing.RegisterRoute("LogInPage", typeof(LogInPage));
             Routing.RegisterRoute("SignUpPage", typeof(SignUpPage));
+            Routing.RegisterRoute("ForgotPasswordPage", typeof(ForgotPasswordPage));
+            Routing.RegisterRoute("ResetPasswordPage", typeof(ResetPasswordPage));
+            Routing.RegisterRoute("VerifyProfilePage", typeof(VerifyProfilePage));
 
             // pages for posts
             Routing.RegisterRoute("PostComments", typeof(PostCommentsPage));
             Routing.RegisterRoute("EditPostPage", typeof(EditPostPage));
 
-            // pages for settings
+            // pages for settings ColorsPage
             Routing.RegisterRoute("SettingsPage", typeof(SettingsPage));
             Routing.RegisterRoute("ManageAccountPage", typeof(ManageAccountPage));
-            
+            Routing.RegisterRoute("ColorsPage", typeof(ColorsPage));
+
             // pages for search
             Routing.RegisterRoute("SearchPage", typeof(SearchPage));
 

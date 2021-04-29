@@ -24,9 +24,10 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
+                        TextColor="{StaticResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
-                        BackgroundColor="{StaticResource White}"
+                        BackgroundColor="Transparent"
                         Command="{Binding BackCommand}"/>
 
                     <Button 
@@ -34,9 +35,10 @@
                         HeightRequest="48"
                         WidthRequest="48"
                         Text="" 
+                        TextColor="{StaticResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
-                        BackgroundColor="{StaticResource White}"
+                        BackgroundColor="Transparent"
                         Command="{Binding PostCommand}"/>
 
                 </Grid>
@@ -74,20 +76,24 @@
 
                     <Label 
                         Text="Descripton"
+                        TextColor="{StaticResource TextColor}"
                         FontSize="Medium"/>
 
                     <Editor
                         x:Name="descriptionEditor"
                         HeightRequest="100"
-                        Text="{Binding Description}"/>
+                        Text="{Binding Description}"
+                        TextColor="{StaticResource TextColor}"/>
 
                     <Label 
                         Text="Tags"
+                        TextColor="{StaticResource TextColor}"
                         FontSize="Medium"/>
 
                     <Editor
                         x:Name="tagsEditor"
-                        TextChanged="tagsEditor_TextChangesd"/>
+                        TextChanged="tagsEditor_TextChangesd"
+                        TextColor="{StaticResource TextColor}"/>
 
                     <CollectionView 
                         SelectionMode="None"
@@ -104,15 +110,16 @@
                                         Grid.Column="0"
                                         FontSize="Medium"
                                         VerticalOptions="Center"
-                                        TextColor="{StaticResource Black}"
+                                        TextColor="{StaticResource TextColor}"
                                         Text="{Binding TagName}"/>
 
                                     <Button
                                         Grid.Column="1"
                                         Text=""
+                                        TextColor="{StaticResource IconsColor}"
                                         FontFamily="FA-S"
                                         WidthRequest="48"
-                                        BackgroundColor="{StaticResource White}"
+                                        BackgroundColor="Transparent"
                                         Command="{Binding DeleteTagCommand, Source={
                                             RelativeSource AncestorType={x:Type local:MakePostPageViewModel}
                                             }}"

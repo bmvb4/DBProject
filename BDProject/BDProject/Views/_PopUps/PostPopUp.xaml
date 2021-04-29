@@ -36,18 +36,21 @@
 
                 <Button 
                     Text="Share"
+                    TextColor="{StaticResource TextColor}"
                     Clicked="Share_Clicked"
-                    BackgroundColor="{StaticResource White}"/>
+                    BackgroundColor="Transparent"/>
 
                 <Button 
                     Text="Edit" 
+                    TextColor="{StaticResource TextColor}"
                     Clicked="Edit_Clicked"
-                    BackgroundColor="{StaticResource White}"/>
+                    BackgroundColor="Transparent"/>
 
                 <Button 
                     Text="Delete" 
+                    TextColor="{StaticResource TextColor}"
                     Clicked="Delete_Clicked"
-                    BackgroundColor="{StaticResource White}"/>
+                    BackgroundColor="Transparent"/>
 
             </StackLayout>
         </Frame>

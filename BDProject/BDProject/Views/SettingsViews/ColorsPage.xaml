@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.SettingsViews.ColorsPage"
+                          
+             BackgroundColor="{Binding BackgroundColor}"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.Content>
+        <Grid
+            RowDefinitions="auto,*,*,*, auto">
+
+            <Grid 
+                Grid.Row="0"
+                Padding="8,8,8,0"
+                ColumnDefinitions="auto,*">
+
+                <Button 
+                    Grid.Column="0"
+                    HeightRequest="48"
+                    WidthRequest="38"
+                    Text="" 
+                    TextColor="{StaticResource IconsColor}"
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="Transparent"
+                    Command="{Binding BackCommand}"/>
+
+            </Grid>
+
+            <StackLayout
+                Grid.Row="1">
+
+                <Button
+                    Text="Set Icons"
+                    Command="{Binding SetIconsCommand}"/>
+
+                <Label
+                    HeightRequest="46"
+                    WidthRequest="46"
+                    Text=""
+                    FontSize="Large"
+                    FontFamily="FA-R"
+                    TextColor="{Binding IconColor}"
+                    HorizontalOptions="Center"/>
+
+            </StackLayout>
+
+            <StackLayout
+                Grid.Row="2">
+
+                <Button
+                    Text="Set Text"
+                    Command="{Binding SetTextCommand}"/>
+
+                <Label
+                    Text="Sample Text"
+                    FontSize="Medium"
+                    TextColor="{Binding TextColor}"
+                    HorizontalOptions="Center"/>
+
+            </StackLayout>
+
+            <StackLayout
+                Grid.Row="3">
+
+                <Button
+                    Text="Set Background"
+                    Command="{Binding SetBackgroundCommand}"/>
+
+                <Label
+                    Text="Background Color"
+                    FontSize="Medium"
+                    TextColor="{Binding TextColor}"
+                    HorizontalOptions="Center"/>
+
+            </StackLayout>
+
+            <Grid
+                Grid.Row="4"
+                ColumnDefinitions="*,*">
+
+                <Button
+                    Grid.Column="0"
+                    Text="Reset Colors"
+                    Command="{Binding ResetCommand}"/>
+
+                <Button
+                    Grid.Column="1"
+                    Text="Save Changes"
+                    Command="{Binding SaveChangesCommand}"/>
+
+            </Grid>
+
+        </Grid>
+    </ContentPage.Content>
+    
+</ContentPage>

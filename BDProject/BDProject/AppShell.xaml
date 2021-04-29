@@ -4,7 +4,8 @@
        xmlns:local="clr-namespace:BDProject.Views"
        x:Class="BDProject.AppShell"
        
-       FlyoutBehavior="Disabled">
+       FlyoutBehavior="Disabled"
+       BackgroundColor="{StaticResource BackgroundColor}">
 
     <Shell.Resources>
         <Style x:Key="BaseStyle" TargetType="Element">
@@ -36,12 +37,13 @@
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
-                    Glyph=""/>
+                    Glyph=""
+                    Color="{StaticResource IconsColor}"/>
             </Tab.Icon>
 
             <ShellContent 
                 Route="HomePage"
-                Shell.BackgroundColor="{StaticResource White}"
+                Shell.BackgroundColor="{StaticResource BackgroundColor}"
                 Shell.NavBarIsVisible="False"
                 ContentTemplate="{DataTemplate local:HomePage}"/>
         </Tab>
@@ -50,13 +52,14 @@
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
-                    Glyph=""/>
+                    Glyph=""
+                    Color="{StaticResource IconsColor}"/>
             </Tab.Icon>
 
             <ShellContent 
                 Route="PostPage"
                 Shell.TabBarIsVisible="False"
-                Shell.BackgroundColor="{StaticResource White}"
+                Shell.BackgroundColor="{StaticResource BackgroundColor}"
                 Shell.NavBarIsVisible="False"
                 ContentTemplate="{DataTemplate local:MakePostPage}"/>
         </Tab>
@@ -65,12 +68,13 @@
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
-                    Glyph=""/>
+                    Glyph=""
+                    Color="{StaticResource IconsColor}"/>
             </Tab.Icon>
 
             <ShellContent 
                 Route="ProfilePage"
-                Shell.BackgroundColor="{StaticResource White}"
+                Shell.BackgroundColor="{StaticResource BackgroundColor}"
                 Shell.NavBarIsVisible="False"
                 ContentTemplate="{DataTemplate local:ProfilePage}"/>
         </Tab>

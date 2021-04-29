@@ -1,8 +1,11 @@
 ﻿using BDProject.Helpers;
+using BDProject.Models;
 using BDProject.ModelWrappers;
 using BDProject.Views._PopUps;
+using MvvmHelpers;
 using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -11,9 +14,9 @@ namespace BDProject.ViewModels.SearchViewModels
 {
     public class SearchPageViewModel : BaseViewModel
     {
-        private ObservableCollection<SearchBubble> AllBubbles = new ObservableCollection<SearchBubble>();
-        private ObservableCollection<SearchBubble> AllPeople = new ObservableCollection<SearchBubble>();
-        private ObservableCollection<SearchBubble> AllTags = new ObservableCollection<SearchBubble>();
+        private ObservableRangeCollection<SearchBubble> AllBubbles = new ObservableRangeCollection<SearchBubble>();
+        private ObservableRangeCollection<SearchBubble> AllPeople = new ObservableRangeCollection<SearchBubble>();
+        private ObservableRangeCollection<SearchBubble> AllTags = new ObservableRangeCollection<SearchBubble>();
 
         private void SortBubbles()
         {
@@ -52,7 +55,7 @@ namespace BDProject.ViewModels.SearchViewModels
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
             FilterCommand = new Command(async () => await FilterFunction());
-            LoadMoreCommand = new Command(LoadMoreFunction);
+            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
 
             SearchAllCommand = new Command(SearchAllFunction);
             SearchPeopleCommand = new Command(SearchPeopleFunction);
@@ -61,8 +64,8 @@ namespace BDProject.ViewModels.SearchViewModels
 
         // Parameters
         // search bubbles collection
-        private ObservableCollection<SearchBubble> bubblesCollection = new ObservableCollection<SearchBubble>();
-        public ObservableCollection<SearchBubble> BubblesCollection
+        private ObservableRangeCollection<SearchBubble> bubblesCollection = new ObservableRangeCollection<SearchBubble>();
+        public ObservableRangeCollection<SearchBubble> BubblesCollection
         {
             get => bubblesCollection;
             set
@@ -181,86 +184,54 @@ namespace BDProject.ViewModels.SearchViewModels
         private bool onlyTags = false;
         private bool everything = false;
         public ICommand LoadMoreCommand { get; set; }
-        private void LoadMoreFunction()
+        private async Task LoadMoreFunction()
         {
-            if (BubblesCollection.Count == AllBubbles.Count) { return; }
-            int start = BubblesCollection.Count;
-            int amount = BubblesCollection.Count + 10;
-            
+            if (_Globals.IsBusy) { return; }
+            _Globals.IsBusy = true;
+
+            await Task.Delay(1000);
+
             // add everything
             if (everything == true)
             {
-                if(amount < AllBubbles.Count)
+                if (AllBubbles.Count - BubblesCollection.Count < 10)
                 {
-                    for (int i = start; i < amount; i++)
-                    {
-                        if (BubblesCollection.Count == AllBubbles.Count) { break; }
-
-                        BubblesCollection.Add(AllBubbles[i]);
-                    }
+                    BubblesCollection.AddRange(AllBubbles.Skip(BubblesCollection.Count));
                 }
                 else
                 {
-                    for (int i = start; i < AllBubbles.Count; i++)
-                    {
-                        if (BubblesCollection.Count == AllBubbles.Count) { break; }
-
-                        BubblesCollection.Add(AllBubbles[i]);
-                    }
+                    BubblesCollection.AddRange(AllBubbles.Skip(BubblesCollection.Count).Take(10));
                 }
-
-                return;
             }
 
             // add only people everything
             if (onlyPeople == true)
             {
-                if (amount < AllPeople.Count)
+                if (AllPeople.Count - BubblesCollection.Count < 10)
                 {
-                    for (int i = start; i < amount; i++)
-                    {
-                        if (BubblesCollection.Count == AllPeople.Count) { break; }
-
-                        BubblesCollection.Add(AllPeople[i]);
-                    }
+                    BubblesCollection.AddRange(AllPeople.Skip(BubblesCollection.Count));
                 }
                 else
                 {
-                    for (int i = start; i < AllPeople.Count; i++)
-                    {
-                        if (BubblesCollection.Count == AllPeople.Count) { break; }
-
-                        BubblesCollection.Add(AllPeople[i]);
-                    }
+                    BubblesCollection.AddRange(AllPeople.Skip(BubblesCollection.Count).Take(10));
                 }
-
-                return;
             }
 
             // add only tags everything
             if (onlyTags == true)
             {
-                if (amount < AllTags.Count)
+                if (AllTags.Count - BubblesCollection.Count < 10)
                 {
-                    for (int i = start; i < amount; i++)
-                    {
-                        if (BubblesCollection.Count == AllTags.Count) { break; }
-
-                        BubblesCollection.Add(AllTags[i]);
-                    }
+                    BubblesCollection.AddRange(AllTags.Skip(BubblesCollection.Count));
                 }
                 else
                 {
-                    for (int i = start; i < AllTags.Count; i++)
-                    {
-                        if (BubblesCollection.Count == AllTags.Count) { break; }
-
-                        BubblesCollection.Add(AllTags[i]);
-                    }
+                    BubblesCollection.AddRange(AllTags.Skip(BubblesCollection.Count).Take(10));
                 }
-
-                return;
             }
+
+            _Globals.IsBusy = false;
+            return;
         }
 
     }

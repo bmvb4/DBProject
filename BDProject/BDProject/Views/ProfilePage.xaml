@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.ProfilePage"
              
-             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:BDProject.ViewModels">
 
     <ContentPage.Content>
@@ -27,9 +27,10 @@
                             HeightRequest="46"
                             WidthRequest="46"
                             Text="" 
+                            TextColor="{StaticResource IconsColor}"
                             FontFamily="FA-S"
                             FontSize="Large"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="Transparent"
                             Command="{Binding OpenSettingsCommand}"/>
 
                     </Grid>
@@ -37,36 +38,35 @@
                     <Grid 
                         ColumnDefinitions="*,auto,*">
 
-                        <controls:CircleImage
+                        <xct:AvatarView 
                             Grid.Column="1"
                             Source="{Binding ProfilePictureSource}"
-                            HeightRequest="200"
-                            WidthRequest="150"/>
+                            Size="150"/>
 
                     </Grid>
 
                     <Label 
                         Text="{Binding Name}"
+                        TextColor="{StaticResource TextColor}"
                         Margin="16,0"
                         FontSize="Large"
-                        HorizontalOptions="Center"
-                        TextColor="{StaticResource Black}"/>
+                        HorizontalOptions="Center"/>
 
                     <Label 
                         Text="{Binding Username}"
+                        TextColor="{StaticResource TextColor}"
                         Margin="16,0"
                         FontSize="Medium"
-                        HorizontalOptions="Center"
-                        TextColor="{StaticResource Black}"/>
+                        HorizontalOptions="Center"/>
 
                     <Label 
                         Text="{Binding Description}" 
+                        TextColor="{StaticResource TextColor}"
                         Margin="8,0"
                         FontSize="Medium"
                         HeightRequest="60"
                         HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        TextColor="{StaticResource Black}"/>
+                        HorizontalTextAlignment="Center"/>
 
                     <Grid 
                         ColumnDefinitions="*,*,*,*">
@@ -81,14 +81,14 @@
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
                                 Text="{Binding PostsCount}"
-                                TextColor="{StaticResource Black}"/>
+                                TextColor="{StaticResource TextColor}"/>
 
                             <Label 
                                 Grid.Row="1"
                                 FontSize="Small"
                                 HorizontalOptions="Center"
                                 Text="Posts"
-                                TextColor="{StaticResource Black}"/>
+                                TextColor="{StaticResource TextColor}"/>
 
                         </Grid>
 
@@ -102,14 +102,14 @@
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
                                 Text="{Binding FollowersCount}"
-                                TextColor="{StaticResource Black}"/>
+                                TextColor="{StaticResource TextColor}"/>
 
                             <Label 
                                 Grid.Row="1"
                                 FontSize="Small"
                                 HorizontalOptions="Center"
                                 Text="Followers"
-                                TextColor="{StaticResource Black}"/>
+                                TextColor="{StaticResource TextColor}"/>
 
                         </Grid>
 
@@ -123,14 +123,14 @@
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
                                 Text="{Binding FollowingCount}"
-                                TextColor="{StaticResource Black}"/>
+                                TextColor="{StaticResource TextColor}"/>
 
                             <Label 
                                 Grid.Row="1"
                                 FontSize="Small"
                                 HorizontalOptions="Center"
                                 Text="Following"
-                                TextColor="{StaticResource Black}"/>
+                                TextColor="{StaticResource TextColor}"/>
 
                         </Grid>
 
@@ -146,14 +146,18 @@
 
                     <Label 
                         Text="Posts"
+                        TextColor="{StaticResource TextColor}"
                         HorizontalOptions="Center"
-                        FontSize="Medium"
-                        TextColor="{StaticResource Black}"/>
+                        FontSize="Medium"/>
 
                     <CollectionView 
                         SelectionMode="None"
                         HeightRequest="{Binding CollectionHeight}"
                         x:Name="YourPostsCollectionView"
+                        
+                        RemainingItemsThreshold="5"
+                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                        
                         ItemsSource="{Binding YourPostsCollection}">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout 
@@ -169,7 +173,7 @@
                                     Padding="0"
                                     Margin="0"
                                     Scale="1.2"
-                                    BackgroundColor="{StaticResource White}"
+                                    BackgroundColor="Transparent"
                                     Source="{Binding PhotoSource}"
                                     HeightRequest="{Binding PostHeight, Source={
                                         RelativeSource AncestorType={x:Type local:ProfilePageViewModel}

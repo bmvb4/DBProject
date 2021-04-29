@@ -5,7 +5,7 @@
              
              xmlns:selector="clr-namespace:BDProject.Helpers"
              xmlns:local="clr-namespace:BDProject.ViewModels.PostsViewModels"
-             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              
              Shell.BackgroundColor="{StaticResource White}"
              Shell.NavBarIsVisible="False">
@@ -26,11 +26,10 @@
                     HeightRequest="60"
                     ColumnDefinitions="auto,*">
 
-                    <controls:CircleImage
+                    <xct:AvatarView 
                         Grid.Column="0"
                         Source="{Binding UserPhotoSource}"
-                        HeightRequest="60"
-                        WidthRequest="40"/>
+                        Size="40"/>
 
                     <Grid 
                         Grid.Column="1"
@@ -70,11 +69,10 @@
                     HeightRequest="60"
                     ColumnDefinitions="auto,*,auto">
 
-                    <controls:CircleImage
+                    <xct:AvatarView 
                         Grid.Column="0"
                         Source="{Binding UserPhotoSource}"
-                        HeightRequest="60"
-                        WidthRequest="40"/>
+                        Size="40"/>
 
                     <Grid 
                         Grid.Column="1"
@@ -123,11 +121,10 @@
                         Grid.Row="0"
                         ColumnDefinitions="auto,auto,*,auto">
 
-                        <controls:CircleImage
+                        <xct:AvatarView 
                             Grid.Column="0"
                             Source="{Binding UserPhotoSource}"
-                            HeightRequest="50"
-                            WidthRequest="35"/>
+                            Size="40"/>
 
                         <Label 
                             Grid.Column="1"

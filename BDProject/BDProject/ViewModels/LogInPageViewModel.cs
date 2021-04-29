@@ -20,6 +20,7 @@ namespace BDProject.ViewModels
             LogInCommand = new Command(async () => await LogInFunction());
             SignUpCommand = new Command(async () => await SignUpFunction());
             ShowHidePasswordCommand = new Command(ShowHidePasswordFunction);
+            ForgotCommand = new Command(async () => await ForgotFunction());
         }
 
         // Parameters
@@ -185,6 +186,13 @@ namespace BDProject.ViewModels
                 HidePassword = true;
                 Eye = "";
             }
+        }
+
+        // Forgot password comman
+        public ICommand ForgotCommand { get; set; }
+        private async Task ForgotFunction()
+        {
+            await Shell.Current.GoToAsync("ForgotPasswordPage");
         }
 
         // Functions

@@ -179,6 +179,40 @@ namespace BDProject.ViewModels
                     tags.Add(t.TagName);
                 }
 
+                //=================================ТЕСТ
+                //for(int i=0; i<50; i++)
+                //{
+                //    Description = $"Test{i}";
+
+                //    JObject oJsonObject = new JObject();
+                //    oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
+                //    oJsonObject.Add("Photo", imageBytes);
+                //    oJsonObject.Add("Description", Description);
+                //    oJsonObject.Add("tags", JToken.FromObject(tags));
+
+                //    var success = await ServerServices.SendPostRequestAsync("posts/post", oJsonObject);
+
+                //    if (success.IsSuccessStatusCode)
+                //    {
+                //        PostWrapper post = new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes);
+                //        foreach (string t in tags)
+                //        {
+                //            post.AddTag(new Tag(t));
+                //        }
+
+                //        _Globals.GlobalMainUser.AddPost(post);
+                //        _Globals.AddMyPost(post);
+
+                //        _Globals.Refresh = true;
+                //        await Shell.Current.GoToAsync("//HomePage");
+                //    }
+                //    else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                //    {
+                //        await ServerServices.RefreshTokenAsync();
+                //    }
+                //}
+                //=================================ТЕСТ
+
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
                 oJsonObject.Add("Photo", imageBytes);

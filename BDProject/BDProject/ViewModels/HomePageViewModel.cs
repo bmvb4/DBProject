@@ -2,12 +2,12 @@
 using BDProject.Models;
 using BDProject.ModelWrappers;
 using BDProject.Views._PopUps;
+using MvvmHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -33,7 +33,16 @@ namespace BDProject.ViewModels
                 var rootobject = JsonConvert.DeserializeObject<List<PostUser>>(earthquakesJson);
 
                 _Globals.AddPostsFromDB(rootobject);
-                PostsCollection = new ObservableCollection<PostWrapper>(_Globals.GlobalFeedPosts);
+                AllPostsCollection = new ObservableRangeCollection<PostWrapper>(_Globals.GlobalFeedPosts);
+
+                if (AllPostsCollection.Count - PostsCollection.Count < 10)
+                {
+                    PostsCollection.AddRange(AllPostsCollection);
+                }
+                else
+                {
+                    PostsCollection.AddRange(AllPostsCollection.Take(10));
+                }
             }
         }
 
@@ -48,7 +57,8 @@ namespace BDProject.ViewModels
 
             // like commands
             LikePostCommand = new Command<PostWrapper>(LikePostFunction);
-            
+            SearchTagCommand = new Command<Tag>(SearchTagFunction);
+
             // open commands
             OpenPostCommentsCommand = new Command<PostWrapper>(OpenPostCommentsFunction);
             OpenSearchCommand = new Command(async () => await OpenSearchFunction());
@@ -57,14 +67,17 @@ namespace BDProject.ViewModels
 
             // More command
             MoreCommand = new Command<PostWrapper>(MoreFunction);
+            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
 
             FollowProfileCommand = new Command<PostWrapper>(FollowProfileFunction);
         }
 
+        private ObservableRangeCollection<PostWrapper> AllPostsCollection = new ObservableRangeCollection<PostWrapper>();
+
         // Parameters
         // Posts Collection parameter
-        private ObservableCollection<PostWrapper> postsCollection = new ObservableCollection<PostWrapper>();
-        public ObservableCollection<PostWrapper> PostsCollection
+        private ObservableRangeCollection<PostWrapper> postsCollection = new ObservableRangeCollection<PostWrapper>();
+        public ObservableRangeCollection<PostWrapper> PostsCollection
         {
             get => postsCollection;
             set
@@ -72,19 +85,6 @@ namespace BDProject.ViewModels
                 if (value == postsCollection) { return; }
                 postsCollection = value;
                 OnPropertyChanged(nameof(PostsCollection));
-            }
-        }
-
-        // Search parameter
-        private string search = "";
-        public string Search
-        {
-            get => search;
-            set
-            {
-                if (value == search) { return; }
-                search = value;
-                OnPropertyChanged(nameof(Search));
             }
         }
 
@@ -209,6 +209,33 @@ namespace BDProject.ViewModels
                     post.Following = "Follow";
                 }
             }
+        }
+
+        // load more command 
+        public ICommand LoadMoreCommand { get; set; }
+        private async Task LoadMoreFunction()
+        {
+            if (_Globals.IsBusy) { return; }
+            _Globals.IsBusy = true;
+
+            await Task.Delay(1000);
+
+            if (AllPostsCollection.Count - PostsCollection.Count < 10)
+            {
+                PostsCollection.AddRange(AllPostsCollection.Skip(PostsCollection.Count));
+            }
+            else
+            {
+                PostsCollection.AddRange(AllPostsCollection.Skip(PostsCollection.Count).Take(10));
+            }
+
+            _Globals.IsBusy = false;
+        }
+
+        public ICommand SearchTagCommand { get; set; }
+        private async void SearchTagFunction(Tag tag)
+        {
+            await Task.Delay(1000);
         }
     }
 }

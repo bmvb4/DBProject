@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.SearchViews.SearchPage"
+             
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:selector="clr-namespace:BDProject.Helpers"
              
-             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
-             
-             Shell.BackgroundColor="{StaticResource White}"
+             Shell.BackgroundColor="{StaticResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -24,18 +24,17 @@
                 <Grid 
                     ColumnDefinitions="auto,*">
 
-                    <controls:CircleImage
+                    <xct:AvatarView 
                         Grid.Column="0"
                         Source="{Binding PhotoSource}"
-                        HeightRequest="60"
-                        WidthRequest="40"/>
+                        Size="40"/>
 
                     <Label 
                         Grid.Column="1"
                         Text="{Binding Name}"
+                        TextColor="{StaticResource TextColor}"
                         FontSize="Medium"
-                        FontAttributes="Bold"
-                        TextColor="{StaticResource Black}"/>
+                        FontAttributes="Bold"/>
 
                 </Grid>
             </DataTemplate>
@@ -52,9 +51,9 @@
                     <Label 
                         Grid.Column="1"
                         Text="{Binding Name}"
+                        TextColor="{StaticResource TextColor}"
                         FontSize="Medium"
-                        FontAttributes="Bold"
-                        TextColor="{StaticResource Black}"/>
+                        FontAttributes="Bold"/>
 
                 </Grid>
             </DataTemplate>
@@ -81,15 +80,17 @@
                     HeightRequest="46"
                     WidthRequest="38"
                     Text="" 
+                    TextColor="{StaticResource IconsColor}"
                     FontFamily="FA-S"
                     FontSize="Large"
-                    BackgroundColor="{StaticResource White}"
+                    BackgroundColor="Transparent"
                     Command="{Binding BackCommand}"/>
 
                 <Entry
                     Grid.Column="1"
                     x:Name="Searcher"
                     Text="{Binding Search}" 
+                    TextColor="{StaticResource TextColor}"
                     Placeholder=""
                     FontFamily="FA-S"/>
 

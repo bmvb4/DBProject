@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.LogInPage"
              
-             BackgroundColor="{StaticResource White}"
+             BackgroundColor="White"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
     
@@ -21,7 +21,7 @@
                     FontSize="Large"
                     HorizontalOptions="Center"
                     Text="Log into the App"
-                    TextColor="{StaticResource Black}"/>
+                    TextColor="Black"/>
 
                 <Entry 
                     x:Name="UsernameEntry"
@@ -51,7 +51,7 @@
                         Text="{Binding Eye}"
                         FontSize="Medium"
                         FontFamily="FA-S"
-                        BackgroundColor="{StaticResource White}"
+                        BackgroundColor="White"
                         Command="{Binding ShowHidePasswordCommand}"/>
 
                 </Grid>
@@ -60,6 +60,13 @@
                     Text="{Binding PasswordAlert}" 
                     FontSize="Small"
                     TextColor="Red"/>
+
+                <Button 
+                    Text="Forgot Password?"
+                    TextColor="Blue"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Start"
+                    Command="{Binding ForgotCommand}"/>
 
                 <Grid ColumnDefinitions="*,*">
 

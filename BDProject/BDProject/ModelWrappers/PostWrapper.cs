@@ -1,5 +1,6 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
+using MvvmHelpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -164,6 +165,7 @@ namespace BDProject.ModelWrappers
                 OnPropertyChanged(nameof(Tags));
             }
         }
+        public ObservableRangeCollection<Tag> TagsCollection { get=> new ObservableRangeCollection<Tag>(tags); }
         public void AddTag(Tag tag) { tags.Add(tag); TagsCount = tags.Count; }
         public void RemoveTag(Tag tag) { tags.RemoveAll(x => x.TagName == tag.TagName); TagsCount = tags.Count; }
 

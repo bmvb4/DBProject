@@ -1,6 +1,7 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
 using BDProject.ModelWrappers;
+using MvvmHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -42,7 +43,7 @@ namespace BDProject.ViewModels.PostsViewModels
                     lc.Add(new CommentWrapper(c));
                 }
 
-                AllComments = new ObservableCollection<CommentWrapper>(lc);
+                AllComments = new ObservableRangeCollection<CommentWrapper>(lc);
 
                 CommentsCollection.Clear();
                 if (AllComments.Count >= 20)
@@ -61,7 +62,7 @@ namespace BDProject.ViewModels.PostsViewModels
             }
         }
 
-        private ObservableCollection<CommentWrapper> AllComments = new ObservableCollection<CommentWrapper>();
+        private ObservableRangeCollection<CommentWrapper> AllComments = new ObservableRangeCollection<CommentWrapper>();
 
         public PostCommentsPageViewModel()
         {
@@ -73,13 +74,13 @@ namespace BDProject.ViewModels.PostsViewModels
             RefreshCommand = new Command(RefreshFunction);
             CommentCommand = new Command(CommentFunction);
             DeleteCommentCommand = new Command<CommentWrapper>(DeleteCommentFunction);
-            LoadMoreCommand = new Command(LoadMoreFunction);
+            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
         }
 
         // Parameters
         // Posts Collection parameter
-        private ObservableCollection<CommentWrapper> commentsCollection = new ObservableCollection<CommentWrapper>();
-        public ObservableCollection<CommentWrapper> CommentsCollection
+        private ObservableRangeCollection<CommentWrapper> commentsCollection = new ObservableRangeCollection<CommentWrapper>();
+        public ObservableRangeCollection<CommentWrapper> CommentsCollection
         {
             get => commentsCollection;
             set
@@ -200,25 +201,6 @@ namespace BDProject.ViewModels.PostsViewModels
         {
             if (string.IsNullOrEmpty(Comment) || string.IsNullOrWhiteSpace(Comment)) { return; }
 
-            // ======= ZA TESVANE NA LAZY LOAD =============
-            //for(int i=0; i < 100; i++)
-            //{
-            //    PostWrapper post = _Globals.GetPost(_Globals.OpenID);
-
-            //    JObject oJsonObject = new JObject();
-            //    oJsonObject.Add("IdPost", post.PostID);
-            //    oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
-            //    oJsonObject.Add("CommentText", i.ToString());
-
-            //    var success = await ServerServices.SendPostRequestAsync("posts/comment", oJsonObject);
-            //    if (success.IsSuccessStatusCode)
-            //    {
-            //        _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).AddComment(new CommentWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username, Comment));
-            //        SetCollection();
-            //        Comment = "";
-            //    }
-            //}
-
             PostWrapper post = _Globals.GetPost(_Globals.OpenID);
 
             JObject oJsonObject = new JObject();
@@ -237,17 +219,23 @@ namespace BDProject.ViewModels.PostsViewModels
 
         // load more command 
         public ICommand LoadMoreCommand { get; set; }
-        private void LoadMoreFunction()
+        private async Task LoadMoreFunction()
         {
-            if (CommentsCollection.Count == AllComments.Count) { return; }
+            if (_Globals.IsBusy) { return; }
+            _Globals.IsBusy = true;
 
-            int start = CommentsCollection.Count + 10;
-            for (int i = CommentsCollection.Count; i < start; i++)
+            await Task.Delay(1000);
+
+            if (AllComments.Count - CommentsCollection.Count < 10) 
             {
-                if(CommentsCollection.Count == AllComments.Count) { break; }
-
-                CommentsCollection.Add(AllComments[i]);
+                CommentsCollection.AddRange(AllComments.Skip(CommentsCollection.Count));
             }
+            else
+            {
+                CommentsCollection.AddRange(AllComments.Skip(CommentsCollection.Count).Take(10));
+            }
+
+            _Globals.IsBusy = false;
         }
     }
 }

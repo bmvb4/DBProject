@@ -217,7 +217,7 @@ namespace BDProject.ViewModels
                 var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
 
                 _Globals.GlobalMainUser = new UserWrapper(rootobject);
-                await Shell.Current.GoToAsync("//HomePage");
+                await Shell.Current.GoToAsync("VerifyProfilePage");
             }
             else
             {

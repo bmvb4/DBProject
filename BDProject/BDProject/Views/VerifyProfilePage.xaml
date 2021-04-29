@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views.VerifyProfilePage"
+             
+             Shell.BackgroundColor="White"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"/>
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.Content>
+
+        <Grid
+            Margin="8,0"
+            RowDefinitions="*,auto, auto, auto, auto,*">
+
+            <Grid 
+                Grid.Row="0"
+                ColumnDefinitions="auto,*">
+
+                <Button 
+                    Grid.Column="0"
+                    HeightRequest="48"
+                    WidthRequest="38"
+                    Text="" 
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="Transparent"
+                    Command="{Binding BackCommand}"/>
+
+            </Grid>
+
+            <Label
+                Grid.Row="1"
+                Text="Verify Profile"
+                FontSize="Large"
+                HorizontalOptions="Center"/>
+
+            <Entry
+                Grid.Row="2"
+                Text="{Binding Code}"
+                x:Name="codeEntry"
+                Placeholder="Verification Code"/>
+
+            <Label 
+                Grid.Row="3"
+                Text="{Binding CodeAlert}" 
+                FontSize="Small"
+                TextColor="Red"/>
+
+            <Button
+                Grid.Row="4"
+                Text="Verify"
+                Command="{Binding VerifyCommand}"/>
+
+        </Grid>
+    </ContentPage.Content>
+    
+</ContentPage>

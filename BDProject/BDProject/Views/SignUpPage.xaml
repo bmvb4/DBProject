@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.SignUpPage"
              
-             BackgroundColor="{StaticResource White}"
+             BackgroundColor="White"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
     
@@ -26,7 +26,7 @@
                     FontSize="Large"
                     HorizontalOptions="Center"
                     Text="Sign Up Your Account"
-                    TextColor="{StaticResource Black}"/>
+                    TextColor="Black"/>
 
                 <Grid ColumnDefinitions="*,*">
 

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.SettingsPage"
              
-             Shell.BackgroundColor="{StaticResource White}"
+             Shell.BackgroundColor="{StaticResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -26,19 +26,20 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
+                        TextColor="{StaticResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
-                        BackgroundColor="{StaticResource White}"
+                        BackgroundColor="Transparent"
                         Command="{Binding BackCommand}"/>
 
                     <Label 
                         Grid.Column="1"
                         Margin="10,5,0,0"
                         Text="Settings" 
+                        TextColor="{StaticResource TextColor}"
                         FontAttributes="Bold"
                         FontSize="Title"
-                        HorizontalOptions="Center"
-                        TextColor="{StaticResource Black}"/>
+                        HorizontalOptions="Center"/>
 
                 </Grid>
 
@@ -53,16 +54,16 @@
 
                             <Label 
                                 Text=""
+                                TextColor="{StaticResource IconsColor}"
                                 FontSize="Large"
-                                FontFamily="FA-R"
-                                TextColor="{StaticResource Black}"/>
+                                FontFamily="FA-R"/>
 
                             <Label 
                                 Text="Manage Account"
+                                TextColor="{StaticResource TextColor}"
                                 Margin="16,0"
                                 FontSize="Medium"
-                                FontAttributes="Bold"
-                                TextColor="{StaticResource Black}"/>
+                                FontAttributes="Bold"/>
 
                         </StackLayout>
 
@@ -81,22 +82,22 @@
 
                             <Label 
                                 Text=""
+                                TextColor="{StaticResource IconsColor}"
                                 FontSize="Large"
-                                FontFamily="FA-S"
-                                TextColor="{StaticResource Black}"/>
+                                FontFamily="FA-S"/>
 
                             <Label 
-                                Text="Themes"
+                                Text="Colors"
+                                TextColor="{StaticResource TextColor}"
                                 Margin="16,0"
                                 FontSize="Medium"
-                                FontAttributes="Bold"
-                                TextColor="{StaticResource Black}"/>
+                                FontAttributes="Bold"/>
 
                         </StackLayout>
 
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer 
-                                Command="{Binding OpenThemes}"/>
+                                Command="{Binding OpenColorsCommand}"/>
                         </Frame.GestureRecognizers>
 
                     </Frame>
