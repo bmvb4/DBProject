@@ -5,7 +5,7 @@
        x:Class="BDProject.AppShell"
        
        FlyoutBehavior="Disabled"
-       BackgroundColor="{StaticResource BackgroundColor}">
+       BackgroundColor="{DynamicResource BackgroundColor}">
 
     <Shell.Resources>
         <Style x:Key="BaseStyle" TargetType="Element">
@@ -15,9 +15,9 @@
             <!--<Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />-->
             <!--<Setter Property="Shell.UnselectedColor" Value="Red" />-->
             <!--<Setter Property="Shell.TabBarForegroundColor" Value="Orange"/>-->
-            <Setter Property="Shell.TabBarBackgroundColor" Value="White"/>
+            <Setter Property="Shell.TabBarBackgroundColor" Value="{DynamicResource BackgroundColor}"/>
             <Setter Property="Shell.TabBarUnselectedColor" Value="LightSlateGray"/>
-            <Setter Property="Shell.TabBarTitleColor" Value="Black"/>
+            <Setter Property="Shell.TabBarTitleColor" Value="{DynamicResource IconsColor}"/>
 
         </Style>
         <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
@@ -37,13 +37,11 @@
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
-                    Glyph=""
-                    Color="{StaticResource IconsColor}"/>
+                    Glyph=""/>
             </Tab.Icon>
 
             <ShellContent 
                 Route="HomePage"
-                Shell.BackgroundColor="{StaticResource BackgroundColor}"
                 Shell.NavBarIsVisible="False"
                 ContentTemplate="{DataTemplate local:HomePage}"/>
         </Tab>
@@ -52,14 +50,12 @@
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
-                    Glyph=""
-                    Color="{StaticResource IconsColor}"/>
+                    Glyph=""/>
             </Tab.Icon>
 
             <ShellContent 
                 Route="PostPage"
                 Shell.TabBarIsVisible="False"
-                Shell.BackgroundColor="{StaticResource BackgroundColor}"
                 Shell.NavBarIsVisible="False"
                 ContentTemplate="{DataTemplate local:MakePostPage}"/>
         </Tab>
@@ -68,13 +64,11 @@
             <Tab.Icon>
                 <FontImageSource 
                     FontFamily="FARegular"
-                    Glyph=""
-                    Color="{StaticResource IconsColor}"/>
+                    Glyph=""/>
             </Tab.Icon>
 
             <ShellContent 
                 Route="ProfilePage"
-                Shell.BackgroundColor="{StaticResource BackgroundColor}"
                 Shell.NavBarIsVisible="False"
                 ContentTemplate="{DataTemplate local:ProfilePage}"/>
         </Tab>

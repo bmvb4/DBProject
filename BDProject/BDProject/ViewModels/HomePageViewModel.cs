@@ -44,11 +44,14 @@ namespace BDProject.ViewModels
                     PostsCollection.AddRange(AllPostsCollection.Take(10));
                 }
             }
+
+            _Globals.IsBusy = false;
         }
 
         // setting application defaults
         public HomePageViewModel()
-        {            
+        {
+            _Globals.IsBusy = true;
             SetCollection();
 
             // Assigning functions to the commands

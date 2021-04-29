@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:BDProject.ViewModels.PostsViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              
-             Shell.BackgroundColor="{StaticResource White}"
+             BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False">
 
     <Shell.BackButtonBehavior>
@@ -40,13 +40,13 @@
                             Text="{Binding Username}"
                             FontSize="Medium"
                             FontAttributes="Bold"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                         <Label 
                             Grid.Row="2"
                             Text="{Binding Message}"
                             FontSize="Medium"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                     </Grid>
 
@@ -83,13 +83,13 @@
                             Text="{Binding Username}"
                             FontSize="Medium"
                             FontAttributes="Bold"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                         <Label 
                             Grid.Row="2"
                             Text="{Binding Message}"
                             FontSize="Medium"
-                            TextColor="{StaticResource Black}"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                     </Grid>
 
@@ -131,7 +131,7 @@
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding Username}"/>
 
                         <Button 
@@ -140,7 +140,7 @@
                             WidthRequest="38"
                             Text=""
                             FontFamily="FA-S"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="Transparent"
                             Command="{Binding MoreCommand, Source={
                                 RelativeSource AncestorType={x:Type local:MyProfilePostPageViewModel}
                             }}"
@@ -185,7 +185,7 @@
                             Text=""
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="Transparent"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:MyProfilePostPageViewModel}
                                 }}"
@@ -196,7 +196,7 @@
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding LikesCount}" />
 
                         <Button 
@@ -206,7 +206,7 @@
                             Text="" 
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="Transparent"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:MyProfilePostPageViewModel}
                                 }}"
@@ -216,7 +216,7 @@
                             Grid.Column="4"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding CommentsCount}" />
 
                     </Grid>

@@ -23,12 +23,6 @@ namespace BDProject.Views
             BindingContext = new HomePageViewModel();
         }
 
-        private async void Entry_Focused(object sender, FocusEventArgs e)
-        {
-            Searcher.Unfocus();
-            await Shell.Current.GoToAsync("SearchPage");
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();

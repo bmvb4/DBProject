@@ -4,7 +4,9 @@
              x:Class="BDProject.Views.ProfilePage"
              
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             xmlns:local="clr-namespace:BDProject.ViewModels">
+             xmlns:local="clr-namespace:BDProject.ViewModels"
+             
+             BackgroundColor="{DynamicResource BackgroundColor}">
 
     <ContentPage.Content>
         <RefreshView
@@ -27,7 +29,7 @@
                             HeightRequest="46"
                             WidthRequest="46"
                             Text="" 
-                            TextColor="{StaticResource IconsColor}"
+                            TextColor="{DynamicResource IconsColor}"
                             FontFamily="FA-S"
                             FontSize="Large"
                             BackgroundColor="Transparent"
@@ -47,21 +49,21 @@
 
                     <Label 
                         Text="{Binding Name}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="16,0"
                         FontSize="Large"
                         HorizontalOptions="Center"/>
 
                     <Label 
                         Text="{Binding Username}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="16,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"/>
 
                     <Label 
                         Text="{Binding Description}" 
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="8,0"
                         FontSize="Medium"
                         HeightRequest="60"
@@ -81,14 +83,14 @@
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
                                 Text="{Binding PostsCount}"
-                                TextColor="{StaticResource TextColor}"/>
+                                TextColor="{DynamicResource TextColor}"/>
 
                             <Label 
                                 Grid.Row="1"
                                 FontSize="Small"
                                 HorizontalOptions="Center"
                                 Text="Posts"
-                                TextColor="{StaticResource TextColor}"/>
+                                TextColor="{DynamicResource TextColor}"/>
 
                         </Grid>
 
@@ -102,14 +104,14 @@
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
                                 Text="{Binding FollowersCount}"
-                                TextColor="{StaticResource TextColor}"/>
+                                TextColor="{DynamicResource TextColor}"/>
 
                             <Label 
                                 Grid.Row="1"
                                 FontSize="Small"
                                 HorizontalOptions="Center"
                                 Text="Followers"
-                                TextColor="{StaticResource TextColor}"/>
+                                TextColor="{DynamicResource TextColor}"/>
 
                         </Grid>
 
@@ -123,14 +125,14 @@
                                 FontSize="Medium"
                                 HorizontalOptions="Center"
                                 Text="{Binding FollowingCount}"
-                                TextColor="{StaticResource TextColor}"/>
+                                TextColor="{DynamicResource TextColor}"/>
 
                             <Label 
                                 Grid.Row="1"
                                 FontSize="Small"
                                 HorizontalOptions="Center"
                                 Text="Following"
-                                TextColor="{StaticResource TextColor}"/>
+                                TextColor="{DynamicResource TextColor}"/>
 
                         </Grid>
 
@@ -146,7 +148,7 @@
 
                     <Label 
                         Text="Posts"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         HorizontalOptions="Center"
                         FontSize="Medium"/>
 

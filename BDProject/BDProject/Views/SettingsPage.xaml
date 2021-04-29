@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.SettingsPage"
              
-             Shell.BackgroundColor="{StaticResource BackgroundColor}"
+             BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -26,7 +26,7 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
-                        TextColor="{StaticResource IconsColor}"
+                        TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
@@ -36,7 +36,7 @@
                         Grid.Column="1"
                         Margin="10,5,0,0"
                         Text="Settings" 
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontAttributes="Bold"
                         FontSize="Title"
                         HorizontalOptions="Center"/>
@@ -48,19 +48,20 @@
 
                     <Frame 
                         Grid.Row="0"
-                        HasShadow="False">
+                        HasShadow="False"
+                        BackgroundColor="{DynamicResource BackgroundColor}">
                         <StackLayout 
                             Orientation="Horizontal">
 
                             <Label 
                                 Text=""
-                                TextColor="{StaticResource IconsColor}"
+                                TextColor="{DynamicResource IconsColor}"
                                 FontSize="Large"
                                 FontFamily="FA-R"/>
 
                             <Label 
                                 Text="Manage Account"
-                                TextColor="{StaticResource TextColor}"
+                                TextColor="{DynamicResource TextColor}"
                                 Margin="16,0"
                                 FontSize="Medium"
                                 FontAttributes="Bold"/>
@@ -76,19 +77,20 @@
 
                     <Frame 
                         Grid.Row="1"
-                        HasShadow="False">
+                        HasShadow="False"
+                        BackgroundColor="{DynamicResource BackgroundColor}">
                         <StackLayout 
                             Orientation="Horizontal">
 
                             <Label 
                                 Text=""
-                                TextColor="{StaticResource IconsColor}"
+                                TextColor="{DynamicResource IconsColor}"
                                 FontSize="Large"
                                 FontFamily="FA-S"/>
 
                             <Label 
                                 Text="Colors"
-                                TextColor="{StaticResource TextColor}"
+                                TextColor="{DynamicResource TextColor}"
                                 Margin="16,0"
                                 FontSize="Medium"
                                 FontAttributes="Bold"/>
@@ -104,13 +106,14 @@
 
                     <Frame 
                         Grid.Row="3"
-                        HasShadow="False">
+                        HasShadow="False"
+                        BackgroundColor="{DynamicResource BackgroundColor}">
 
                         <Label 
                             Text="Log Out"
                             HorizontalOptions="End"
                             FontSize="Medium"
-                            TextColor="Red"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer 
@@ -121,13 +124,14 @@
 
                     <Frame 
                         Grid.Row="4"
-                        HasShadow="False">
+                        HasShadow="False"
+                        BackgroundColor="{DynamicResource BackgroundColor}">
 
                         <Label 
                             Text="Delete Account"
                             HorizontalOptions="End"
                             FontSize="Medium"
-                            TextColor="Red"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer 

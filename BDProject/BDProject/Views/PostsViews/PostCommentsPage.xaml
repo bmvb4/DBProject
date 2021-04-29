@@ -7,7 +7,7 @@
              xmlns:selector="clr-namespace:BDProject.Helpers"
              xmlns:local="clr-namespace:BDProject.ViewModels.PostsViewModels"
              
-             Shell.BackgroundColor="{StaticResource BackgroundColor}"
+             BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -36,14 +36,14 @@
                         <Label 
                             Grid.Column="0"
                             Text="{Binding Username}"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"
                             FontAttributes="Bold"/>
 
                         <Label 
                             Grid.Column="1"
                             Text="{Binding Message}"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"/>
 
                     </Grid>
@@ -78,14 +78,14 @@
                         <Label 
                             Grid.Row="1"
                             Text="{Binding Username}"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"
                             FontAttributes="Bold"/>
 
                         <Label 
                             Grid.Row="2"
                             Text="{Binding Message}"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"/>
 
                     </Grid>
@@ -119,7 +119,7 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
-                        TextColor="{StaticResource IconsColor}"
+                        TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
@@ -129,7 +129,7 @@
                         Grid.Column="1"
                         Margin="10,5,0,0"
                         Text="Comments" 
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontAttributes="Bold"
                         FontSize="Large"
                         HorizontalOptions="Center"/>
@@ -148,13 +148,13 @@
                             FontSize="Medium"
                             FontAttributes="Bold"
                             Text="{Binding Username}"
-                            TextColor="{StaticResource TextColor}"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                         <Label 
                             Grid.Row="1"
                             FontSize="Medium"
                             Text="{Binding Description}"
-                            TextColor="{StaticResource TextColor}"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                         <CollectionView 
                             Grid.Row="2"
@@ -181,12 +181,12 @@
                         x:Name="CommentEntry"
                         Placeholder="Comment"
                         Text="{Binding Comment}"
-                        TextColor="{StaticResource TextColor}"/>
+                        TextColor="{DynamicResource TextColor}"/>
 
                     <Button 
                         Grid.Column="1"
                         Text="Send"
-                        TextColor="{StaticResource IconsColor}"
+                        TextColor="{DynamicResource IconsColor}"
                         FontSize="Medium"
                         FontAttributes="Bold"
                         WidthRequest="70"

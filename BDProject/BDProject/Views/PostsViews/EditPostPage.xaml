@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.PostsViews.EditPostPage"
              
-             Shell.BackgroundColor="{StaticResource BackgroundColor}"
+             BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -23,7 +23,7 @@
                     HeightRequest="48"
                     WidthRequest="38"
                     Text="" 
-                    TextColor="{StaticResource IconsColor}"
+                    TextColor="{DynamicResource IconsColor}"
                     FontFamily="FA-S"
                     FontSize="Large"
                     BackgroundColor="Transparent"
@@ -34,7 +34,7 @@
                     HeightRequest="48"
                     WidthRequest="48"
                     Text="" 
-                    TextColor="{StaticResource IconsColor}"
+                    TextColor="{DynamicResource IconsColor}"
                     FontFamily="FA-S"
                     FontSize="Large"
                     BackgroundColor="Transparent"
@@ -75,7 +75,7 @@
                             FontSize="Medium"
                             FontAttributes="Bold"
                             Text="{Binding Username}"
-                            TextColor="{StaticResource TextColor}"/>
+                            TextColor="{DynamicResource TextColor}"/>
 
                     </Grid>
 
@@ -85,7 +85,7 @@
                     Grid.Row="1"
                     FontSize="Medium"
                     Text="{Binding Description}"
-                    TextColor="{StaticResource TextColor}"/>
+                    TextColor="{DynamicResource TextColor}"/>
 
                 <Image 
                     Grid.Row="2"

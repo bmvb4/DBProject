@@ -6,7 +6,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:selector="clr-namespace:BDProject.Helpers"
              
-             Shell.BackgroundColor="{StaticResource BackgroundColor}"
+             BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -32,7 +32,7 @@
                     <Label 
                         Grid.Column="1"
                         Text="{Binding Name}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"
                         FontAttributes="Bold"/>
 
@@ -51,7 +51,7 @@
                     <Label 
                         Grid.Column="1"
                         Text="{Binding Name}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"
                         FontAttributes="Bold"/>
 
@@ -80,7 +80,7 @@
                     HeightRequest="46"
                     WidthRequest="38"
                     Text="" 
-                    TextColor="{StaticResource IconsColor}"
+                    TextColor="{DynamicResource IconsColor}"
                     FontFamily="FA-S"
                     FontSize="Large"
                     BackgroundColor="Transparent"
@@ -90,8 +90,9 @@
                     Grid.Column="1"
                     x:Name="Searcher"
                     Text="{Binding Search}" 
-                    TextColor="{StaticResource TextColor}"
+                    TextColor="{DynamicResource TextColor}"
                     Placeholder=""
+                    PlaceholderColor="{DynamicResource TextColor}"
                     FontFamily="FA-S"/>
 
             </Grid>

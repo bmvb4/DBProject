@@ -5,7 +5,7 @@
              
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              
-             Shell.BackgroundColor="{StaticResource BackgroundColor}"
+             BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -29,7 +29,7 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
-                        TextColor="{StaticResource IconsColor}"
+                        TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
@@ -71,7 +71,7 @@
                     <Label 
                         Grid.Column="0"
                         Text="First Name"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="0,10,0,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"/>
@@ -79,7 +79,7 @@
                     <Editor 
                         Grid.Column="1"
                         Text="{Binding FirstName}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"
                         HorizontalOptions="Fill"/>
 
@@ -92,7 +92,7 @@
                     <Label 
                         Grid.Column="0"
                         Text="Last Name"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="0,10,0,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"/>
@@ -100,7 +100,7 @@
                     <Editor
                         Grid.Column="1"
                         Text="{Binding LastName}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"
                         HorizontalOptions="Fill"/>
 
@@ -113,7 +113,7 @@
                     <Label 
                         Grid.Column="0"
                         Text="Description"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="0,10,0,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"/>
@@ -121,7 +121,7 @@
                     <Editor
                         Grid.Column="1"
                         Text="{Binding Description}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         HeightRequest="100"
                         FontSize="Medium"
                         HorizontalOptions="Fill"/>

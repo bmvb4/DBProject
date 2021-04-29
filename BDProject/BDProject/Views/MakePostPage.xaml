@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.MakePostPage"
              
-             xmlns:local="clr-namespace:BDProject.ViewModels">
+             xmlns:local="clr-namespace:BDProject.ViewModels"
+             
+             BackgroundColor="{DynamicResource BackgroundColor}">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
@@ -24,7 +26,7 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
-                        TextColor="{StaticResource IconsColor}"
+                        TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
@@ -35,7 +37,7 @@
                         HeightRequest="48"
                         WidthRequest="48"
                         Text="" 
-                        TextColor="{StaticResource IconsColor}"
+                        TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
@@ -76,24 +78,24 @@
 
                     <Label 
                         Text="Descripton"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"/>
 
                     <Editor
                         x:Name="descriptionEditor"
                         HeightRequest="100"
                         Text="{Binding Description}"
-                        TextColor="{StaticResource TextColor}"/>
+                        TextColor="{DynamicResource TextColor}"/>
 
                     <Label 
                         Text="Tags"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"/>
 
                     <Editor
                         x:Name="tagsEditor"
                         TextChanged="tagsEditor_TextChangesd"
-                        TextColor="{StaticResource TextColor}"/>
+                        TextColor="{DynamicResource TextColor}"/>
 
                     <CollectionView 
                         SelectionMode="None"
@@ -110,13 +112,13 @@
                                         Grid.Column="0"
                                         FontSize="Medium"
                                         VerticalOptions="Center"
-                                        TextColor="{StaticResource TextColor}"
+                                        TextColor="{DynamicResource TextColor}"
                                         Text="{Binding TagName}"/>
 
                                     <Button
                                         Grid.Column="1"
                                         Text=""
-                                        TextColor="{StaticResource IconsColor}"
+                                        TextColor="{DynamicResource IconsColor}"
                                         FontFamily="FA-S"
                                         WidthRequest="48"
                                         BackgroundColor="Transparent"

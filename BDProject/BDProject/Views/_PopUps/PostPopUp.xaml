@@ -36,19 +36,19 @@
 
                 <Button 
                     Text="Share"
-                    TextColor="{StaticResource TextColor}"
+                    TextColor="{DynamicResource TextColor}"
                     Clicked="Share_Clicked"
                     BackgroundColor="Transparent"/>
 
                 <Button 
                     Text="Edit" 
-                    TextColor="{StaticResource TextColor}"
+                    TextColor="{DynamicResource TextColor}"
                     Clicked="Edit_Clicked"
                     BackgroundColor="Transparent"/>
 
                 <Button 
                     Text="Delete" 
-                    TextColor="{StaticResource TextColor}"
+                    TextColor="{DynamicResource TextColor}"
                     Clicked="Delete_Clicked"
                     BackgroundColor="Transparent"/>
 

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.SettingsViews.ManageAccountPage"
              
-             Shell.BackgroundColor="{StaticResource BackgroundColor}"
+             BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
              Shell.TabBarIsVisible="False">
 
@@ -27,7 +27,7 @@
                         HeightRequest="48"
                         WidthRequest="38"
                         Text="" 
-                        TextColor="{StaticResource IconsColor}"
+                        TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
@@ -42,7 +42,7 @@
                     <Label 
                         Grid.Column="0"
                         Text="Username"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="0,10,0,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"
@@ -51,7 +51,7 @@
                     <Editor 
                         Grid.Column="1"
                         Text="{Binding Username}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"
                         HorizontalOptions="Fill"/>
 
@@ -64,7 +64,7 @@
                     <Label 
                         Grid.Column="0"
                         Text="Email"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         Margin="0,10,0,0"
                         FontSize="Medium"
                         HorizontalOptions="Center"
@@ -73,7 +73,7 @@
                     <Editor
                         Grid.Column="1"
                         Text="{Binding Email}"
-                        TextColor="{StaticResource TextColor}"
+                        TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"
                         HorizontalOptions="Fill"/>
 

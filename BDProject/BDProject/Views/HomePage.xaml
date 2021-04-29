@@ -5,7 +5,9 @@
              
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:BDProject.ViewModels"
-             xmlns:selector="clr-namespace:BDProject.Helpers">
+             xmlns:selector="clr-namespace:BDProject.Helpers"
+             
+             BackgroundColor="{DynamicResource BackgroundColor}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -47,7 +49,7 @@
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding Username}"/>
 
                         <Grid.GestureRecognizers>
@@ -97,7 +99,7 @@
 
                         <Label 
                             FontSize="Medium"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding Description}"
                             HorizontalOptions="Center"
                             VerticalOptions="End"/>
@@ -114,7 +116,7 @@
                             HeightRequest="46"
                             WidthRequest="46"
                             Text=""
-                            TextColor="{StaticResource IconsColor}"
+                            TextColor="{DynamicResource IconsColor}"
                             FontSize="Large"
                             FontFamily="FA-R"
                             BackgroundColor="Transparent"
@@ -128,7 +130,7 @@
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding LikesCount}" />
 
                         <Button 
@@ -136,7 +138,7 @@
                             HeightRequest="46"
                             WidthRequest="46"
                             Text=""
-                            TextColor="{StaticResource IconsColor}"
+                            TextColor="{DynamicResource IconsColor}"
                             FontSize="Large"
                             FontFamily="FA-R"
                             BackgroundColor="Transparent"
@@ -150,7 +152,7 @@
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding LikesCount}" />
 
                         <Button 
@@ -158,7 +160,7 @@
                             HeightRequest="46"
                             WidthRequest="46"
                             Text="" 
-                            TextColor="{StaticResource IconsColor}"
+                            TextColor="{DynamicResource IconsColor}"
                             FontSize="Large"
                             FontFamily="FA-R"
                             BackgroundColor="Transparent"
@@ -171,7 +173,7 @@
                             Grid.Column="5"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource TextColor}"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding CommentsCount}" />
 
                         <Button 
@@ -179,7 +181,7 @@
                             HeightRequest="0"
                             WidthRequest="38"
                             Text=""
-                            TextColor="{StaticResource IconsColor}"
+                            TextColor="{DynamicResource IconsColor}"
                             FontFamily="FA-S"
                             BackgroundColor="Transparent"
                             Command="{Binding MoreCommand, Source={
@@ -458,7 +460,7 @@
                     Padding="8,16"
                     RowDefinitions="auto,*,auto">
 
-                    <!--<Grid
+                    <Grid
                         Grid.Row="0"
                         ColumnDefinitions="auto,auto,*,auto">
 
@@ -472,7 +474,7 @@
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding Username}"/>
 
                         <Button 
@@ -520,14 +522,14 @@
                             Grid.Column="0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="Days" />
 
                         <Label 
                             Grid.Column="1"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding DaysCount, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}" />
@@ -539,7 +541,7 @@
                             Text=""
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="White"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -550,7 +552,7 @@
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding LikesCount}" />
 
                         <Button 
@@ -560,7 +562,7 @@
                             Text="" 
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="White"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -570,10 +572,10 @@
                             Grid.Column="6"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding CommentsCount}" />
 
-                    </Grid>-->
+                    </Grid>
 
                 </Grid>
             </DataTemplate>
@@ -588,27 +590,37 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    
-    
+
+
     <ContentPage.Content>
+        
+        <RefreshView 
+            IsRefreshing="{Binding IsRefreshing}"
+            Command="{Binding RefreshCommand}">
 
-        <Grid RowDefinitions="auto,*">
+            <Grid 
+                RowDefinitions="auto,*">
 
-            <Entry
-                Grid.Row="0"
-                Margin="8,8,8,0"
-                x:Name="Searcher"
-                Focused="Entry_Focused"
-                Placeholder=""
-                TextColor="{StaticResource TextColor}"
-                FontFamily="FA-S"/>
+                <Grid 
+                    Grid.Row="0"
+                    Padding="0,8,8,0"
+                    ColumnDefinitions="*,auto">
 
-            <RefreshView 
-                Grid.Row="1"
-                IsRefreshing="{Binding IsRefreshing}"
-                Command="{Binding RefreshCommand}">
+                    <Button 
+                        Grid.Column="1"
+                        HeightRequest="46"
+                        WidthRequest="46"
+                        Text="" 
+                        TextColor="{DynamicResource IconsColor}"
+                        FontFamily="FA-S"
+                        FontSize="Large"
+                        BackgroundColor="Transparent"
+                        Command="{Binding OpenSearchCommand}"/>
+
+                </Grid>
 
                 <CollectionView 
+                    Grid.Row="1"
                     VerticalScrollBarVisibility="Never"
                     SelectionMode="None"
                     x:Name="PostsCollectionView"
@@ -619,9 +631,9 @@
                     ItemsSource="{Binding PostsCollection}"
                     ItemTemplate="{StaticResource templateSelector}"/>
 
-            </RefreshView>
+            </Grid>
 
-        </Grid>
-        
+        </RefreshView>
+
     </ContentPage.Content>
 </ContentPage>
