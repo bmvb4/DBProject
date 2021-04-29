@@ -194,7 +194,7 @@
             </DataTemplate>
 
             <!--===============MY TEMPLATE WITHOUT DESCRIPTION===============-->
-            <DataTemplate x:Key="MyTemplateWithoutDescription">
+            <!--<DataTemplate x:Key="MyTemplateWithoutDescription">
                 <Grid 
                     Padding="8,16"
                     RowDefinitions="auto,*,auto">
@@ -318,10 +318,10 @@
                     </Grid>
 
                 </Grid>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <!--==============OTHERS TEMPLATE===================-->
-            <DataTemplate x:Key="OthersTemplate">
+            <!--<DataTemplate x:Key="OthersTemplate">
                 <Grid 
                     Padding="8,16"
                     RowDefinitions="auto,auto,*,auto">
@@ -450,10 +450,10 @@
                     </Grid>
 
                 </Grid>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <!--==============OTHERS TEMPLATE WITHOUT DESCRIPTION===================-->
-            <DataTemplate x:Key="OthersTemplateWithoutDescription">
+            <!--<DataTemplate x:Key="OthersTemplateWithoutDescription">
                 <Grid 
                     Padding="8,16"
                     RowDefinitions="auto,*,auto">
@@ -576,7 +576,7 @@
                     </Grid>
 
                 </Grid>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <!--===================DATA TEMPLATE SELECTOR=====================-->
             <selector:ProfilePostsDataTemplateSelector x:Key="templateSelector"
