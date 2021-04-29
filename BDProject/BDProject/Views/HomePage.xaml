@@ -194,7 +194,7 @@
             </DataTemplate>
 
             <!--===============MY TEMPLATE WITHOUT DESCRIPTION===============-->
-            <!--<DataTemplate x:Key="MyTemplateWithoutDescription">
+            <DataTemplate x:Key="MyTemplateWithoutDescription">
                 <Grid 
                     Padding="8,16"
                     RowDefinitions="auto,*,auto">
@@ -213,7 +213,7 @@
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding Username}"/>
 
                         <Button 
@@ -222,7 +222,7 @@
                             WidthRequest="38"
                             Text=""
                             FontFamily="FA-S"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="White"
                             Command="{Binding MoreCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                             }}"
@@ -262,14 +262,14 @@
                             Grid.Column="0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="Days" />
 
                         <Label 
                             Grid.Column="1"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding DaysCount, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}" />
@@ -281,7 +281,7 @@
                             Text=""
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="White"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -292,7 +292,7 @@
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding LikesCount}" />
 
                         <Button 
@@ -302,7 +302,7 @@
                             Text="" 
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="White"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -312,16 +312,16 @@
                             Grid.Column="6"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding CommentsCount}" />
 
                     </Grid>
 
                 </Grid>
-            </DataTemplate>-->
+            </DataTemplate>
 
             <!--==============OTHERS TEMPLATE===================-->
-            <!--<DataTemplate x:Key="OthersTemplate">
+            <DataTemplate x:Key="OthersTemplate">
                 <Grid 
                     Padding="8,16"
                     RowDefinitions="auto,auto,*,auto">
@@ -334,13 +334,13 @@
                             Grid.Column="0"
                             Source="{Binding UserPhotoSource}"
                             Size="40"/>
-                        
+
                         <Label 
                             Grid.Column="1"
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding Username}"/>
 
                         <Button 
@@ -367,7 +367,7 @@
                     <Label 
                         Grid.Row="1"
                         FontSize="Medium"
-                        TextColor="{StaticResource Black}"
+                        TextColor="Black"
                         Text="{Binding Description}" />
 
                     <Image 
@@ -394,14 +394,14 @@
                             Grid.Column="0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="Days" />
 
                         <Label 
                             Grid.Column="1"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding DaysCount, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}" />
@@ -413,7 +413,7 @@
                             Text=""
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="White"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -424,7 +424,7 @@
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding LikesCount}" />
 
                         <Button 
@@ -434,7 +434,7 @@
                             Text="" 
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="{StaticResource White}"
+                            BackgroundColor="White"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -444,21 +444,21 @@
                             Grid.Column="6"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="{StaticResource Black}"
+                            TextColor="Black"
                             Text="{Binding CommentsCount}" />
 
                     </Grid>
 
                 </Grid>
-            </DataTemplate>-->
+            </DataTemplate>
 
             <!--==============OTHERS TEMPLATE WITHOUT DESCRIPTION===================-->
-            <!--<DataTemplate x:Key="OthersTemplateWithoutDescription">
+            <DataTemplate x:Key="OthersTemplateWithoutDescription">
                 <Grid 
                     Padding="8,16"
                     RowDefinitions="auto,*,auto">
 
-                    <Grid
+                    <!--<Grid
                         Grid.Row="0"
                         ColumnDefinitions="auto,auto,*,auto">
 
@@ -573,10 +573,10 @@
                             TextColor="{StaticResource Black}"
                             Text="{Binding CommentsCount}" />
 
-                    </Grid>
+                    </Grid>-->
 
                 </Grid>
-            </DataTemplate>-->
+            </DataTemplate>
 
             <!--===================DATA TEMPLATE SELECTOR=====================-->
             <selector:ProfilePostsDataTemplateSelector x:Key="templateSelector"

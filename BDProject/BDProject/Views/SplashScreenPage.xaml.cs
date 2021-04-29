@@ -47,7 +47,7 @@ namespace BDProject.Views
 
         private async void CheckAutoLogin()
         {
-            if (Preferences.Get("UsernameKey", string.Empty) != string.Empty && Preferences.Get("PasswordKey", string.Empty) != string.Empty)
+            if (Preferences.Get("UsernameKey", string.Empty) != string.Empty || Preferences.Get("PasswordKey", string.Empty) != string.Empty)
             {
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("Username", Preferences.Get("UsernameKey", string.Empty));
