@@ -1,15 +1,16 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
-using MvvmHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels.PostsViewModels
@@ -19,9 +20,9 @@ namespace BDProject.ViewModels.PostsViewModels
 
         public void SetParameters()
         {
-            PostWrapper SelectedPost = _Globals.GetPost(_Globals.OpenID);
+            Post SelectedPost = _Globals.GetPost(_Globals.OpenID);
 
-            Username = SelectedPost.Username;
+            Username = SelectedPost.IdUser;
             Description = SelectedPost.Description;
         }
 
@@ -35,15 +36,13 @@ namespace BDProject.ViewModels.PostsViewModels
             if (success.IsSuccessStatusCode)
             {
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<List<Comment>>(earthquakesJson);
+                var rootobject = JsonConvert.DeserializeObject<List<CommentDB>>(earthquakesJson);
 
-                List<CommentWrapper> lc = new List<CommentWrapper>();
-                foreach(Comment c in rootobject)
-                {
-                    lc.Add(new CommentWrapper(c));
-                }
+                List<Comment> list = new List<Comment>();
+                foreach (CommentDB comment in rootobject)
+                    list.Add(new Comment(comment));
 
-                AllComments = new ObservableRangeCollection<CommentWrapper>(lc);
+                AllComments = new ObservableRangeCollection<Comment>(list);
 
                 CommentsCollection.Clear();
                 if (AllComments.Count >= 20)
@@ -60,9 +59,13 @@ namespace BDProject.ViewModels.PostsViewModels
 
                 CollectionHeight = 77 * CommentsCollection.Count;
             }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
+            }
         }
 
-        private ObservableRangeCollection<CommentWrapper> AllComments = new ObservableRangeCollection<CommentWrapper>();
+        private ObservableRangeCollection<Comment> AllComments = new ObservableRangeCollection<Comment>();
 
         public PostCommentsPageViewModel()
         {
@@ -73,21 +76,23 @@ namespace BDProject.ViewModels.PostsViewModels
             BackCommand = new Command(async () => await BackFunction());
             RefreshCommand = new Command(RefreshFunction);
             CommentCommand = new Command(CommentFunction);
-            DeleteCommentCommand = new Command<CommentWrapper>(DeleteCommentFunction);
+            DeleteCommentCommand = new Command<Comment>(DeleteCommentFunction);
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
+
+            OpenProfileCommand = new Command<Comment>(OpenProfileFunctionAsync);
         }
 
         // Parameters
         // Posts Collection parameter
-        private ObservableRangeCollection<CommentWrapper> commentsCollection = new ObservableRangeCollection<CommentWrapper>();
-        public ObservableRangeCollection<CommentWrapper> CommentsCollection
+        private ObservableRangeCollection<Comment> commentsCollection = new ObservableRangeCollection<Comment>();
+        public ObservableRangeCollection<Comment> CommentsCollection
         {
             get => commentsCollection;
             set
             {
                 if (value == commentsCollection) { return; }
                 commentsCollection = value;
-                OnPropertyChanged(nameof(CommentsCollection));
+                OnPropertyChanged();
             }
         }
 
@@ -100,7 +105,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == comment) { return; }
                 comment = value;
-                OnPropertyChanged(nameof(Comment));
+                OnPropertyChanged();
             }
         }
 
@@ -113,7 +118,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == username) { return; }
                 username = value;
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
 
@@ -126,7 +131,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == description) { return; }
                 description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
             }
         }
 
@@ -139,7 +144,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == collectionHeight) { return; }
                 collectionHeight = value;
-                OnPropertyChanged(nameof(CollectionHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -152,7 +157,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == isRefreshing) { return; }
                 isRefreshing = value;
-                OnPropertyChanged(nameof(IsRefreshing));
+                OnPropertyChanged();
             }
         }
 
@@ -177,21 +182,25 @@ namespace BDProject.ViewModels.PostsViewModels
 
         // delete command
         public ICommand DeleteCommentCommand { get; set; }
-        private async void DeleteCommentFunction(CommentWrapper comment)
+        private async void DeleteCommentFunction(Comment comment)
         {
             bool result = await App.Current.MainPage.DisplayAlert("Warning", "Do you want to delete this comment", "Yes", "No");
             if (result == false) { return; }
 
             JObject oJsonObject = new JObject();
             oJsonObject.Add("idUser", _Globals.GlobalMainUser.Username);
-            oJsonObject.Add("idPost", comment.PostID);
-            oJsonObject.Add("idcomment", comment.ID);
+            oJsonObject.Add("idPost", comment.IdPost);
+            oJsonObject.Add("idcomment", comment.IdComment);
 
             var success = await ServerServices.SendDeleteRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).RemoveComment(comment);
+                _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).RemoveComment(comment);
                 SetCollection();
+            }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
             }
         }
 
@@ -201,19 +210,23 @@ namespace BDProject.ViewModels.PostsViewModels
         {
             if (string.IsNullOrEmpty(Comment) || string.IsNullOrWhiteSpace(Comment)) { return; }
 
-            PostWrapper post = _Globals.GetPost(_Globals.OpenID);
+            Post post = _Globals.GetPost(_Globals.OpenID);
 
             JObject oJsonObject = new JObject();
-            oJsonObject.Add("IdPost", post.PostID);
+            oJsonObject.Add("IdPost", post.IdPost);
             oJsonObject.Add("IdUser", _Globals.GlobalMainUser.Username);
             oJsonObject.Add("CommentText", Comment);
 
             var success = await ServerServices.SendPostRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).AddComment(new CommentWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username, Comment));
+                _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).AddComment(new Comment(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username, Comment));
                 SetCollection();
                 Comment = "";
+            }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
             }
         }
 
@@ -236,6 +249,21 @@ namespace BDProject.ViewModels.PostsViewModels
             }
 
             _Globals.IsBusy = false;
+        }
+
+
+
+        // open profile command
+        public ICommand OpenProfileCommand { get; set; }
+        private async void OpenProfileFunctionAsync(Comment com)
+        {
+            if (com.IdUser != _Globals.GlobalMainUser.Username)
+            {
+                _Globals.UsernameTemp = com.IdUser;
+                await Shell.Current.GoToAsync("PersonsProfilePage");
+            }
+            else
+                await Shell.Current.GoToAsync("//ProfilePage");
         }
     }
 }

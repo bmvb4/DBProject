@@ -1,8 +1,9 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -36,7 +37,7 @@ namespace BDProject.ViewModels
 
                 RestrictLenght(username, 35, 1);
 
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
 
@@ -49,7 +50,7 @@ namespace BDProject.ViewModels
             {
                 if (value == usernameAlert) { return; }
                 usernameAlert = value;
-                OnPropertyChanged(nameof(UsernameAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -65,7 +66,7 @@ namespace BDProject.ViewModels
 
                 RestrictLenght(password, 133, 2);
 
-                OnPropertyChanged(nameof(Password));
+                OnPropertyChanged();
             }
         }
 
@@ -78,7 +79,7 @@ namespace BDProject.ViewModels
             {
                 if (value == passwordAlert) { return; }
                 passwordAlert = value;
-                OnPropertyChanged(nameof(PasswordAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -91,7 +92,7 @@ namespace BDProject.ViewModels
             {
                 if (value == hidePassword) { return; }
                 hidePassword = value;
-                OnPropertyChanged(nameof(HidePassword));
+                OnPropertyChanged();
             }
         }
 
@@ -104,7 +105,7 @@ namespace BDProject.ViewModels
             {
                 if (value == eye) { return; }
                 eye = value;
-                OnPropertyChanged(nameof(Eye));
+                OnPropertyChanged();
             }
         }
 
@@ -127,16 +128,19 @@ namespace BDProject.ViewModels
                 Preferences.Set("PasswordKey", Password);
 
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
+                var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
 
-                _Globals.GlobalMainUser = new UserWrapper(rootobject);
-                
+                if(rootobject.Photo == null)
+                    _Globals.GlobalMainUser = new User(rootobject) { Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto) };
+                else
+                    _Globals.GlobalMainUser = new User(rootobject);
+
                 success = await ServerServices.SendGetRequestAsync($"posts/getAll/{rootobject.Username}", oJsonObject);
 
                 if (success.IsSuccessStatusCode)
                 {
                     earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                    var postList = JsonConvert.DeserializeObject<List<PostUser>>(earthquakesJson);
+                    var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
                     _Globals.GlobalMainUser.AddPostsFromDB(postList);
                     _Globals.AddPostsFromDB(postList);
 

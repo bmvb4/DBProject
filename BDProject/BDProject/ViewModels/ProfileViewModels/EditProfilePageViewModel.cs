@@ -1,10 +1,10 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -17,19 +17,10 @@ namespace BDProject.ViewModels.ProfileViewModels
 
         private void SetUserData()
         {
-            UserWrapper user = _Globals.GlobalMainUser;
-
-            try
-            {
-                FirstName = user.FirstName;
-                LastName = user.LastName;
-                Description = user.Description;
-                ProfilePictureSource = user.PhotoSource;
-            }
-            catch (Exception ex)
-            {
-
-            }
+            FirstName = _Globals.GlobalMainUser.FirstName;
+            LastName = _Globals.GlobalMainUser.LastName;
+            Description = _Globals.GlobalMainUser.Description;
+            ProfilePictureSource = _Globals.GlobalMainUser.PhotoSource;
         }
 
         public EditProfilePageViewModel()
@@ -54,7 +45,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == profilePictureSource) { return; }
                 profilePictureSource = value;
-                OnPropertyChanged(nameof(ProfilePictureSource));
+                OnPropertyChanged();
             }
         }
 
@@ -67,7 +58,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == firstname) { return; }
                 firstname = value;
-                OnPropertyChanged(nameof(FirstName));
+                OnPropertyChanged();
             }
         }
 
@@ -80,7 +71,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == lastname) { return; }
                 lastname = value;
-                OnPropertyChanged(nameof(LastName));
+                OnPropertyChanged();
             }
         }
 
@@ -93,7 +84,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == description) { return; }
                 description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
             }
         }
 
@@ -143,7 +134,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             // save photo
             if (isChanged == true)
             {
-                _Globals.GlobalMainUser.ImageBytes = imageBytes;
+                _Globals.GlobalMainUser.Photo = imageBytes;
             }
 
             // save first name
@@ -168,7 +159,7 @@ namespace BDProject.ViewModels.ProfileViewModels
 
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
-            oJsonObject.Add("Photo", _Globals.GlobalMainUser.ImageBytes);
+            oJsonObject.Add("Photo", _Globals.GlobalMainUser.Photo);
             oJsonObject.Add("Description", _Globals.GlobalMainUser.Description);
             oJsonObject.Add("FirstName", _Globals.GlobalMainUser.FirstName);
             oJsonObject.Add("LastName", _Globals.GlobalMainUser.LastName);
@@ -178,6 +169,10 @@ namespace BDProject.ViewModels.ProfileViewModels
             if (success.IsSuccessStatusCode)
             {
                 await Shell.Current.Navigation.PopAsync();
+            }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
             }
         }
 

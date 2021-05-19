@@ -5,10 +5,10 @@
              
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:selector="clr-namespace:BDProject.Helpers"
+             xmlns:local="clr-namespace:BDProject.ViewModels.SearchViewModels"
              
              BackgroundColor="{DynamicResource BackgroundColor}"
-             Shell.NavBarIsVisible="False"
-             Shell.TabBarIsVisible="False">
+             Shell.NavBarIsVisible="False">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
@@ -20,7 +20,8 @@
         <ResourceDictionary>
 
             <!--===============ACCOUNT===============-->
-            <DataTemplate x:Key="AccountTemplate">
+            <DataTemplate 
+                x:Key="AccountTemplate">
                 <Grid 
                     ColumnDefinitions="auto,*">
 
@@ -35,12 +36,22 @@
                         TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"
                         FontAttributes="Bold"/>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer
+                            NumberOfTapsRequired="1"
+                            Command="{Binding OpenProfileCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:SearchPageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+                    </Grid.GestureRecognizers>
 
                 </Grid>
             </DataTemplate>
 
             <!--==============TAG===================-->
-            <DataTemplate x:Key="TagTemplate">
+            <DataTemplate 
+                x:Key="TagTemplate">
                 <Grid 
                     ColumnDefinitions="auto,*">
 
@@ -69,10 +80,12 @@
     
 
     <ContentPage.Content>
-        <StackLayout>
+        <Grid
+            Margin="8"
+            RowDefinitions="auto,auto,*">
 
             <Grid 
-                Padding="8,8,8,0"
+                Grid.Row="0"
                 ColumnDefinitions="auto,*">
 
                 <Button 
@@ -97,7 +110,10 @@
 
             </Grid>
 
-            <Grid ColumnDefinitions="auto,auto,auto">
+            <Grid 
+                Grid.Row="1"
+                Padding="0"
+                ColumnDefinitions="auto,auto,auto">
 
                 <Frame
                     Grid.Column="0"
@@ -115,7 +131,8 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer 
                             Tapped="SearchAll_Tapped"
-                            Command="{Binding SearchAllCommand}"/>
+                            Command="{Binding SearchAllCommand}"
+                            CommandParameter="{Binding Name}"/>
                     </Frame.GestureRecognizers>
                 </Frame>
 
@@ -135,7 +152,8 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer 
                             Tapped="SearchPeople_Tapped"
-                            Command="{Binding SearchPeopleCommand}"/>
+                            Command="{Binding SearchPeopleCommand}"
+                            CommandParameter="{Binding Name}"/>
                     </Frame.GestureRecognizers>
                 </Frame>
 
@@ -155,13 +173,15 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer 
                             Tapped="SearchTags_Tapped"
-                            Command="{Binding SearchTagsCommand}"/>
+                            Command="{Binding SearchTagsCommand}"
+                            CommandParameter="{Binding Name}"/>
                     </Frame.GestureRecognizers>
                 </Frame>
 
             </Grid>
 
             <CollectionView 
+                Grid.Row="2"
                 SelectionMode="None" 
                 VerticalScrollBarVisibility="Never"
                             
@@ -169,8 +189,14 @@
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 
                 ItemsSource="{Binding BubblesCollection}"
-                ItemTemplate="{StaticResource templateSelector}"/>
+                ItemTemplate="{StaticResource templateSelector}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout 
+                        Orientation="Vertical"
+                        ItemSpacing="4"/>
+                </CollectionView.ItemsLayout>
+            </CollectionView>
 
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

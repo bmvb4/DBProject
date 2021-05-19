@@ -1,6 +1,7 @@
 ﻿using BDProject.Helpers;
-using BDProject.ModelWrappers;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -11,17 +12,8 @@ namespace BDProject.ViewModels.SettingsViewModels
     {
         private void SetUserData()
         {
-            UserWrapper user = _Globals.GlobalMainUser;
-
-            try
-            {
-                Username = user.Username;
-                Email = user.Email;
-            }
-            catch (Exception ex)
-            {
-
-            }
+            Username = _Globals.GlobalMainUser.Username;
+            Email = _Globals.GlobalMainUser.Email;
         }
 
         public ManageAccountPageViewModel()
@@ -43,7 +35,7 @@ namespace BDProject.ViewModels.SettingsViewModels
             {
                 if (value == username) { return; }
                 username = value;
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
 
@@ -56,7 +48,7 @@ namespace BDProject.ViewModels.SettingsViewModels
             {
                 if (value == email) { return; }
                 email = value;
-                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged();
             }
         }
 
@@ -88,21 +80,20 @@ namespace BDProject.ViewModels.SettingsViewModels
             _Globals.Refresh = true;
             await Shell.Current.Navigation.PopAsync();
 
-            /*
-            JObject oJsonObject = new JObject();
-            oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
-            oJsonObject.Add("Photo", _Globals.GlobalMainUser.ImageBytes);
-            oJsonObject.Add("Description", _Globals.GlobalMainUser.Description);
-            oJsonObject.Add("FirstName", _Globals.GlobalMainUser.FirstName);
-            oJsonObject.Add("LastName", _Globals.GlobalMainUser.LastName);
+            //JObject oJsonObject = new JObject();
+            //oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
+            //oJsonObject.Add("Email", _Globals.GlobalMainUser.Email);
 
-            bool success = await ServerServices.SendRequestAsync("profile/update/", oJsonObject);
+            //var success = await ServerServices.SendPutRequestAsync("profile/update/", oJsonObject);
 
-            if (success)
-            {
-                await Shell.Current.Navigation.PopAsync();
-            }
-            */
+            //if (success.IsSuccessStatusCode)
+            //{
+            //    await Shell.Current.Navigation.PopAsync();
+            //}
+            //else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            //{
+            //    await ServerServices.RefreshTokenAsync();
+            //}
         }
 
     }

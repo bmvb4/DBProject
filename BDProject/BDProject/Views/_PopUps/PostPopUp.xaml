@@ -26,9 +26,9 @@
     <pages:PopupPage.Content>
 
         <Frame
-            Padding="0"
-            Margin="140,260"
-            CornerRadius="10">
+            Padding="140,260"
+            CornerRadius="10"
+            BackgroundColor="{DynamicResource BackgroundColor}">
             <StackLayout
                 Margin="0"
                 Spacing="0"

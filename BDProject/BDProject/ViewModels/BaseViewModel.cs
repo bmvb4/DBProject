@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace BDProject.ViewModels
 {
@@ -6,10 +8,16 @@ namespace BDProject.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            if (PropertyChanged == null) { return; }
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex + "in View Models");
+            }
         }
     }
 }

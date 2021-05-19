@@ -1,4 +1,4 @@
-﻿using BDProject.ModelWrappers;
+﻿using BDProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,9 +14,9 @@ namespace BDProject.Helpers
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            CommentWrapper comment = (CommentWrapper)item;
+            Comment comment = (Comment)item;
 
-            if (_Globals.GlobalMainUser.Username == comment.Username)
+            if (_Globals.GlobalMainUser.Username == comment.IdUser)
             {
                 return MyComments;
             }

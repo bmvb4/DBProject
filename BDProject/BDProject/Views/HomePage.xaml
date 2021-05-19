@@ -16,8 +16,34 @@
             <DataTemplate x:Key="MyTemplate">
 
                 <Grid 
-                    RowDefinitions="auto,*, auto, auto, auto"
+                    RowDefinitions="auto,*, auto, auto"
                     Margin="0,0,0,16">
+
+                    <StackLayout
+                        Grid.Row="0">
+
+                        <xct:AvatarView 
+                            Source="{Binding UserPhotoSource}"
+                            Size="40"
+                            HorizontalOptions="Center"/>
+
+                        <Label 
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding IdUser}"
+                            HorizontalOptions="Center"/>
+
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding OpenMyProfileCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                                CommandParameter="{Binding .}"/>
+                        </StackLayout.GestureRecognizers>
+
+                    </StackLayout>
 
                     <Image 
                         Grid.Row="1"
@@ -35,65 +61,8 @@
 
                     </Image>
 
-                    <Grid
-                        Grid.Row="0"
-                        ColumnDefinitions="*,auto,auto,*">
-
-                        <xct:AvatarView 
-                            Grid.Column="1"
-                            Source="{Binding UserPhotoSource}"
-                            Size="40"/>
-
-                        <Label 
-                            Grid.Column="2"
-                            FontSize="Medium"
-                            FontAttributes="Bold"
-                            VerticalOptions="Center"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding Username}"/>
-
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding OpenMyProfileCommand, Source={
-                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}"
-                                CommandParameter="{Binding .}"/>
-                        </Grid.GestureRecognizers>
-
-                    </Grid>
-
                     <ScrollView
                         Grid.Row="2"
-                        Orientation="Horizontal"
-                        Padding="0">
-                        <CollectionView
-                            ItemsSource="{Binding TagsCollection}"
-                            Margin="0">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-
-                                    <Label
-                                        Text="{Binding TagName}"
-                                        TextColor="Blue"
-                                        Margin="0,0,8,0">
-
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding SearchTagCommand, Source={
-                                                        RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                                    }}"
-                                                CommandParameter="{Binding .}"/>
-                                        </Label.GestureRecognizers>
-
-                                    </Label>
-
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </ScrollView>
-
-                    <ScrollView
-                        Grid.Row="3"
                         HeightRequest="60"
                         Margin="0">
 
@@ -107,7 +76,7 @@
                     </ScrollView>
 
                     <Grid 
-                        Grid.Row="4"
+                        Grid.Row="3"
                         ColumnDefinitions="auto,auto,auto,auto,auto,auto,auto"
                         HorizontalOptions="Center">
 
@@ -119,11 +88,7 @@
                             TextColor="{DynamicResource IconsColor}"
                             FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="Transparent"
-                            Command="{Binding LikePostCommand, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}"
-                            CommandParameter="{Binding .}"/>
+                            BackgroundColor="Transparent"/>
 
                         <Label 
                             Grid.Column="1"
@@ -131,7 +96,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding DeleteDateString}" />
 
                         <Button 
                             Grid.Column="2"
@@ -603,7 +568,6 @@
 
                 <Grid 
                     Grid.Row="0"
-                    Padding="0,8,8,0"
                     ColumnDefinitions="*,auto">
 
                     <Button 

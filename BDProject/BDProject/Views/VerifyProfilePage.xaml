@@ -51,10 +51,21 @@
                 FontSize="Small"
                 TextColor="Red"/>
 
-            <Button
+            <Grid
                 Grid.Row="4"
-                Text="Verify"
-                Command="{Binding VerifyCommand}"/>
+                ColumnDefinitions="auto,auto">
+
+                <Button
+                    Grid.Column="0"
+                    Text="Resend"
+                    Command="{Binding ResendCommand}"/>
+
+                <Button
+                    Grid.Column="1"
+                    Text="Verify"
+                    Command="{Binding VerifyCommand}"/>
+
+            </Grid>
 
         </Grid>
     </ContentPage.Content>

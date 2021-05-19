@@ -1,15 +1,16 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
-using MvvmHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels.ProfileViewModels
@@ -20,28 +21,30 @@ namespace BDProject.ViewModels.ProfileViewModels
         private async void SetUserData()
         {
             YourPostsCollection.Clear();
-            string uName = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Username;
-            JObject oJsonObject = new JObject();
 
-            var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{uName}", oJsonObject);
+            var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.UsernameTemp}", new JObject());
 
             if (success.IsSuccessStatusCode)
             {
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<Profile>(earthquakesJson);
+                var rootobject = JsonConvert.DeserializeObject<ProfileDB>(earthquakesJson);
 
-                Name = rootobject.FirstName + " " + rootobject.LastName;
-                realUsername = rootobject.Username;
-                Username = "(" + rootobject.Username + ")";
-                Description = rootobject.Description;
-                ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(rootobject.Photo));
+                User user = new User(rootobject);
+                if (user.Photo == null)
+                    user.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
 
-                FollowingCount = rootobject.Followed;
-                FollowersCount = rootobject.Follower;
+                Name = user.FirstName + " " + user.LastName;
+                realUsername = user.Username;
+                Username = "(" + user.Username + ")";
+                Description = user.Description;
+                ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(user.Photo));
 
-                Following = _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following;
+                FollowingCount = user.FollowingsCount;
+                FollowersCount = user.FollowersCount;
 
-                AllPostsCollection = new ObservableRangeCollection<PostWrapper>(_Globals.FromPostToWrapperList(rootobject.Posts));
+                //Following = _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollowString;
+
+                AllPostsCollection = new ObservableRangeCollection<Post>(user.Posts);
                 PostsCount = AllPostsCollection.Count;
 
                 YourPostsCollection.Clear();
@@ -56,6 +59,10 @@ namespace BDProject.ViewModels.ProfileViewModels
                     SetCollectionHeight();
                 }
             }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
+            }
         }
 
         public PersonsProfilePageViewModel()
@@ -69,19 +76,19 @@ namespace BDProject.ViewModels.ProfileViewModels
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
         }
 
-        private ObservableRangeCollection<PostWrapper> AllPostsCollection = new ObservableRangeCollection<PostWrapper>();
+        private ObservableRangeCollection<Post> AllPostsCollection = new ObservableRangeCollection<Post>();
 
         // Parameters
         // Your Posts Collection parameter
-        private ObservableRangeCollection<PostWrapper> yourPostsCollection = new ObservableRangeCollection<PostWrapper>();
-        public ObservableRangeCollection<PostWrapper> YourPostsCollection
+        private ObservableRangeCollection<Post> yourPostsCollection = new ObservableRangeCollection<Post>();
+        public ObservableRangeCollection<Post> YourPostsCollection
         {
             get => yourPostsCollection;
             set
             {
                 if (value == yourPostsCollection) { return; }
                 yourPostsCollection = value;
-                OnPropertyChanged(nameof(YourPostsCollection));
+                OnPropertyChanged();
             }
         }
 
@@ -94,7 +101,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == collectionHeight) { return; }
                 collectionHeight = value;
-                OnPropertyChanged(nameof(CollectionHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -107,7 +114,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == postHeight) { return; }
                 postHeight = value;
-                OnPropertyChanged(nameof(PostHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -119,7 +126,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == profilePictureSource) { return; }
                 profilePictureSource = value;
-                OnPropertyChanged(nameof(ProfilePictureSource));
+                OnPropertyChanged();
             }
         }
 
@@ -132,7 +139,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == name) { return; }
                 name = value;
-                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged();
             }
         }
 
@@ -146,7 +153,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == username) { return; }
                 username = value;
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
 
@@ -159,7 +166,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == description) { return; }
                 description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
             }
         }
 
@@ -172,7 +179,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == postsCount) { return; }
                 postsCount = value;
-                OnPropertyChanged(nameof(PostsCount));
+                OnPropertyChanged();
             }
         }
 
@@ -185,7 +192,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == followersCount) { return; }
                 followersCount = value;
-                OnPropertyChanged(nameof(FollowersCount));
+                OnPropertyChanged();
             }
         }
 
@@ -198,7 +205,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == followingCount) { return; }
                 followingCount = value;
-                OnPropertyChanged(nameof(FollowingCount));
+                OnPropertyChanged();
             }
         }
 
@@ -211,7 +218,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 //if (value == isRefreshing) { return; }
                 isRefreshing = value;
-                OnPropertyChanged(nameof(IsRefreshing));
+                OnPropertyChanged();
             }
         }
 
@@ -224,7 +231,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == following) { return; }
                 following = value;
-                OnPropertyChanged(nameof(Following));
+                OnPropertyChanged();
             }
         }
 
@@ -262,8 +269,13 @@ namespace BDProject.ViewModels.ProfileViewModels
                 if (success.IsSuccessStatusCode)
                 {
                     _Globals.GlobalMainUser.AddFollowing(realUsername);
-                    _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Following";
+                    _Globals.AddFollowing(realUsername);
+                    _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = true;
                     Following = "Following";
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
                 }
             }
             else
@@ -277,8 +289,13 @@ namespace BDProject.ViewModels.ProfileViewModels
                 if (success.IsSuccessStatusCode)
                 {
                     _Globals.GlobalMainUser.RemoveFollowing(realUsername);
-                    _Globals.GlobalFeedPosts.First(x => x.PostID == _Globals.OpenID).Following = "Follow";
+                    _Globals.RemoveFollowing(realUsername);
+                    _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = false;
                     Following = "Follow";
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
                 }
             }
         }

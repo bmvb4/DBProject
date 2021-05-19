@@ -1,4 +1,4 @@
-﻿using BDProject.ModelWrappers;
+﻿using BDProject.Models;
 using BDProject.ViewModels.SettingsViewModels;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Pages;

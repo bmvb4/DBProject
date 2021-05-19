@@ -1,6 +1,6 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -37,16 +37,16 @@ namespace BDProject.Views
                 if (success.IsSuccessStatusCode)
                 {
                     var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
+                    var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
 
-                    _Globals.GlobalMainUser = new UserWrapper(rootobject);
+                    _Globals.GlobalMainUser = new User(rootobject);
 
                     success = await ServerServices.SendGetRequestAsync($"posts/getAll/{rootobject.Username}", oJsonObject);
 
                     if (success.IsSuccessStatusCode)
                     {
                         earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                        var postList = JsonConvert.DeserializeObject<List<PostUser>>(earthquakesJson);
+                        var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
                         _Globals.GlobalMainUser.AddPostsFromDB(postList);
                         _Globals.AddPostsFromDB(postList);
 

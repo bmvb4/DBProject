@@ -2,28 +2,35 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Xamarin.Forms;
 
-namespace BDProject.ModelWrappers
+namespace BDProject.Models
 {
-    public class LikeWrapper : INotifyPropertyChanged
+    public class Like : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            if (PropertyChanged == null) { return; }
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex + "in Like Class");
+            }
         }
 
-        public LikeWrapper(byte[] image, string uname)
+        public Like(byte[] image, string uname)
         {
             imageBytes = image;
             username = uname;
         }
 
-        public LikeWrapper()
+        public Like()
         {
 
         }
@@ -35,7 +42,7 @@ namespace BDProject.ModelWrappers
             set
             {
                 imageBytes = value;
-                OnPropertyChanged(nameof(ImageBytes));
+                OnPropertyChanged();
             }
         }
         public ImageSource PhotoSource
@@ -53,7 +60,7 @@ namespace BDProject.ModelWrappers
             set
             {
                 username = value;
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
 

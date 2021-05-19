@@ -1,13 +1,18 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
 using BDProject.Views._PopUps;
-using MvvmHelpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels.SearchViewModels
@@ -17,49 +22,109 @@ namespace BDProject.ViewModels.SearchViewModels
         private ObservableRangeCollection<SearchBubble> AllBubbles = new ObservableRangeCollection<SearchBubble>();
         private ObservableRangeCollection<SearchBubble> AllPeople = new ObservableRangeCollection<SearchBubble>();
         private ObservableRangeCollection<SearchBubble> AllTags = new ObservableRangeCollection<SearchBubble>();
+        private int choice = 0;
 
-        private void SortBubbles()
+        private async void SetCollcetions(string value)
         {
-            foreach(SearchBubble sb in AllBubbles)
+            AllBubbles.Clear();
+            AllPeople.Clear();
+            AllTags.Clear();
+
+            var success = await ServerServices.SendPostRequestAsync($"search/tag/{value}", new JObject());
+
+            if (success.IsSuccessStatusCode)
             {
-                if (sb.IsTag == true)
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var listTags = JsonConvert.DeserializeObject<List<string>>(earthquakesJson);
+
+                foreach (string s in listTags)
+                    AllBubbles.Add(new SearchBubble(s) { IsTag = true });
+
+                foreach (string s in listTags)
+                    AllTags.Add(new SearchBubble(s) { IsTag = true });
+                AllTags.OrderBy(x => string.Compare(x.Name, Search));
+            }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
+            }
+
+            success = await ServerServices.SendPostRequestAsync($"search/user/{value}", new JObject());
+
+            if (success.IsSuccessStatusCode)
+            {
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var listUsers = JsonConvert.DeserializeObject<List<UserDB>>(earthquakesJson);
+
+                foreach (UserDB u in listUsers)
                 {
-                    AllTags.Add(sb);
+                    if(u.Photo == null)
+                        AllBubbles.Add(new SearchBubble(u) { IsTag = false, ImageBytes=Convert.FromBase64String(_Globals.Base64DefaultPhoto)});
+                    else
+                        AllBubbles.Add(new SearchBubble(u) { IsTag = false });
                 }
-                else
+
+                foreach (UserDB u in listUsers)
                 {
-                    AllPeople.Add(sb);
+                    if (u.Photo == null)
+                        AllPeople.Add(new SearchBubble(u) { IsTag = false, ImageBytes = Convert.FromBase64String(_Globals.Base64DefaultPhoto) });
+                    else
+                        AllPeople.Add(new SearchBubble(u) { IsTag = false });
                 }
+                AllPeople.OrderBy(x => string.Compare(x.Name, Search));
+            }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
+            }
+
+            AllBubbles.OrderBy(x => string.Compare(x.Name, Search));
+
+            switch (choice)
+            {
+                case 1:
+                    BubblesCollection.Clear();
+
+                    if (AllBubbles.Count >= 20)
+                        BubblesCollection.AddRange(AllBubbles.Take(20));
+                    else
+                        BubblesCollection.AddRange(AllBubbles);
+                    break;
+
+                case 2:
+                    BubblesCollection.Clear();
+
+                    if (AllPeople.Count >= 20)
+                        BubblesCollection.AddRange(AllPeople.Take(20));
+                    else
+                        BubblesCollection.AddRange(AllPeople);
+                    break;
+
+                case 3:
+                    BubblesCollection.Clear();
+
+                    if (AllTags.Count >= 20)
+                        BubblesCollection.AddRange(AllTags.Take(20));
+                    else
+                        BubblesCollection.AddRange(AllTags);
+                    break;
+
+                default: break;
             }
         }
 
         public SearchPageViewModel()
         {
-            //=============================================TEST
-            for (int i=0; i<30; i++)
-            {
-                if(i==4 || i == 6 || i == 13 || i == 14 || i == 20 || i == 24)
-                {
-                    AllBubbles.Add(new SearchBubble(new Tag { TagName=$"test{i}" }));
-                }
-                else
-                {
-                    AllBubbles.Add(new SearchBubble(_Globals.GlobalMainUser));
-                }
-            }
-            //=============================================TEST
-
-            SortBubbles();
             SearchAllFunction();
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
-            FilterCommand = new Command(async () => await FilterFunction());
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
 
             SearchAllCommand = new Command(SearchAllFunction);
             SearchPeopleCommand = new Command(SearchPeopleFunction);
-            SearchTagsCommand = new Command(SearchTagsFunction);
+            SearchTagsCommand = new Command(SearchTagsFunctionAsync);
+            OpenProfileCommand = new Command<SearchBubble>(OpenProfileFunctionAsync);
         }
 
         // Parameters
@@ -72,7 +137,7 @@ namespace BDProject.ViewModels.SearchViewModels
             {
                 if (value == bubblesCollection) { return; }
                 bubblesCollection = value;
-                OnPropertyChanged(nameof(BubblesCollection));
+                OnPropertyChanged();
             }
         }
 
@@ -85,7 +150,10 @@ namespace BDProject.ViewModels.SearchViewModels
             {
                 if (value == search) { return; }
                 search = value;
-                OnPropertyChanged(nameof(Search));
+
+                SetCollcetions(value);
+
+                OnPropertyChanged();
             }
         }
 
@@ -97,92 +165,31 @@ namespace BDProject.ViewModels.SearchViewModels
             await Shell.Current.Navigation.PopAsync();
         }
 
-        // Back to post command
-        public ICommand FilterCommand { get; set; }
-        private async Task FilterFunction()
-        {
-            await PopupNavigation.Instance.PushAsync(new PostPopUp());
-        }
-
         // show everything command
         public ICommand SearchAllCommand { get; set; }
         private void SearchAllFunction()
         {
-            BubblesCollection.Clear();
-            if (AllBubbles.Count >= 20)
-            {
-                for (int i = 0; i < 20; i++)
-                {
-                    BubblesCollection.Add(AllBubbles[i]);
-                }
-            }
-            else
-            {
-                foreach (SearchBubble sb in AllBubbles)
-                {
-                    BubblesCollection.Add(sb);
-                }
-            }
-
-            everything = true;
-            onlyPeople = false;
-            onlyTags = false;
+            choice = 1;
+            SetCollcetions(Search);
         }
 
         // show only people command
         public ICommand SearchPeopleCommand { get; set; }
         private void SearchPeopleFunction()
         {
-            BubblesCollection.Clear();
-            if (AllPeople.Count >= 20)
-            {
-                for (int i = 0; i < 20; i++)
-                {
-                    BubblesCollection.Add(AllPeople[i]);
-                }
-            }
-            else
-            {
-                foreach (SearchBubble sb in AllPeople)
-                {
-                    BubblesCollection.Add(sb);
-                }
-            }
-
-            onlyPeople = true;
-            onlyTags = false;
-            everything = false;
+            choice = 2;
+            SetCollcetions(Search);
         }
 
         // show only tags command
         public ICommand SearchTagsCommand { get; set; }
-        private void SearchTagsFunction()
+        private void SearchTagsFunctionAsync()
         {
-            BubblesCollection.Clear();
-            if (AllTags.Count >= 20)
-            {
-                for (int i = 0; i < 20; i++)
-                {
-                    BubblesCollection.Add(AllTags[i]);
-                }
-            }
-            else
-            {
-                foreach(SearchBubble sb in AllTags)
-                {
-                    BubblesCollection.Add(sb);
-                }
-            }
-
-            onlyTags = true;
-            onlyPeople = false;
-            everything = false;
+            choice = 3;
+            SetCollcetions(Search);
         }
 
         // load more command 
-        private bool onlyPeople = false;
-        private bool onlyTags = false;
-        private bool everything = false;
         public ICommand LoadMoreCommand { get; set; }
         private async Task LoadMoreFunction()
         {
@@ -191,47 +198,46 @@ namespace BDProject.ViewModels.SearchViewModels
 
             await Task.Delay(1000);
 
-            // add everything
-            if (everything == true)
+            switch (choice)
             {
-                if (AllBubbles.Count - BubblesCollection.Count < 10)
-                {
-                    BubblesCollection.AddRange(AllBubbles.Skip(BubblesCollection.Count));
-                }
-                else
-                {
-                    BubblesCollection.AddRange(AllBubbles.Skip(BubblesCollection.Count).Take(10));
-                }
-            }
+                case 1:
+                    if (AllBubbles.Count - BubblesCollection.Count <= 10)
+                        BubblesCollection.AddRange(AllBubbles.Skip(BubblesCollection.Count));
+                    else
+                        BubblesCollection.AddRange(AllBubbles.Skip(BubblesCollection.Count).Take(10));
+                    break;
 
-            // add only people everything
-            if (onlyPeople == true)
-            {
-                if (AllPeople.Count - BubblesCollection.Count < 10)
-                {
-                    BubblesCollection.AddRange(AllPeople.Skip(BubblesCollection.Count));
-                }
-                else
-                {
-                    BubblesCollection.AddRange(AllPeople.Skip(BubblesCollection.Count).Take(10));
-                }
-            }
+                case 2:
+                    if (AllPeople.Count - BubblesCollection.Count <= 10)
+                        BubblesCollection.AddRange(AllPeople.Skip(BubblesCollection.Count));
+                    else
+                        BubblesCollection.AddRange(AllPeople.Skip(BubblesCollection.Count).Take(10));
+                    break;
 
-            // add only tags everything
-            if (onlyTags == true)
-            {
-                if (AllTags.Count - BubblesCollection.Count < 10)
-                {
-                    BubblesCollection.AddRange(AllTags.Skip(BubblesCollection.Count));
-                }
-                else
-                {
-                    BubblesCollection.AddRange(AllTags.Skip(BubblesCollection.Count).Take(10));
-                }
+                case 3:
+                    if (AllTags.Count - BubblesCollection.Count <= 10)
+                        BubblesCollection.AddRange(AllTags.Skip(BubblesCollection.Count));
+                    else
+                        BubblesCollection.AddRange(AllTags.Skip(BubblesCollection.Count).Take(10));
+                    break;
+                default: break;
             }
 
             _Globals.IsBusy = false;
             return;
+        }
+
+        // open profile command
+        public ICommand OpenProfileCommand { get; set; }
+        private async void OpenProfileFunctionAsync(SearchBubble sb)
+        {
+            if (sb.Name != _Globals.GlobalMainUser.Username)
+            {
+                _Globals.UsernameTemp = sb.Name;
+                await Shell.Current.GoToAsync("PersonsProfilePage");
+            }
+            else
+                await Shell.Current.GoToAsync("//ProfilePage");
         }
 
     }

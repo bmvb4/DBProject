@@ -1,10 +1,9 @@
-﻿using SkiaSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using System.Text;
 
-namespace BDProject.ModelWrappers
+namespace BDProject.Models
 {
     public class ColorPick
     {

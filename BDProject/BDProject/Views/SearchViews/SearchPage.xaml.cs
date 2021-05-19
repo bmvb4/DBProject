@@ -10,6 +10,8 @@ using System.Globalization;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BDProject.Views.SearchViews
 {

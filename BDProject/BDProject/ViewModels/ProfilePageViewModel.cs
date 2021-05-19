@@ -1,11 +1,11 @@
 ﻿using BDProject.Helpers;
-using BDProject.ModelWrappers;
-using MvvmHelpers;
+using BDProject.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels
@@ -14,7 +14,7 @@ namespace BDProject.ViewModels
     {
         public void SetUserData()
         {
-            UserWrapper user = _Globals.GlobalMainUser;
+            User user = _Globals.GlobalMainUser;
 
             try
             {
@@ -26,7 +26,7 @@ namespace BDProject.ViewModels
                 FollowingCount = _Globals.GlobalMainUser.Followings.Count;
                 FollowersCount = _Globals.GlobalMainUser.Followers.Count;
 
-                AllPostsCollection = new ObservableRangeCollection<PostWrapper>(_Globals.GlobalMainUser.MyPosts);
+                AllPostsCollection = new ObservableRangeCollection<Post>(_Globals.GlobalMainUser.Posts);
                 PostsCount = AllPostsCollection.Count;
 
                 YourPostsCollection.Clear();
@@ -55,23 +55,23 @@ namespace BDProject.ViewModels
             OpenSettingsCommand = new Command(async () => await OpenSettingsFunction());
             OpenEditProfileCommand=new Command(async () => await OpenEditProfileFunction());
             RefreshCommand = new Command(RefreshFunction);
-            OpenPostsCommand = new Command<PostWrapper>(OpenPostsFunction);
+            OpenPostsCommand = new Command<Post>(OpenPostsFunction);
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
         }
 
-        private ObservableRangeCollection<PostWrapper> AllPostsCollection = new ObservableRangeCollection<PostWrapper>();
+        private ObservableRangeCollection<Post> AllPostsCollection = new ObservableRangeCollection<Post>();
 
         // Parameters
         // Your Posts Collection parameter
-        private ObservableRangeCollection<PostWrapper> yourPostsCollection = new ObservableRangeCollection<PostWrapper>();
-        public ObservableRangeCollection<PostWrapper> YourPostsCollection
+        private ObservableRangeCollection<Post> yourPostsCollection = new ObservableRangeCollection<Post>();
+        public ObservableRangeCollection<Post> YourPostsCollection
         {
             get => yourPostsCollection;
             set
             {
                 if (value == yourPostsCollection) { return; }
                 yourPostsCollection = value;
-                OnPropertyChanged(nameof(YourPostsCollection));
+                OnPropertyChanged();
             }
         }
 
@@ -84,7 +84,7 @@ namespace BDProject.ViewModels
             {
                 if (value == collectionHeight) { return; }
                 collectionHeight = value;
-                OnPropertyChanged(nameof(CollectionHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -97,7 +97,7 @@ namespace BDProject.ViewModels
             {
                 if (value == postHeight) { return; }
                 postHeight = value;
-                OnPropertyChanged(nameof(PostHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -109,7 +109,7 @@ namespace BDProject.ViewModels
             {
                 if (value == profilePictureSource) { return; }
                 profilePictureSource = value;
-                OnPropertyChanged(nameof(ProfilePictureSource));
+                OnPropertyChanged();
             }
         }
 
@@ -122,7 +122,7 @@ namespace BDProject.ViewModels
             {
                 if (value == name) { return; }
                 name = value;
-                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged();
             }
         }
 
@@ -135,7 +135,7 @@ namespace BDProject.ViewModels
             {
                 if (value == username) { return; }
                 username = value;
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
 
@@ -148,7 +148,7 @@ namespace BDProject.ViewModels
             {
                 if (value == description) { return; }
                 description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged(); 
             }
         }
 
@@ -161,7 +161,7 @@ namespace BDProject.ViewModels
             {
                 if (value == postsCount) { return; }
                 postsCount = value;
-                OnPropertyChanged(nameof(PostsCount));
+                OnPropertyChanged();
             }
         }
 
@@ -174,7 +174,7 @@ namespace BDProject.ViewModels
             {
                 if (value == followersCount) { return; }
                 followersCount = value;
-                OnPropertyChanged(nameof(FollowersCount));
+                OnPropertyChanged();
             }
         }
 
@@ -187,7 +187,7 @@ namespace BDProject.ViewModels
             {
                 if (value == followingCount) { return; }
                 followingCount = value;
-                OnPropertyChanged(nameof(FollowingCount));
+                OnPropertyChanged();
             }
         }
 
@@ -200,7 +200,7 @@ namespace BDProject.ViewModels
             {
                 //if (value == isRefreshing) { return; }
                 isRefreshing = value;
-                OnPropertyChanged(nameof(IsRefreshing));
+                OnPropertyChanged();
             }
         }
 
@@ -232,9 +232,9 @@ namespace BDProject.ViewModels
 
         // Open Posts command
         public ICommand OpenPostsCommand { get; set; }
-        private async void OpenPostsFunction(PostWrapper post)
+        private async void OpenPostsFunction(Post post)
         {
-            _Globals.OpenID = post.PostID;
+            _Globals.OpenID = post.IdPost;
             await Shell.Current.GoToAsync("MyProfilePostPage");
         }
 

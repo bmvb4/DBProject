@@ -1,16 +1,17 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
 using BDProject.Views._PopUps;
-using MvvmHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace BDProject.ViewModels
@@ -30,10 +31,10 @@ namespace BDProject.ViewModels
             if (success.IsSuccessStatusCode)
             {
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<List<PostUser>>(earthquakesJson);
+                var rootobject = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
 
                 _Globals.AddPostsFromDB(rootobject);
-                AllPostsCollection = new ObservableRangeCollection<PostWrapper>(_Globals.GlobalFeedPosts);
+                AllPostsCollection = new ObservableRangeCollection<Post>(_Globals.GlobalFeedPosts);
 
                 if (AllPostsCollection.Count - PostsCollection.Count < 10)
                 {
@@ -43,6 +44,10 @@ namespace BDProject.ViewModels
                 {
                     PostsCollection.AddRange(AllPostsCollection.Take(10));
                 }
+            }
+            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await ServerServices.RefreshTokenAsync();
             }
 
             _Globals.IsBusy = false;
@@ -59,28 +64,28 @@ namespace BDProject.ViewModels
             RefreshCommand = new Command(RefreshFunction);
 
             // like commands
-            LikePostCommand = new Command<PostWrapper>(LikePostFunction);
+            LikePostCommand = new Command<Post>(LikePostFunction);
             SearchTagCommand = new Command<Tag>(SearchTagFunction);
 
             // open commands
-            OpenPostCommentsCommand = new Command<PostWrapper>(OpenPostCommentsFunction);
+            OpenPostCommentsCommand = new Command<Post>(OpenPostCommentsFunction);
             OpenSearchCommand = new Command(async () => await OpenSearchFunction());
             OpenMyProfileCommand= new Command(async () => await OpenMyProfileFunction());
-            OpenProfileCommand = new Command<PostWrapper>(OpenProfileFunction);
+            OpenProfileCommand = new Command<Post>(OpenProfileFunction);
 
             // More command
-            MoreCommand = new Command<PostWrapper>(MoreFunction);
+            MoreCommand = new Command<Post>(MoreFunction);
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
 
-            FollowProfileCommand = new Command<PostWrapper>(FollowProfileFunction);
+            FollowProfileCommand = new Command<Post>(FollowProfileFunction);
         }
 
-        private ObservableRangeCollection<PostWrapper> AllPostsCollection = new ObservableRangeCollection<PostWrapper>();
+        private ObservableRangeCollection<Post> AllPostsCollection = new ObservableRangeCollection<Post>();
 
         // Parameters
         // Posts Collection parameter
-        private ObservableRangeCollection<PostWrapper> postsCollection = new ObservableRangeCollection<PostWrapper>();
-        public ObservableRangeCollection<PostWrapper> PostsCollection
+        private ObservableRangeCollection<Post> postsCollection = new ObservableRangeCollection<Post>();
+        public ObservableRangeCollection<Post> PostsCollection
         {
             get => postsCollection;
             set
@@ -107,18 +112,23 @@ namespace BDProject.ViewModels
         // Commands
         // Like Post command
         public ICommand LikePostCommand { get; set; }
-        private async void LikePostFunction(PostWrapper post)
+        private async void LikePostFunction(Post post)
         {
             JObject oJsonObject = new JObject();
-            oJsonObject.Add("idUser", post.Username);
-            oJsonObject.Add("idPost", post.PostID);
+            oJsonObject.Add("idUser", post.IdUser);
+            oJsonObject.Add("idPost", post.IdPost);
 
-            if (post.IsLikeUsernameInside(_Globals.GlobalMainUser.Username) == false)
+            if (!post.isLiked)
             {
                 var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.PostID==post.PostID).AddLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).AddLike(new Like(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username));
+                    post.isLiked = true;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
                 }
             }
             else
@@ -126,16 +136,21 @@ namespace BDProject.ViewModels
                 var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.PostID == post.PostID).RemoveLike(new LikeWrapper(_Globals.GlobalMainUser.ImageBytes, _Globals.GlobalMainUser.Username));
+                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).RemoveLike(new Like(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username));
+                    post.isLiked = false;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
                 }
             }
         }
 
         // Open Post Comments command
         public ICommand OpenPostCommentsCommand { get; set; }
-        private async void OpenPostCommentsFunction(PostWrapper post)
+        private async void OpenPostCommentsFunction(Post post)
         {
-            _Globals.OpenID = (int)post.PostID;
+            _Globals.OpenID = (int)post.IdPost;
             await Shell.Current.GoToAsync("PostComments");
         }
 
@@ -164,52 +179,62 @@ namespace BDProject.ViewModels
 
         // open profile command
         public ICommand OpenProfileCommand { get; set; }
-        private async void OpenProfileFunction(PostWrapper post)
+        private async void OpenProfileFunction(Post post)
         {
-            _Globals.OpenID = post.PostID;
+            _Globals.UsernameTemp = post.IdUser;
             await Shell.Current.GoToAsync("PersonsProfilePage");
         }
 
         // Edit profile command
         public ICommand MoreCommand { get; set; }
-        private async void MoreFunction(PostWrapper post)
+        private async void MoreFunction(Post post)
         {
-            _Globals.OpenID = post.PostID;
+            _Globals.OpenID = post.IdPost;
             await PopupNavigation.Instance.PushAsync(new PostPopUp());
         }
 
         // Follow profile command 
         public ICommand FollowProfileCommand { get; set; }
-        private async void FollowProfileFunction(PostWrapper post)
+        private async void FollowProfileFunction(Post post)
         {
-            if (post.Following == "Follow")
+            if (!post.IsFollow)
             {
                 JObject oJsonObject = new JObject();
-                oJsonObject.Add("idFollowed", post.Username);
+                oJsonObject.Add("idFollowed", post.IdUser);
                 oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
 
                 var success = await ServerServices.SendPostRequestAsync("follow", oJsonObject);
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.AddFollowing(post.Username);
-                    _Globals.AddFollowing(post.Username);
-                    post.Following = "Following";
+                    _Globals.GlobalMainUser.AddFollowing(post.IdUser);
+                    _Globals.AddFollowing(post.IdUser);
+
+                    post.IsFollow = true;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
                 }
             }
             else
             {
                 JObject oJsonObject = new JObject();
-                oJsonObject.Add("idFollowed", post.Username);
+                oJsonObject.Add("idFollowed", post.IdUser);
                 oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
 
                 var success = await ServerServices.SendDeleteRequestAsync("follow", oJsonObject);
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.RemoveFollowing(post.Username);
-                    _Globals.RemoveFollowing(post.Username);
-                    post.Following = "Follow";
+                    _Globals.GlobalMainUser.RemoveFollowing(post.IdUser);
+                    _Globals.RemoveFollowing(post.IdUser);
+
+                    post.IsFollow = false;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
                 }
             }
         }

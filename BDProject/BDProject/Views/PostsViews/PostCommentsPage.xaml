@@ -20,37 +20,52 @@
 
             <!--===============MY TEMPLATE===============-->
             <DataTemplate x:Key="MyTemplate">
+
                 <Grid
-                    Padding="8"
+                    Margin="8"
                     ColumnDefinitions="auto,*">
-
-                    <xct:AvatarView 
+                    <StackLayout
                         Grid.Column="0"
-                        Source="{Binding UserPhotoSource}"
-                        Size="40"/>
+                        Orientation="Horizontal">
 
-                    <Grid 
+                        <xct:AvatarView 
+                            Source="{Binding UserPhotoSource}"
+                            Size="40"
+                            VerticalOptions="Start">
+
+                            <xct:AvatarView.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    NumberOfTapsRequired="2"
+                                    Command="{Binding OpenProfileCommand, Source={
+                                        RelativeSource AncestorType={x:Type local:PostCommentsPageViewModel}
+                                        }}"
+                                    CommandParameter="{Binding .}"/>
+                            </xct:AvatarView.GestureRecognizers>
+
+                        </xct:AvatarView>
+                    </StackLayout>
+
+                    <Grid
                         Grid.Column="1"
-                        ColumnDefinitions="auto,*">
+                        RowDefinitions="auto,auto">
 
                         <Label 
-                            Grid.Column="0"
-                            Text="{Binding Username}"
+                            Grid.Row="0"
+                            Text="{Binding IdUser}"
                             TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"
                             FontAttributes="Bold"/>
 
                         <Label 
-                            Grid.Column="1"
-                            Text="{Binding Message}"
+                            Grid.Row="1"
+                            Text="{Binding CommentText}"
                             TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"/>
 
                     </Grid>
 
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer
-                            NumberOfTapsRequired="2"
+                        <SwipeGestureRecognizer
                             Command="{Binding DeleteCommentCommand, Source={
                                 RelativeSource AncestorType={x:Type local:PostCommentsPageViewModel}
                                 }}"
@@ -77,14 +92,14 @@
 
                         <Label 
                             Grid.Row="1"
-                            Text="{Binding Username}"
+                            Text="{Binding IdUser}"
                             TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"
                             FontAttributes="Bold"/>
 
                         <Label 
                             Grid.Row="2"
-                            Text="{Binding Message}"
+                            Text="{Binding CommentText}"
                             TextColor="{DynamicResource TextColor}"
                             FontSize="Medium"/>
 
@@ -180,6 +195,7 @@
                         Grid.Column="0"
                         x:Name="CommentEntry"
                         Placeholder="Comment"
+                        PlaceholderColor="{DynamicResource TextColor}"
                         Text="{Binding Comment}"
                         TextColor="{DynamicResource TextColor}"/>
 

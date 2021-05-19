@@ -1,5 +1,6 @@
 ﻿using BDProject.Helpers;
-using BDProject.ModelWrappers;
+using BDProject.Models;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -15,7 +16,7 @@ namespace BDProject.ViewModels.PostsViewModels
 
             PhotoSource = SelectedPost.PhotoSource;
             UserPhotoSource = SelectedPost.UserPhotoSource;
-            Username = SelectedPost.Username;
+            Username = SelectedPost.IdUser;
             Description = SelectedPost.Description;
 
             _Globals.OpenID = 0;
@@ -32,7 +33,7 @@ namespace BDProject.ViewModels.PostsViewModels
 
         // Parameters
         // editet post
-        PostWrapper SelectedPost = new PostWrapper();
+        Post SelectedPost = new Post();
 
         // post Image parameter
         private ImageSource photoSource = null;
@@ -43,7 +44,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == photoSource) { return; }
                 photoSource = value;
-                OnPropertyChanged(nameof(PhotoSource));
+                OnPropertyChanged();
             }
         }
 
@@ -56,7 +57,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == userPhotoSource) { return; }
                 userPhotoSource = value;
-                OnPropertyChanged(nameof(UserPhotoSource));
+                OnPropertyChanged();
             }
         }
 
@@ -69,7 +70,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == description) { return; }
                 description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
             }
         }
 
@@ -82,7 +83,7 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 if (value == username) { return; }
                 username = value;
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
 
@@ -98,15 +99,23 @@ namespace BDProject.ViewModels.PostsViewModels
         public ICommand SaveChangesCommand { get; set; }
         private async Task SaveChangesFunction()
         {
-            SelectedPost.Description = Description;
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("IdPost", SelectedPost.IdPost);
+            oJsonObject.Add("IdUser", SelectedPost.IdUser);
+            oJsonObject.Add("Description", Description);
 
-            _Globals.GlobalMainUser.EditPost(SelectedPost);
-            _Globals.EditPost(SelectedPost);
+            var success = await ServerServices.SendPutRequestAsync($"posts/update/{SelectedPost.IdPost}", oJsonObject);
 
-            _Globals.Refresh = true;
-            await Shell.Current.Navigation.PopAsync();
+            if (success.IsSuccessStatusCode)
+            {
+                _Globals.GlobalMainUser.EditPost(SelectedPost);
+                _Globals.EditPost(SelectedPost);
 
-            PhotoSource = null;
+                _Globals.Refresh = true;
+                await Shell.Current.Navigation.PopAsync();
+
+                PhotoSource = null;
+            }
         }
 
     }

@@ -1,5 +1,5 @@
 ﻿using BDProject.Helpers;
-using BDProject.ModelWrappers;
+using BDProject.Models;
 using BDProject.Views;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -60,11 +60,8 @@ namespace BDProject.ViewModels
 
             _Globals.OpenID = 0;
 
-            _Globals.GlobalFeedPosts = new List<PostWrapper>();
-
-            _Globals.GlobalMainUser.Followings = new List<string>();
-            _Globals.GlobalMainUser.MyPosts = new List<PostWrapper>();
-            _Globals.GlobalMainUser = new UserWrapper();
+            _Globals.GlobalFeedPosts = new List<Post>();
+            _Globals.GlobalMainUser = new User();
 
             await Shell.Current.Navigation.PopAsync();
             Shell.Current.CurrentItem = new SplashScreenPage();
@@ -80,11 +77,8 @@ namespace BDProject.ViewModels
 
             _Globals.OpenID = 0;
 
-            _Globals.GlobalFeedPosts = new List<PostWrapper>();
-
-            _Globals.GlobalMainUser.Followings = new List<string>();
-            _Globals.GlobalMainUser.MyPosts = new List<PostWrapper>();
-            _Globals.GlobalMainUser = new UserWrapper();
+            _Globals.GlobalFeedPosts = new List<Post>();
+            _Globals.GlobalMainUser = new User();
 
             await Shell.Current.Navigation.PopAsync();
             await Shell.Current.GoToAsync("//LogInPage");

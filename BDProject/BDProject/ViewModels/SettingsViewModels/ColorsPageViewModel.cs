@@ -16,6 +16,10 @@ namespace BDProject.ViewModels.SettingsViewModels
         {
             ColorWidth = App.Current.MainPage.Width - 32;
 
+            IconColor = (Color)Application.Current.Resources["IconsColor"];
+            TextColor = (Color)Application.Current.Resources["TextColor"];
+            BackgroundColor = (Color)Application.Current.Resources["BackgroundColor"];
+
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
             SetIconsCommand = new Command(SetIconsFunction);
@@ -39,7 +43,7 @@ namespace BDProject.ViewModels.SettingsViewModels
             {
                 if (value == iconColor) { return; }
                 iconColor = value;
-                OnPropertyChanged(nameof(IconColor));
+                OnPropertyChanged();
             }
         }
 
@@ -52,7 +56,7 @@ namespace BDProject.ViewModels.SettingsViewModels
             {
                 if (value == textColor) { return; }
                 textColor = value;
-                OnPropertyChanged(nameof(TextColor));
+                OnPropertyChanged();
             }
         }
 
@@ -65,7 +69,7 @@ namespace BDProject.ViewModels.SettingsViewModels
             {
                 if (value == backgroundColor) { return; }
                 backgroundColor = value;
-                OnPropertyChanged(nameof(BackgroundColor));
+                OnPropertyChanged();
             }
         }
 

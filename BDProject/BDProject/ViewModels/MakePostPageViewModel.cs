@@ -1,6 +1,5 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -48,7 +47,7 @@ namespace BDProject.ViewModels
             {
                 if (value == takenPhoto) { return; }
                 takenPhoto = value;
-                OnPropertyChanged(nameof(TakenPhoto));
+                OnPropertyChanged();
             }
         }
 
@@ -61,7 +60,7 @@ namespace BDProject.ViewModels
             {
                 if (value == imageWidth) { return; }
                 imageWidth = value;
-                OnPropertyChanged(nameof(ImageWidth));
+                OnPropertyChanged();
             }
         }
 
@@ -74,7 +73,7 @@ namespace BDProject.ViewModels
             {
                 if (value == imageHeight) { return; }
                 imageHeight = value;
-                OnPropertyChanged(nameof(ImageHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -87,7 +86,7 @@ namespace BDProject.ViewModels
             {
                 if (value == description) { return; }
                 description = value;
-                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged();
             }
         }
 
@@ -100,7 +99,7 @@ namespace BDProject.ViewModels
             {
                 if (value == allTagsHeight) { return; }
                 allTagsHeight = value;
-                OnPropertyChanged(nameof(AllTagsHeight));
+                OnPropertyChanged();
             }
         }
 
@@ -113,7 +112,7 @@ namespace BDProject.ViewModels
             {
                 if (value == allTags) { return; }
                 allTags = value;
-                OnPropertyChanged(nameof(AllTags));
+                OnPropertyChanged();
             }
         }
 
@@ -223,11 +222,14 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    PostWrapper post = new PostWrapper(imageBytes, Description, _Globals.GlobalMainUser.Username, _Globals.GlobalMainUser.ImageBytes);
-                    foreach (string t in tags)
+                    Post post = new Post() 
                     {
-                        post.AddTag(new Tag(t));
-                    }
+                        IdUser = _Globals.GlobalMainUser.Username,
+                        Photo = imageBytes,
+                        UserPhoto = _Globals.GlobalMainUser.Photo,
+                        Description = Description,
+                        tags = tags 
+                    };                    
 
                     _Globals.GlobalMainUser.AddPost(post);
                     _Globals.AddMyPost(post);

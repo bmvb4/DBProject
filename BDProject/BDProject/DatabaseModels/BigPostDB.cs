@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BDProject.Models
+namespace BDProject.DatabaseModels
 {
-    public class PostUser
+    public class BigPostDB
     {
         public long IdPost { get; set; }
         public string IdUser { get; set; }

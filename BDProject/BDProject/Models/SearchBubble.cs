@@ -1,5 +1,4 @@
-﻿using BDProject.Helpers;
-using BDProject.Models;
+﻿using BDProject.DatabaseModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +6,7 @@ using System.IO;
 using System.Text;
 using Xamarin.Forms;
 
-namespace BDProject.ModelWrappers
+namespace BDProject.Models
 {
     public class SearchBubble : INotifyPropertyChanged
     {
@@ -19,10 +18,9 @@ namespace BDProject.ModelWrappers
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public SearchBubble(UserWrapper value)
+        public SearchBubble(UserDB value)
         {
-            user = value;
-            imageBytes = value.ImageBytes;
+            imageBytes = value.Photo;
             name = value.Username;
 
             IsTag = false;
@@ -30,8 +28,14 @@ namespace BDProject.ModelWrappers
 
         public SearchBubble(Tag value)
         {
-            tag = value;
             name = value.TagName;
+
+            IsTag = true;
+        }
+
+        public SearchBubble(string value)
+        {
+            name = value;
 
             IsTag = true;
         }
@@ -71,9 +75,6 @@ namespace BDProject.ModelWrappers
         }
 
         public bool IsTag { get; set; }
-
-        public UserWrapper user { get; set; }
-        public Tag tag { get; set; }
 
     }
 }

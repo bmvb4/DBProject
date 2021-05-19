@@ -1,8 +1,9 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.ModelWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace BDProject.ViewModels
                 RestrictLenght(firstName, 31, 1);
                 CheckSymbolsAndNumbers(firstName, 1);
 
-                OnPropertyChanged(nameof(FirstName));
+                OnPropertyChanged();
             }
         }
         // First name Alert parameter
@@ -46,7 +47,7 @@ namespace BDProject.ViewModels
             {
                 if (value == firstNameAlert) { return; }
                 firstNameAlert = value;
-                OnPropertyChanged(nameof(FirstNameAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -63,7 +64,7 @@ namespace BDProject.ViewModels
                 RestrictLenght(lastName, 31, 2);
                 CheckSymbolsAndNumbers(lastName, 2);
 
-                OnPropertyChanged(nameof(LastName));
+                OnPropertyChanged();
             }
         }
         // Last name Alert parameter
@@ -75,7 +76,7 @@ namespace BDProject.ViewModels
             {
                 if (value == lastNameAlert) { return; }
                 lastNameAlert = value;
-                OnPropertyChanged(nameof(LastNameAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -91,7 +92,7 @@ namespace BDProject.ViewModels
 
                 RestrictLenght(username, 35, 3);
 
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged();
             }
         }
         // Username Alert parameter
@@ -103,7 +104,7 @@ namespace BDProject.ViewModels
             {
                 if (value == usernameAlert) { return; }
                 usernameAlert = value;
-                OnPropertyChanged(nameof(UsernameAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -119,7 +120,7 @@ namespace BDProject.ViewModels
 
                 RestrictLenght(password, 133, 4);
 
-                OnPropertyChanged(nameof(Password));
+                OnPropertyChanged();
             }
         }
         // Password Alert parameter
@@ -131,7 +132,7 @@ namespace BDProject.ViewModels
             {
                 if (value == passwordAlert) { return; }
                 passwordAlert = value;
-                OnPropertyChanged(nameof(PasswordAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -147,7 +148,7 @@ namespace BDProject.ViewModels
 
                 RestrictLenght(confirmPassword, 133, 5);
 
-                OnPropertyChanged(nameof(ConfirmPassword));
+                OnPropertyChanged();
             }
         }
         // Confirm Password Alert parameter
@@ -159,7 +160,7 @@ namespace BDProject.ViewModels
             {
                 if (value == confirmPasswordAlert) { return; }
                 confirmPasswordAlert = value;
-                OnPropertyChanged(nameof(ConfirmPasswordAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -175,7 +176,7 @@ namespace BDProject.ViewModels
 
                 RestrictLenght(email, 260, 6);
 
-                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged();
             }
         }
         // Email Alert parameter
@@ -187,7 +188,7 @@ namespace BDProject.ViewModels
             {
                 if (value == emailAlert) { return; }
                 emailAlert = value;
-                OnPropertyChanged(nameof(EmailAlert));
+                OnPropertyChanged();
             }
         }
 
@@ -208,15 +209,19 @@ namespace BDProject.ViewModels
             oJsonObject.Add("FirstName", FirstName);
             oJsonObject.Add("LastName", LastName);
             oJsonObject.Add("Email", Email);
+            oJsonObject.Add("Photo", Convert.FromBase64String(_Globals.Base64DefaultPhoto));
 
-            var success = await ServerServices.SendPost2RequestAsync("register", oJsonObject);
+            var success = await ServerServices.SendPostRegisterRequestAsync("register", oJsonObject);
 
             if (success.IsSuccessStatusCode)
             {
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<User>(earthquakesJson);
+                var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
 
-                _Globals.GlobalMainUser = new UserWrapper(rootobject);
+                _Globals.UsernameTemp = Username;
+                _Globals.PasswordTemp = Password;
+
+                _Globals.GlobalMainUser = new User(rootobject);
                 await Shell.Current.GoToAsync("VerifyProfilePage");
             }
             else

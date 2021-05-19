@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDProject.Views._PopUps.AllTagsPopUp"
+             
+             xmlns:local="clr-namespace:BDProject.Views._PopUps"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    
+             CloseWhenBackgroundIsClicked="True">        
+
+    <!--You can set an animation in the xaml file or in the csharp code behind-->
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="100"
+            DurationOut="100"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </pages:PopupPage.Animation>
+    <!--You can use any elements here which are extended from Xamarin.Forms.View-->
+
+    <!--<pages:PopupPage.Resources>
+        <DataTemplate
+            x:Key="empty">
+            <Label
+                Text="No Tags"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="full">
+            <CollectionView
+                ItemsSource="{Binding TagsCollection, Source={
+                    RelativeSource AncestorType={x:Type local:AllTagsPopUp}
+                }}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label
+                            Text="{Binding TagName}"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </DataTemplate>
+    </pages:PopupPage.Resources>-->
+
+    <pages:PopupPage.Content>
+
+        <Frame
+            Padding="100,200"
+            BindableLayout.ItemsSource="{Binding TagsCollection}"
+            BackgroundColor="{DynamicResource BackgroundColor}">
+
+            <BindableLayout.EmptyViewTemplate>
+                <DataTemplate>
+                    <Label
+                        Text="No Tags"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"/>
+                </DataTemplate>
+            </BindableLayout.EmptyViewTemplate>
+
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Label
+                        Text="{Binding TagName}"/>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+            
+        </Frame>
+
+    </pages:PopupPage.Content>
+
+</pages:PopupPage>

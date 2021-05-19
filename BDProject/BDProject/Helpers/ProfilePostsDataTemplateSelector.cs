@@ -1,4 +1,4 @@
-﻿using BDProject.ModelWrappers;
+﻿using BDProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,9 +16,9 @@ namespace BDProject.Helpers
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            PostWrapper post = (PostWrapper)item;
+            Post post = (Post)item;
 
-            if (_Globals.GlobalMainUser.IsInside(post) == true)
+            if (post.IdUser == _Globals.GlobalMainUser.Username)
             {
                 if(string.IsNullOrEmpty(post.Description) || string.IsNullOrWhiteSpace(post.Description))
                 {
