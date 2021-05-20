@@ -62,13 +62,13 @@ namespace BDProject.ViewModels.PostsViewModels
             oJsonObject.Add("idUser", _Globals.GlobalMainUser.Username);
             oJsonObject.Add("idPost", post.IdPost);
 
-            if (!post.isLiked)
+            if (!post.IsLiked)
             {
                 var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).AddLike(new Like(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username));
-                    post.isLiked = true;
+                    post.IsLiked = true;
+                    post.LikesCount++;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -80,8 +80,8 @@ namespace BDProject.ViewModels.PostsViewModels
                 var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).RemoveLike(new Like(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username));
-                    post.isLiked = false;
+                    post.IsLiked = false;
+                    post.LikesCount--;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {

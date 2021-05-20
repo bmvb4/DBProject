@@ -12,6 +12,15 @@
     <ContentPage.Resources>
         <ResourceDictionary>
 
+
+            <Style x:Key="BaseButton" TargetType="Button">
+                <Setter Property="HeightRequest" Value="46"/>
+                <Setter Property="WidthRequest" Value="46"/>
+                <Setter Property="TextColor" Value="{DynamicResource IconsColor}"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+
             <!--===============MY TEMPLATE===============-->
             <DataTemplate x:Key="MyTemplate">
 
@@ -45,6 +54,20 @@
 
                     </StackLayout>
 
+                    <Button 
+                        Grid.Row="0"
+                        HeightRequest="0"
+                        WidthRequest="38"
+                        Text=""
+                        TextColor="{DynamicResource IconsColor}"
+                        FontFamily="FA-S"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="End"
+                        Command="{Binding MoreCommand, Source={
+                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                        }}"
+                        CommandParameter="{Binding .}"/>
+
                     <Image 
                         Grid.Row="1"
                         Aspect="Fill"
@@ -57,23 +80,45 @@
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
+                            
+                            <TapGestureRecognizer
+                                NumberOfTapsRequired="1"
+                                Command="{Binding ShowTagsCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
                         </Image.GestureRecognizers>
 
                     </Image>
 
-                    <ScrollView
+                    <Button
+                        Grid.Row="1"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Text="#"
+                        TextColor="{DynamicResource IconsColor}"
+                        IsVisible="{Binding IsTagsVisible, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                        Padding="0"
+                        Margin="0,0,4,4"
+                        CornerRadius="100"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        BackgroundColor="{DynamicResource BackgroundColor}"
+                        Command="{Binding OpenTagsCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                        CommandParameter="{Binding .}"/>
+                    
+                    <Label 
                         Grid.Row="2"
-                        HeightRequest="60"
-                        Margin="0">
-
-                        <Label 
-                            FontSize="Medium"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding Description}"
-                            HorizontalOptions="Center"
-                            VerticalOptions="End"/>
-
-                    </ScrollView>
+                        Margin="6,0"
+                        FontSize="Medium"
+                        TextColor="{DynamicResource TextColor}"
+                        Text="{Binding Description}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="End"/>
 
                     <Grid 
                         Grid.Row="3"
@@ -82,13 +127,9 @@
 
                         <Button 
                             Grid.Column="0"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
                             Text=""
-                            TextColor="{DynamicResource IconsColor}"
-                            FontSize="Large"
-                            FontFamily="FA-R"
-                            BackgroundColor="Transparent"/>
+                            FontFamily="FA-R"/>
 
                         <Label 
                             Grid.Column="1"
@@ -100,13 +141,9 @@
 
                         <Button 
                             Grid.Column="2"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
                             Text=""
-                            TextColor="{DynamicResource IconsColor}"
-                            FontSize="Large"
-                            FontFamily="FA-R"
-                            BackgroundColor="Transparent"
+                            FontFamily="{Binding LikeIconFamily}"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -122,13 +159,9 @@
 
                         <Button 
                             Grid.Column="4"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
                             Text="" 
-                            TextColor="{DynamicResource IconsColor}"
-                            FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="Transparent"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
@@ -140,19 +173,6 @@
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
                             Text="{Binding CommentsCount}" />
-
-                        <Button 
-                            Grid.Column="6"
-                            HeightRequest="0"
-                            WidthRequest="38"
-                            Text=""
-                            TextColor="{DynamicResource IconsColor}"
-                            FontFamily="FA-S"
-                            BackgroundColor="Transparent"
-                            Command="{Binding MoreCommand, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                            }}"
-                            CommandParameter="{Binding .}"/>
 
                     </Grid>
 

@@ -33,16 +33,15 @@ namespace BDProject.ViewModels.ProfileViewModels
                 if (user.Photo == null)
                     user.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
 
-                Name = user.FirstName + " " + user.LastName;
+                Name = $"{user.FirstName} {user.LastName}";
                 realUsername = user.Username;
-                Username = "(" + user.Username + ")";
+                Username = $"({ user.Username})";
                 Description = user.Description;
                 ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(user.Photo));
 
                 FollowingCount = user.FollowingsCount;
                 FollowersCount = user.FollowersCount;
-
-                //Following = _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollowString;
+                IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow;
 
                 AllPostsCollection = new ObservableRangeCollection<Post>(user.Posts);
                 PostsCount = AllPostsCollection.Count;
@@ -62,6 +61,7 @@ namespace BDProject.ViewModels.ProfileViewModels
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ServerServices.RefreshTokenAsync();
+                SetUserData();
             }
         }
 
@@ -223,17 +223,16 @@ namespace BDProject.ViewModels.ProfileViewModels
         }
 
         // following parameter
-        private string following = "Follow";
-        public string Following
-        {
-            get => following;
+        private bool IsFollowing 
+        { 
+            get => IsFollowing;
             set
             {
-                if (value == following) { return; }
-                following = value;
-                OnPropertyChanged();
+                IsFollowing = value;
+                OnPropertyChanged(nameof(Following));
             }
         }
+        public string Following => (IsFollowing) ? "Fllowing" : "Follow";
 
         // Commands PostHeight
         // Back to post command
@@ -258,7 +257,7 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand FollowProfileCommand { get; set; }
         private async void FollowProfileFunction()
         {
-            if (Following == "Follow")
+            if (IsFollowing)
             {
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("idFollowed", Username);
@@ -268,14 +267,14 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.AddFollowing(realUsername);
-                    _Globals.AddFollowing(realUsername);
+                    _Globals.GlobalMainUser.FollowingsCount++;
                     _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = true;
-                    Following = "Following";
+                    IsFollowing = true;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     await ServerServices.RefreshTokenAsync();
+                    FollowProfileFunction();
                 }
             }
             else
@@ -288,14 +287,14 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.RemoveFollowing(realUsername);
-                    _Globals.RemoveFollowing(realUsername);
+                    _Globals.GlobalMainUser.FollowingsCount--;
                     _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = false;
-                    Following = "Follow";
+                    IsFollowing = false;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     await ServerServices.RefreshTokenAsync();
+                    FollowProfileFunction();
                 }
             }
         }

@@ -45,8 +45,7 @@
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout 
                                 Orientation="Vertical"
-                                Span="4"
-                                HorizontalItemSpacing="8"
+                                Grid.ColumnSpan="4"
                                 VerticalItemSpacing="8"/>
                         </CollectionView.ItemsLayout>
 
@@ -57,7 +56,7 @@
                                     Padding="0"
                                     Margin="0"
                                     CornerRadius="100"
-                                    HeightRequest="58"
+                                    HeightRequest="50"
                                     BackgroundColor="{Binding Color}"
                                     Clicked="Button_Clicked"/>
 

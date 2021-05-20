@@ -1,5 +1,5 @@
-﻿using BDProject.Helpers;
-using BDProject.Models;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -168,6 +168,9 @@ namespace BDProject.ViewModels.ProfileViewModels
 
             if (success.IsSuccessStatusCode)
             {
+                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                var rootobject = JsonConvert.DeserializeObject<ProfileDB>(earthquakesJson);
+
                 await Shell.Current.Navigation.PopAsync();
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)

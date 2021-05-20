@@ -31,24 +31,24 @@ namespace BDProject.Views.SearchViews
         {
             SearchAll.BackgroundColor = Color.LightGray;
 
-            SearchPeople.BackgroundColor = Color.Black;
-            SearchTags.BackgroundColor = Color.Black;
+            SearchPeople.BackgroundColor = Color.Transparent;
+            SearchTags.BackgroundColor = Color.Transparent;
         }
 
         private void SearchPeople_Tapped(object sender, EventArgs e)
         {
             SearchPeople.BackgroundColor = Color.LightGray;
 
-            SearchAll.BackgroundColor = Color.Black;
-            SearchTags.BackgroundColor = Color.Black;
+            SearchAll.BackgroundColor = Color.Transparent;
+            SearchTags.BackgroundColor = Color.Transparent;
         }
 
         private void SearchTags_Tapped(object sender, EventArgs e)
         {
             SearchTags.BackgroundColor = Color.LightGray;
 
-            SearchPeople.BackgroundColor = Color.Black;
-            SearchAll.BackgroundColor = Color.Black;
+            SearchPeople.BackgroundColor = Color.Transparent;
+            SearchAll.BackgroundColor = Color.Transparent;
         }
     }
 }

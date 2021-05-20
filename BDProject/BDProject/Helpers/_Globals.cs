@@ -19,34 +19,6 @@ namespace BDProject.Helpers
 
 
 
-        // ================= Other Users
-        private static List<User> otherUsers = new List<User>();
-        public static List<User> OtherUsers
-        {
-            get => otherUsers;
-            set => otherUsers = value;
-        }
-        public static void AddUser(User user) { otherUsers.Add(user); }
-        public static void RemoveUser(User user) { otherUsers.RemoveAll(x => x.Username == user.Username); }
-        public static User GetUser(string username) { return otherUsers.First(x => x.Username == username); }
-        public static void AddFollowing(string username) 
-        {
-            //otherUsers.Where(x => x.Username == username).First().AddFollower(GlobalMainUser.Username);
-            for (int i=0; i<otherUsers.Count; i++)
-            {
-                if (otherUsers[i].Username == username) { otherUsers[i].AddFollower(GlobalMainUser.Username); }
-            }
-        }
-        public static void RemoveFollowing(string username) 
-        {
-            for (int i = 0; i < otherUsers.Count; i++)
-            {
-                if (otherUsers[i].Username == username) { otherUsers[i].RemoveFollower(GlobalMainUser.Username); }
-            }
-        }
-
-
-
         // ================= Main Feed
         private static List<Post> FeedPosts = new List<Post>();
         public static List<Post> GlobalFeedPosts
@@ -54,23 +26,11 @@ namespace BDProject.Helpers
             get => FeedPosts;
             set => FeedPosts = value;
         }
-        public static void AddPost(Post post) { FeedPosts.Add(post); }
-        public static void AddMyPost(Post post) { FeedPosts.Insert(0, post); }
         public static Post GetPost(long id)
         {
-            try
-            {
-                return FeedPosts.First(x => x.IdPost == id);
-            }
-            catch (Exception ex)
-            {
-                // not found
-                return new Post();
-            }
+            Post post = FeedPosts?.First(x => x.IdPost == id);
+            return (post != null) ? post : new Post();
         }
-        public static void EditPost(Post post) { FeedPosts.First(x => x.IdPost == post.IdPost).Description = post.Description; }
-        public static void RemovePost(Post post) { FeedPosts.RemoveAll(x => x.IdPost == post.IdPost); }
-        public static void RemovePost(long id) { FeedPosts.RemoveAll(x => x.IdPost == id); }
         public static void AddPostsFromDB(List<PostDB> posts)
         {
             FeedPosts.Clear();

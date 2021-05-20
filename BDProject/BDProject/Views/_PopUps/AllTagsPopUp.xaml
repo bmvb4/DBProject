@@ -7,7 +7,7 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
     
-             CloseWhenBackgroundIsClicked="True">        
+             CloseWhenBackgroundIsClicked="True">
 
     <!--You can set an animation in the xaml file or in the csharp code behind-->
     <pages:PopupPage.Animation>
@@ -24,54 +24,42 @@
     </pages:PopupPage.Animation>
     <!--You can use any elements here which are extended from Xamarin.Forms.View-->
 
-    <!--<pages:PopupPage.Resources>
-        <DataTemplate
-            x:Key="empty">
-            <Label
-                Text="No Tags"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"/>
-        </DataTemplate>
-
-        <DataTemplate
-            x:Key="full">
-            <CollectionView
-                ItemsSource="{Binding TagsCollection, Source={
-                    RelativeSource AncestorType={x:Type local:AllTagsPopUp}
-                }}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label
-                            Text="{Binding TagName}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </DataTemplate>
-    </pages:PopupPage.Resources>-->
-
     <pages:PopupPage.Content>
 
         <Frame
-            Padding="100,200"
-            BindableLayout.ItemsSource="{Binding TagsCollection}"
-            BackgroundColor="{DynamicResource BackgroundColor}">
+            BackgroundColor="{DynamicResource BackgroundColor}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
 
-            <BindableLayout.EmptyViewTemplate>
-                <DataTemplate>
-                    <Label
-                        Text="No Tags"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"/>
-                </DataTemplate>
-            </BindableLayout.EmptyViewTemplate>
+            <CollectionView
+                HeightRequest="200"
+                WidthRequest="200"
+                x:Name="Collecton">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        Orientation="Vertical"
+                        VerticalItemSpacing="8"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Padding="0"
+                            BorderColor="{DynamicResource TextColor}"
+                            BackgroundColor="Transparent"
+                            CornerRadius="100">
 
-            <BindableLayout.ItemTemplate>
-                <DataTemplate>
-                    <Label
-                        Text="{Binding TagName}"/>
-                </DataTemplate>
-            </BindableLayout.ItemTemplate>
-            
+                            <Label
+                                Padding="4"
+                                Text="{Binding TagName}"
+                                TextColor="{DynamicResource TextColor}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"/>
+
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
         </Frame>
 
     </pages:PopupPage.Content>

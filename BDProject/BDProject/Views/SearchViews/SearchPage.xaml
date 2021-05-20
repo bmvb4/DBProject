@@ -56,8 +56,17 @@
                     ColumnDefinitions="auto,*">
 
                     <Frame
+                        Grid.Column="0"
                         CornerRadius="100"
                         BackgroundColor="Black"/>
+
+                    <Label 
+                        Grid.Column="0"
+                        Text="#"
+                        FontSize="Large"
+                        TextColor="White"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"/>
 
                     <Label 
                         Grid.Column="1"
@@ -120,13 +129,13 @@
                     x:Name="SearchAll"
                     CornerRadius="100"
                     Padding="0"
-                    BackgroundColor="Black">
+                    BackgroundColor="Transparent"
+                    BorderColor="{DynamicResource TextColor}">
                     
                     <Label 
                         Text="All"
-                        Margin="5"
-                        HeightRequest="25"
-                        TextColor="Orange"/>
+                        Padding="12,6"
+                        TextColor="{DynamicResource TextColor}"/>
 
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -141,13 +150,13 @@
                     x:Name="SearchPeople"
                     CornerRadius="100"
                     Padding="0"
-                    BackgroundColor="Black">
+                    BackgroundColor="Transparent"
+                    BorderColor="{DynamicResource TextColor}">
                     
                     <Label 
                         Text="People"
-                        Margin="5"
-                        HeightRequest="25"
-                        TextColor="Orange"/>
+                        Padding="6"
+                        TextColor="{DynamicResource TextColor}"/>
 
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -162,13 +171,13 @@
                     x:Name="SearchTags"
                     CornerRadius="100"
                     Padding="0"
-                    BackgroundColor="Black">
+                    BackgroundColor="Transparent"
+                    BorderColor="{DynamicResource TextColor}">
                     
                     <Label 
                         Text="Tags"
-                        Margin="5"
-                        HeightRequest="25"
-                        TextColor="Orange"/>
+                        Padding="6"
+                        TextColor="{DynamicResource TextColor}"/>
 
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer 

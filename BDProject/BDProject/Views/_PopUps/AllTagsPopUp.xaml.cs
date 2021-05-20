@@ -1,9 +1,6 @@
 ﻿using BDProject.Models;
 using Rg.Plugins.Popup.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -14,14 +11,13 @@ namespace BDProject.Views._PopUps
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AllTagsPopUp : PopupPage
     {
-        public AllTagsPopUp(List<Tag> Tags)
+        public AllTagsPopUp(ObservableRangeCollection<Tag> tags)
         {
-            TagsCollection = new ObservableRangeCollection<Tag>(Tags);
-            
             InitializeComponent();
-        }
 
-        public ObservableRangeCollection<Tag> TagsCollection = new ObservableRangeCollection<Tag>();
+            if (tags != null)
+                Collecton.ItemsSource = tags;
+        }
 
         protected override void OnAppearing()
         {

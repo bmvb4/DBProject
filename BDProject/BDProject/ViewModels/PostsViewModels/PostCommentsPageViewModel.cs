@@ -195,7 +195,7 @@ namespace BDProject.ViewModels.PostsViewModels
             var success = await ServerServices.SendDeleteRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).RemoveComment(comment);
+                _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).CommentsCount--;
                 SetCollection();
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
@@ -220,7 +220,7 @@ namespace BDProject.ViewModels.PostsViewModels
             var success = await ServerServices.SendPostRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).AddComment(new Comment(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username, Comment));
+                _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).CommentsCount++;
                 SetCollection();
                 Comment = "";
             }

@@ -66,12 +66,14 @@ namespace BDProject.ViewModels
             // like commands
             LikePostCommand = new Command<Post>(LikePostFunction);
             SearchTagCommand = new Command<Tag>(SearchTagFunction);
+            ShowTagsCommand = new Command(ShowTagsFunction);
 
             // open commands
             OpenPostCommentsCommand = new Command<Post>(OpenPostCommentsFunction);
             OpenSearchCommand = new Command(async () => await OpenSearchFunction());
             OpenMyProfileCommand= new Command(async () => await OpenMyProfileFunction());
             OpenProfileCommand = new Command<Post>(OpenProfileFunction);
+            OpenTagsCommand = new Command<Post>(OpenTagsFunction);
 
             // More command
             MoreCommand = new Command<Post>(MoreFunction);
@@ -92,7 +94,7 @@ namespace BDProject.ViewModels
             {
                 if (value == postsCollection) { return; }
                 postsCollection = value;
-                OnPropertyChanged(nameof(PostsCollection));
+                OnPropertyChanged();
             }
         }
 
@@ -105,7 +107,20 @@ namespace BDProject.ViewModels
             {
                 if (value == isRefreshing) { return; }
                 isRefreshing = value;
-                OnPropertyChanged(nameof(IsRefreshing));
+                OnPropertyChanged();
+            }
+        }
+
+        // Refreshing parameter
+        private bool isTagsVisible = false;
+        public bool IsTagsVisible
+        {
+            get => isTagsVisible;
+            set
+            {
+                if (value == isTagsVisible) { return; }
+                isTagsVisible = value;
+                OnPropertyChanged();
             }
         }
 
@@ -118,13 +133,13 @@ namespace BDProject.ViewModels
             oJsonObject.Add("idUser", post.IdUser);
             oJsonObject.Add("idPost", post.IdPost);
 
-            if (!post.isLiked)
+            if (!post.IsLiked)
             {
                 var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).AddLike(new Like(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username));
-                    post.isLiked = true;
+                    post.IsLiked = true;
+                    post.LikesCount++;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -136,8 +151,8 @@ namespace BDProject.ViewModels
                 var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).RemoveLike(new Like(_Globals.GlobalMainUser.Photo, _Globals.GlobalMainUser.Username));
-                    post.isLiked = false;
+                    post.IsLiked = false;
+                    post.LikesCount--;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -207,10 +222,8 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.AddFollowing(post.IdUser);
-                    _Globals.AddFollowing(post.IdUser);
-
                     post.IsFollow = true;
+                    _Globals.GlobalMainUser.FollowingsCount++;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -227,10 +240,8 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.RemoveFollowing(post.IdUser);
-                    _Globals.RemoveFollowing(post.IdUser);
-
                     post.IsFollow = false;
+                    _Globals.GlobalMainUser.FollowingsCount--;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -264,6 +275,25 @@ namespace BDProject.ViewModels
         private async void SearchTagFunction(Tag tag)
         {
             await Task.Delay(1000);
+        }
+
+        public ICommand ShowTagsCommand { get; set; }
+        private async void ShowTagsFunction()
+        {
+            await Task.Delay(0);
+            if (IsTagsVisible)
+                IsTagsVisible = false;
+            else
+                IsTagsVisible = true;
+        }
+
+        public ICommand OpenTagsCommand { get; set; }
+        private async void OpenTagsFunction(Post post)
+        {
+            if(post.tags != null && post.tags.Count != 0)
+                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
+            else
+                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
         }
     }
 }

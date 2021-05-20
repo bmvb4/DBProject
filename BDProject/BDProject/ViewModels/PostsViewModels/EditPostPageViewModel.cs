@@ -108,9 +108,6 @@ namespace BDProject.ViewModels.PostsViewModels
 
             if (success.IsSuccessStatusCode)
             {
-                _Globals.GlobalMainUser.EditPost(SelectedPost);
-                _Globals.EditPost(SelectedPost);
-
                 _Globals.Refresh = true;
                 await Shell.Current.Navigation.PopAsync();
 

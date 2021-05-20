@@ -17,14 +17,7 @@ namespace BDProject.Models
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            try
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            }
-            catch(Exception ex)
-            {
-                Console.Write(ex + "in Post Class");
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         public Post(BigPostDB post)
@@ -37,10 +30,12 @@ namespace BDProject.Models
             LikesCount = post.LikesCounter;
             commentsCount = post.CommentsCounter;
             IsFollow = post.isFollow;
-            isLiked = post.isLiked;
+            IsLiked = post.isLiked;
 
             CreateDate = post.CreateDate;
             DeleteDate = post.DeleteDate;
+
+            tags = post.tags;
         }
 
         public Post(PostDB post)
@@ -66,12 +61,7 @@ namespace BDProject.Models
 
         public DateTime CreateDate { get; set; } // ========================= CREATED DATE
         public DateTime DeleteDate { get; set; } // ========================= DELETE DATE
-        public string DeleteDateString 
-        { get
-            {
-                return $"{DeleteDate.ToLocalTime()}";
-            } 
-        }
+        public string DeleteDateString => $"{DeleteDate.ToLocalTime()}";
         
 
 
@@ -86,13 +76,7 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        public ImageSource PhotoSource
-        {
-            get
-            {
-                return ImageSource.FromStream(() => new MemoryStream(Photo));
-            }
-        }
+        public ImageSource PhotoSource => ImageSource.FromStream(() => new MemoryStream(Photo));
 
 
 
@@ -106,13 +90,7 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        public ImageSource UserPhotoSource
-        {
-            get
-            {
-                return ImageSource.FromStream(() => new MemoryStream(UserPhoto));
-            }
-        }
+        public ImageSource UserPhotoSource => ImageSource.FromStream(() => new MemoryStream(UserPhoto));
 
 
 
@@ -129,7 +107,17 @@ namespace BDProject.Models
 
 
 
-        public bool isLiked { get; set; } // ========================= LIKES
+        private bool isLiked { get; set; } // ========================= LIKES
+        public bool IsLiked
+        {
+            get => isLiked;
+            set
+            {
+                isLiked = value;
+                OnPropertyChanged(nameof(LikeIconFamily));
+            }
+        }
+        public string LikeIconFamily => (isLiked) ? "FA-S" : "FA-R";
         private int likesCount;
         public int LikesCount // ========================= LIKES COUNTER
         {
@@ -140,21 +128,6 @@ namespace BDProject.Models
                 OnPropertyChanged(nameof(LikesCount));
             }
         }
-        private List<Like> likes = new List<Like>();
-        public List<Like> Likes
-        {
-            get => likes;
-            set
-            {
-                likes = value;
-                OnPropertyChanged();
-            }
-        }
-        public void AddLike(Like like) { likes.Add(like); LikesCount = likes.Count; }
-        public void RemoveLike(Like like) { likes.RemoveAll(x => x.Username == like.Username); LikesCount = likes.Count; }
-        //public void AddLike(LikeWrapper like) { likes.Add(like); LikesCount = likes.Count; }
-        //public void RemoveLike(LikeWrapper like) { likes.RemoveAll(x => x.Username == like.Username); LikesCount = likes.Count; }
-
 
 
         private int commentsCount;
@@ -167,21 +140,6 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        private List<Comment> comments = new List<Comment>();
-        public List<Comment> Comments
-        {
-            get => comments;
-            set
-            {
-                comments = value;
-                OnPropertyChanged();
-            }
-        }
-        public void AddComment(Comment comment) { comments.Add(comment); CommentsCount = comments.Count; }
-        public void RemoveComment(Comment comment) { comments.RemoveAll(x => x.IdComment == comment.IdComment); CommentsCount = comments.Count; }
-        //public void AddComment(Comment comment) { comments.Add(comment); CommentsCount = comments.Count; }
-        //public void RemoveComment(Comment comment) { comments.RemoveAll(x => x.ID == comment.ID); CommentsCount = comments.Count; }
-
 
 
         private bool isFollow { get; set; } // ========================= FOLLOWINGS
@@ -191,23 +149,10 @@ namespace BDProject.Models
             set
             {
                 isFollow = value;
-
-                if (isFollow)
-                    IsFollowString = "Following";
-                else
-                    IsFollowString = "Follow";
+                OnPropertyChanged(nameof(IsFollowString));
             }
         }
-        private string isFollowString = "";
-        public string IsFollowString
-        {
-            get => isFollowString;
-            set
-            {
-                isFollowString = value;
-                OnPropertyChanged();
-            }
-        }
+        public string IsFollowString => (isFollow) ? "Following" : "Follow";
 
 
 
@@ -218,8 +163,8 @@ namespace BDProject.Models
             {
                 List<Tag> list = new List<Tag>();
 
-                foreach (string s in tags)
-                    list.Add(new Tag(s));
+                for (int i=0; i<tags.Count; i++)
+                    list.Add(new Tag(tags[i]));
 
                 return list;
             }
@@ -227,14 +172,12 @@ namespace BDProject.Models
             {
                 List<Tag> list = value;
 
-                foreach (Tag t in list)
-                    tags.Add(t.TagName);
+                for (int i = 0; i < list.Count; i++)
+                    tags.Add(list[i].TagName);
 
                 OnPropertyChanged();
             }
         }
-        public ObservableRangeCollection<Tag> TagsCollection { get => new ObservableRangeCollection<Tag>(Tags); }
-        public void AddTag(Tag tag) { tags.Add(tag.TagName); }
-        public void RemoveTag(Tag tag) { tags.RemoveAll(x => x == tag.TagName); }
+        public ObservableRangeCollection<Tag> TagsCollection => new ObservableRangeCollection<Tag>(Tags);
     }
 }

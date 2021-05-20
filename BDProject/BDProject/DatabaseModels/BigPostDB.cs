@@ -17,5 +17,6 @@ namespace BDProject.DatabaseModels
         public int CommentsCounter { get; set; }
         public bool isFollow { get; set; }
         public bool isLiked { get; set; }
+        public List<string> tags { get; set; }
     }
 }

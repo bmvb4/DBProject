@@ -136,13 +136,7 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        public ImageSource PhotoSource
-        {
-            get
-            {
-                return ImageSource.FromStream(() => new MemoryStream(Photo));
-            }
-        }
+        public ImageSource PhotoSource => ImageSource.FromStream(() => new MemoryStream(Photo));
 
 
 
@@ -161,21 +155,6 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        private List<string> followings = new List<string>();
-        public List<string> Followings
-        {
-            get => followings;
-            set
-            {
-                followings = value;
-                OnPropertyChanged();
-            }
-        }
-        public void AddFollowing(string username) { followings.Add(username); FollowingsCount++; }
-        public void RemoveFollowing(string username) { followings.Remove(username); FollowingsCount--; }
-        public bool IsFollowingInside(string username) { return followings.Contains(username); }
-
-
 
         private int followersCount = 0;
         public int FollowersCount
@@ -187,20 +166,18 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        private List<string> followers = new List<string>();
-        public List<string> Followers
+
+        private bool isFollow { get; set; } // ========================= FOLLOWINGS
+        public bool IsFollow
         {
-            get => followers;
+            get => isFollow;
             set
             {
-                followers = value;
-                OnPropertyChanged();
+                isFollow = value;
+                OnPropertyChanged(nameof(IsFollowString));
             }
         }
-        public void AddFollower(string username) { followers.Add(username); FollowersCount++; }
-        public void RemoveFollower(string username) { followers.Remove(username); FollowersCount--; }
-        public bool IsFollowerInside(string username) { return followers.Contains(username); }
-
+        public string IsFollowString => (isFollow) ? "Following" : "Follow";
 
 
         private List<Post> posts = new List<Post>();
@@ -213,22 +190,11 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        public void AddPost(Post post) { posts.Insert(0, post); }
-        public bool IsInside(Post post) { return posts.Any(x => x.IdUser == post.IdUser); }
-        public void EditPost(Post post) { posts.First(x => x.IdPost == post.IdPost).Description = post.Description; }
         public Post GetPost(long id)
         {
-            try
-            {
-                return posts.First(x => x.IdPost == id);
-            }
-            catch (Exception ex)
-            {
-                // not found
-                return new Post();
-            }
+            Post post = posts?.First(x => x.IdPost == id);
+            return (post != null) ? post : new Post();
         }
-        public void RemovePost(long id) { posts.RemoveAll(x => x.IdPost == id); }
         public void AddPostsFromDB(List<PostDB> posts)
         {
             foreach (PostDB post in posts)

@@ -26,13 +26,18 @@
     <pages:PopupPage.Content>
 
         <Frame
-            Padding="140,260"
             CornerRadius="10"
-            BackgroundColor="{DynamicResource BackgroundColor}">
+            Padding="0"
+            BackgroundColor="{DynamicResource BackgroundColor}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
             <StackLayout
-                Margin="0"
-                Spacing="0"
-                Orientation="Vertical">
+                Margin="10"
+                HeightRequest="160"
+                WidthRequest="110"
+                Orientation="Vertical"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
 
                 <Button 
                     Text="Share"

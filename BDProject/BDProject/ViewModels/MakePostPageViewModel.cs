@@ -222,18 +222,6 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    Post post = new Post() 
-                    {
-                        IdUser = _Globals.GlobalMainUser.Username,
-                        Photo = imageBytes,
-                        UserPhoto = _Globals.GlobalMainUser.Photo,
-                        Description = Description,
-                        tags = tags 
-                    };                    
-
-                    _Globals.GlobalMainUser.AddPost(post);
-                    _Globals.AddMyPost(post);
-
                     _Globals.Refresh = true;
                     await Shell.Current.GoToAsync("//HomePage");
                 }

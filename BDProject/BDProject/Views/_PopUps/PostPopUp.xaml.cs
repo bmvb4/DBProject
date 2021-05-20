@@ -47,8 +47,6 @@ namespace BDProject.Views._PopUps
             var success = await ServerServices.SendDeleteRequestAsync("posts/delete", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.RemovePost(_Globals.OpenID);
-                _Globals.GlobalMainUser.RemovePost(_Globals.OpenID);
                 _Globals.Refresh = true;
             }
         }

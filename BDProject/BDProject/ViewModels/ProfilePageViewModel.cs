@@ -23,8 +23,8 @@ namespace BDProject.ViewModels
                 Description = user.Description;
                 ProfilePictureSource = user.PhotoSource;
 
-                FollowingCount = _Globals.GlobalMainUser.Followings.Count;
-                FollowersCount = _Globals.GlobalMainUser.Followers.Count;
+                FollowingCount = _Globals.GlobalMainUser.FollowingsCount;
+                FollowersCount = _Globals.GlobalMainUser.FollowersCount;
 
                 AllPostsCollection = new ObservableRangeCollection<Post>(_Globals.GlobalMainUser.Posts);
                 PostsCount = AllPostsCollection.Count;
