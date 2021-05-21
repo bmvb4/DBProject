@@ -20,7 +20,6 @@ namespace BDProject.ViewModels
             TakenPhoto = null;
             Description = "";
             AllTags.Clear();
-            AllTagsHeight = 0;
         }
 
         public MakePostPageViewModel()
@@ -31,6 +30,7 @@ namespace BDProject.ViewModels
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
             DeleteTagCommand = new Command<Tag>(DeleteTagFunction);
+            AddTagCommand = new Command(AddTagFunction);
             TakePhotoCommand = new Command(async () => await TakePhotoFunction());
             PickPhotoCommand = new Command(async () => await PickPhotoFunction());
             PostCommand = new Command(async () => await PostFunction());
@@ -90,15 +90,15 @@ namespace BDProject.ViewModels
             }
         }
 
-        // All tagsheight
-        private int allTagsHeight = 0;
-        public int AllTagsHeight
+        // Post Tag
+        private string tagText = "";
+        public string TagText
         {
-            get => allTagsHeight;
+            get => tagText;
             set
             {
-                if (value == allTagsHeight) { return; }
-                allTagsHeight = value;
+                if (value == tagText) { return; }
+                tagText = value;
                 OnPropertyChanged();
             }
         }
@@ -125,12 +125,19 @@ namespace BDProject.ViewModels
             ClearEveryting();
         }
 
-        // Back to post command
+        // Delete tag command
         public ICommand DeleteTagCommand { get; set; }
         private void DeleteTagFunction(Tag tag)
         {
             AllTags.Remove(tag);
-            AllTagsHeight -= 45;
+        }
+
+        // Add tag command
+        public ICommand AddTagCommand { get; set; }
+        private void AddTagFunction()
+        {
+            AllTags.Add(new Tag(TagText));
+            TagText = "";
         }
 
         // Take Photo command

@@ -1,8 +1,12 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
+using BDProject.Views._PopUps;
+using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -18,9 +22,12 @@ namespace BDProject.ViewModels
 
             try
             {
-                Name = user.FirstName + " " + user.LastName;
-                Username = "(" + user.Username + ")";
+                Name = $"{user.FirstName} {user.LastName}";
+                Username = $"({user.Username})";
                 Description = user.Description;
+                if (user.Photo == null)
+                    user.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
+
                 ProfilePictureSource = user.PhotoSource;
 
                 FollowingCount = _Globals.GlobalMainUser.FollowingsCount;
@@ -33,12 +40,10 @@ namespace BDProject.ViewModels
                 if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
                 {
                     YourPostsCollection.AddRange(AllPostsCollection);
-                    this.SetCollectionHeight();
                 }
                 else
                 {
                     YourPostsCollection.AddRange(AllPostsCollection.Take(3 * 10));
-                    this.SetCollectionHeight();
                 }
             }
             catch(Exception ex)
@@ -52,10 +57,21 @@ namespace BDProject.ViewModels
             SetUserData();
 
             // Assigning functions to the commands
-            OpenSettingsCommand = new Command(async () => await OpenSettingsFunction());
-            OpenEditProfileCommand=new Command(async () => await OpenEditProfileFunction());
             RefreshCommand = new Command(RefreshFunction);
-            OpenPostsCommand = new Command<Post>(OpenPostsFunction);
+
+            // like commands
+            LikePostCommand = new Command<Post>(LikePostFunction);
+            SearchTagCommand = new Command<Tag>(SearchTagFunction);
+            ShowTagsCommand = new Command(ShowTagsFunction);
+
+            // open commands
+            OpenSettingsCommand = new Command(async () => await OpenSettingsFunction());
+            OpenEditProfileCommand = new Command(async () => await OpenEditProfileFunction());
+            OpenPostCommentsCommand = new Command<Post>(OpenPostCommentsFunction);
+            OpenTagsCommand = new Command<Post>(OpenTagsFunction);
+
+            // More command
+            MoreCommand = new Command<Post>(MoreFunction);
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
         }
 
@@ -204,6 +220,19 @@ namespace BDProject.ViewModels
             }
         }
 
+        // Refreshing parameter
+        private bool isTagsVisible = false;
+        public bool IsTagsVisible
+        {
+            get => isTagsVisible;
+            set
+            {
+                if (value == isTagsVisible) { return; }
+                isTagsVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Commands PostHeight
         // Settings command
         public ICommand OpenSettingsCommand { get; set; }
@@ -224,18 +253,8 @@ namespace BDProject.ViewModels
         public void RefreshFunction()
         {
             IsRefreshing = true;
-
             SetUserData();
-
             IsRefreshing = false;
-        }
-
-        // Open Posts command
-        public ICommand OpenPostsCommand { get; set; }
-        private async void OpenPostsFunction(Post post)
-        {
-            _Globals.OpenID = post.IdPost;
-            await Shell.Current.GoToAsync("MyProfilePostPage");
         }
 
         // load more command 
@@ -256,24 +275,84 @@ namespace BDProject.ViewModels
                 YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count).Take(3 * 10));
             }
 
-            this.SetCollectionHeight();
             _Globals.IsBusy = false;
         }
 
-        // Functions
-        // Set Collceton height function
-        private void SetCollectionHeight()
+        // Like Post command
+        public ICommand LikePostCommand { get; set; }
+        private async void LikePostFunction(Post post)
         {
-            PostHeight = App.Current.MainPage.Width * 0.365;
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("idUser", post.IdUser);
+            oJsonObject.Add("idPost", post.IdPost);
 
-            if (YourPostsCollection.Count % 3 == 0)
+            if (!post.IsLiked)
             {
-                CollectionHeight = PostHeight * (YourPostsCollection.Count / 3) + 16;
+                var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
+                if (success.IsSuccessStatusCode)
+                {
+                    post.IsLiked = true;
+                    post.LikesCount++;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
+                }
             }
             else
             {
-                CollectionHeight = PostHeight * (Math.Ceiling(((double)YourPostsCollection.Count) / 3.0)) + 16;
+                var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
+                if (success.IsSuccessStatusCode)
+                {
+                    post.IsLiked = false;
+                    post.LikesCount--;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
+                }
             }
+        }
+
+        // Open Post Comments command
+        public ICommand OpenPostCommentsCommand { get; set; }
+        private async void OpenPostCommentsFunction(Post post)
+        {
+            _Globals.OpenID = (int)post.IdPost;
+            await Shell.Current.GoToAsync("PostComments");
+        }
+
+        // Edit profile command
+        public ICommand MoreCommand { get; set; }
+        private async void MoreFunction(Post post)
+        {
+            _Globals.OpenID = post.IdPost;
+            await PopupNavigation.Instance.PushAsync(new PostPopUp());
+        }
+
+        public ICommand SearchTagCommand { get; set; }
+        private async void SearchTagFunction(Tag tag)
+        {
+            await Task.Delay(1000);
+        }
+
+        public ICommand ShowTagsCommand { get; set; }
+        private async void ShowTagsFunction()
+        {
+            await Task.Delay(0);
+            if (IsTagsVisible)
+                IsTagsVisible = false;
+            else
+                IsTagsVisible = true;
+        }
+
+        public ICommand OpenTagsCommand { get; set; }
+        private async void OpenTagsFunction(Post post)
+        {
+            if (post.tags != null && post.tags.Count != 0)
+                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
+            else
+                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
         }
 
     }

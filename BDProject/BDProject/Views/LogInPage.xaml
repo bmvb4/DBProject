@@ -8,82 +8,85 @@
              Shell.TabBarIsVisible="False">
     
     <ContentPage.Content>
-        <Grid
-            Margin="16"
-            RowDefinitions="*,auto,*">
+        <StackLayout
+            Margin="8,0"
+            VerticalOptions="Center">
 
-            <StackLayout 
-                Grid.Row="1"
-                Orientation="Vertical">
+            <Label
+                Margin="0,0,0,16"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                Text="Log into the App"
+                TextColor="Black"/>
 
-                <Label
-                    Margin="0,0,0,16"
-                    FontSize="Large"
-                    HorizontalOptions="Center"
-                    Text="Log into the App"
-                    TextColor="Black"/>
+            <Entry 
+                x:Name="UsernameEntry"
+                Text="{Binding Username}"
+                TextColor="Black"
+                Placeholder="Username"/>
+
+            <Label 
+                Text="{Binding UsernameAlert}" 
+                FontSize="Small"
+                TextColor="Red"/>
+
+            <Grid 
+                ColumnDefinitions="*,auto">
 
                 <Entry 
-                    x:Name="UsernameEntry"
-                    Text="{Binding Username}"
-                    Placeholder="Username" />
-
-                <Label 
-                    Text="{Binding UsernameAlert}" 
-                    FontSize="Small"
-                    TextColor="Red"/>
-
-                <Grid 
-                    ColumnDefinitions="*,auto">
-
-                    <Entry 
-                        Grid.Column="0"
-                        Margin="0"
-                        x:Name="PasswordEntry"
-                        Text="{Binding Password}"
-                        Placeholder="Password" 
-                        IsPassword="{Binding HidePassword}" />
-
-                    <Button 
-                        Grid.Column="1"
-                        WidthRequest="45"
-                        Margin="0"
-                        Text="{Binding Eye}"
-                        FontSize="Medium"
-                        FontFamily="FA-S"
-                        BackgroundColor="White"
-                        Command="{Binding ShowHidePasswordCommand}"/>
-
-                </Grid>
-
-                <Label 
-                    Text="{Binding PasswordAlert}" 
-                    FontSize="Small"
-                    TextColor="Red"/>
+                    Grid.Column="0"
+                    Margin="0"
+                    x:Name="PasswordEntry"
+                    Text="{Binding Password}"
+                    TextColor="Black"
+                    Placeholder="Password"
+                    IsPassword="{Binding HidePassword}" />
 
                 <Button 
-                    Text="Forgot Password?"
-                    TextColor="Blue"
+                    Grid.Column="1"
+                    WidthRequest="45"
+                    Margin="0"
+                    Text="{Binding Eye}"
+                    FontSize="Medium"
+                    FontFamily="FA-S"
+                    BackgroundColor="White"
+                    Command="{Binding ShowHidePasswordCommand}"/>
+
+            </Grid>
+
+            <Label 
+                Text="{Binding PasswordAlert}" 
+                FontSize="Small"
+                TextColor="Red"/>
+
+            <Button 
+                Text="Forgot Password?"
+                TextColor="Blue"
+                BackgroundColor="Transparent"
+                HorizontalOptions="Start"
+                Command="{Binding ForgotCommand}"/>
+
+            <Grid 
+                ColumnDefinitions="*,*">
+
+                <Button 
+                    Grid.Column="0"
+                    Text="Sign Up"
+                    BorderColor="Black"
+                    BorderWidth="1"
                     BackgroundColor="Transparent"
-                    HorizontalOptions="Start"
-                    Command="{Binding ForgotCommand}"/>
+                    Command="{Binding SignUpCommand}" />
 
-                <Grid ColumnDefinitions="*,*">
+                <Button 
+                    Grid.Column="1"
+                    Text="Log In"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    BackgroundColor="Transparent"
+                    Command="{Binding LogInCommand}" />
 
-                    <Button 
-                        Grid.Column="0"
-                        Text="Sign Up"
-                        Command="{Binding SignUpCommand}" />
+            </Grid>
 
-                    <Button 
-                        Grid.Column="1"
-                        Text="Log In"
-                        Command="{Binding LogInCommand}" />
-
-                </Grid>
-
-            </StackLayout>
-
-        </Grid>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

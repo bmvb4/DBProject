@@ -12,110 +12,256 @@
     </Shell.BackButtonBehavior>
 
     <ContentPage.Content>
+        <Grid
+            RowDefinitions="auto,*">
+
+            <StackLayout
+                Grid.Row="0"
+                Orientation="Horizontal">
+
+                <Button 
+                    Text="" 
+                    HeightRequest="48"
+                    WidthRequest="38"
+                    TextColor="{DynamicResource IconsColor}"
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="Transparent"
+                    Command="{Binding BackCommand}"
+                    HorizontalOptions="StartAndExpand"/>
+
+                <Button 
+                    Text="" 
+                    HeightRequest="48"
+                    WidthRequest="48"
+                    TextColor="{DynamicResource IconsColor}"
+                    FontFamily="FA-S"
+                    FontSize="Large"
+                    BackgroundColor="Transparent"
+                    Command="{Binding PostCommand}"
+                    HorizontalOptions="End"/>
+
+            </StackLayout>
+            
+            <CollectionView 
+                Grid.Row="1"
+                Margin="8"
+                SelectionMode="None"
+                HeightRequest="{Binding AllTagsHeight}"
+                ItemsSource="{Binding AllTags}">
+                <CollectionView.Header>
+                    <StackLayout>
+
+                        <Image 
+                            Aspect="AspectFit"
+                            WidthRequest="{Binding ImageWidth}"
+                            HeightRequest="{Binding ImageHeight}"
+                            Source="{Binding TakenPhoto}" />
+
+                        <Grid
+                            ColumnDefinitions="*,*">
+
+                            <Button
+                                Grid.Column="0"
+                                Text="Take"
+                                TextColor="{DynamicResource TextColor}"
+                                BorderColor="{DynamicResource TextColor}"
+                                BorderWidth="1"
+                                BackgroundColor="Transparent"
+                                Command="{Binding TakePhotoCommand}"/>
+
+                            <Button
+                                Grid.Column="1"
+                                Text="Pick"
+                                TextColor="{DynamicResource TextColor}"
+                                BorderColor="{DynamicResource TextColor}"
+                                BorderWidth="1"
+                                BackgroundColor="Transparent"
+                                Command="{Binding PickPhotoCommand}"/>
+
+                        </Grid>
+
+                        <Label 
+                            Text="Descripton"
+                            TextColor="{DynamicResource TextColor}"
+                            FontSize="Medium"/>
+
+                        <Editor
+                            x:Name="descriptionEditor"
+                            HeightRequest="100"
+                            Text="{Binding Description}"
+                            TextColor="{DynamicResource TextColor}"/>
+
+                        <Label 
+                            Text="Tags"
+                            TextColor="{DynamicResource TextColor}"
+                            FontSize="Medium"/>
+
+                        <Grid
+                            ColumnDefinitions="*,auto">
+
+                            <Entry
+                                Grid.Column="0"
+                                x:Name="tagsEditor"
+                                Text="{Binding TagText}"
+                                TextColor="{DynamicResource TextColor}"/>
+
+                            <Button
+                                Grid.Column="1"
+                                WidthRequest="45"
+                                Margin="0"
+                                Text=""
+                                TextColor="{DynamicResource IconsColor}"
+                                FontFamily="FA-S"
+                                FontSize="Large"
+                                BackgroundColor="Transparent"
+                                Command="{Binding AddTagCommand}"/>
+
+                        </Grid>
+
+                    </StackLayout>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid 
+                            HeightRequest="45"
+                            ColumnDefinitions="*,auto">
+
+                            <Label
+                                Grid.Column="0"
+                                FontSize="Medium"
+                                VerticalOptions="Center"
+                                TextColor="{DynamicResource TextColor}"
+                                Text="{Binding TagName}"/>
+
+                            <Button
+                                Grid.Column="1"
+                                Text=""
+                                TextColor="{DynamicResource IconsColor}"
+                                FontFamily="FA-S"
+                                WidthRequest="48"
+                                BackgroundColor="Transparent"
+                                Command="{Binding DeleteTagCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:MakePostPageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
+
+                        </Grid>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ContentPage.Content>
+    
+</ContentPage>
+    
+    <!--
         <ScrollView
             Margin="8,0">
 
-            <StackLayout>
+    <StackLayout>
 
-                <Grid 
-                    Padding="8,8,8,0"
-                    ColumnDefinitions="auto,*,auto">
+        <StackLayout
+                    Orientation="Horizontal">
 
-                    <Button 
-                        Grid.Column="0"
+            <Button 
+                        Text="" 
                         HeightRequest="48"
                         WidthRequest="38"
-                        Text="" 
                         TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
-                        Command="{Binding BackCommand}"/>
+                        Command="{Binding BackCommand}"
+                        HorizontalOptions="StartAndExpand"/>
 
-                    <Button 
-                        Grid.Column="2"
+            <Button 
+                        Text="" 
                         HeightRequest="48"
                         WidthRequest="48"
-                        Text="" 
                         TextColor="{DynamicResource IconsColor}"
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
-                        Command="{Binding PostCommand}"/>
+                        Command="{Binding PostCommand}"
+                        HorizontalOptions="End"/>
 
-                </Grid>
+        </StackLayout>
 
-                <Grid 
-                    RowDefinitions="*,auto">
+        <Image 
+                    Aspect="AspectFit"
+                    WidthRequest="{Binding ImageWidth}"
+                    HeightRequest="{Binding ImageHeight}"
+                    Source="{Binding TakenPhoto}" />
 
-                    <Image 
-                        Grid.Row="0"
-                        Aspect="AspectFit"
-                        WidthRequest="{Binding ImageWidth}"
-                        HeightRequest="{Binding ImageHeight}"
-                        Source="{Binding TakenPhoto}" />
+        <Grid
+                    ColumnDefinitions="*,*">
 
-                    <Grid
-                        Grid.Row="1"
-                        ColumnDefinitions="*,auto,auto,*">
-
-                        <Button
-                        Grid.Column="1"
+            <Button
+                        Grid.Column="0"
                         Text="Take"
+                        TextColor="{DynamicResource TextColor}"
+                        BorderColor="{DynamicResource TextColor}"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
                         Command="{Binding TakePhotoCommand}"/>
 
-                        <Button
-                        Grid.Column="2"
+            <Button
+                        Grid.Column="1"
                         Text="Pick"
+                        TextColor="{DynamicResource TextColor}"
+                        BorderColor="{DynamicResource TextColor}"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
                         Command="{Binding PickPhotoCommand}"/>
 
-                    </Grid>
+        </Grid>
 
-                </Grid>
-
-                <StackLayout 
+        <StackLayout 
                     Orientation="Vertical">
 
-                    <Label 
+            <Label 
                         Text="Descripton"
                         TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"/>
 
-                    <Editor
+            <Editor
                         x:Name="descriptionEditor"
                         HeightRequest="100"
                         Text="{Binding Description}"
                         TextColor="{DynamicResource TextColor}"/>
 
-                    <Label 
+            <Label 
                         Text="Tags"
                         TextColor="{DynamicResource TextColor}"
                         FontSize="Medium"/>
 
-                    <Editor
+            <Editor
                         x:Name="tagsEditor"
                         TextChanged="tagsEditor_TextChangesd"
                         TextColor="{DynamicResource TextColor}"/>
 
-                    <CollectionView 
+            <CollectionView 
                         SelectionMode="None"
                         HeightRequest="{Binding AllTagsHeight}"
                         ItemsSource="{Binding AllTags}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
 
-                                <Grid 
+                        <Grid 
                                     HeightRequest="45"
                                     ColumnDefinitions="*,auto">
 
-                                    <Label
+                            <Label
                                         Grid.Column="0"
                                         FontSize="Medium"
                                         VerticalOptions="Center"
                                         TextColor="{DynamicResource TextColor}"
                                         Text="{Binding TagName}"/>
 
-                                    <Button
+                            <Button
                                         Grid.Column="1"
                                         Text=""
                                         TextColor="{DynamicResource IconsColor}"
@@ -127,17 +273,15 @@
                                             }}"
                                         CommandParameter="{Binding .}"/>
 
-                                </Grid>
-                                
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                        </Grid>
 
-                </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-            </StackLayout>
+        </StackLayout>
 
-        </ScrollView>
-    </ContentPage.Content>
-    
-</ContentPage>
+    </StackLayout>
+
+    </ScrollView>
+    -->

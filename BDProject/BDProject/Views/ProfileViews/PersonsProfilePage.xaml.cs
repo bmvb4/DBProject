@@ -16,9 +16,19 @@ namespace BDProject.Views.ProfileViews
     {
         public PersonsProfilePage()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            BindingContext = new PersonsProfilePageViewModel();
+                BindingContext = new PersonsProfilePageViewModel();
+            }
+            catch(Exception ex)
+            {
+                string s = ex.Message;
+            }
+            //InitializeComponent();
+
+            //BindingContext = new PersonsProfilePageViewModel();
         }
     }
 }

@@ -22,46 +22,52 @@ namespace BDProject.ViewModels.ProfileViewModels
         {
             YourPostsCollection.Clear();
 
-            var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.UsernameTemp}", new JObject());
-
-            if (success.IsSuccessStatusCode)
+            try
             {
-                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<ProfileDB>(earthquakesJson);
+                var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.UsernameTemp}", new JObject());
 
-                User user = new User(rootobject);
-                if (user.Photo == null)
-                    user.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
-
-                Name = $"{user.FirstName} {user.LastName}";
-                realUsername = user.Username;
-                Username = $"({ user.Username})";
-                Description = user.Description;
-                ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(user.Photo));
-
-                FollowingCount = user.FollowingsCount;
-                FollowersCount = user.FollowersCount;
-                IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow;
-
-                AllPostsCollection = new ObservableRangeCollection<Post>(user.Posts);
-                PostsCount = AllPostsCollection.Count;
-
-                YourPostsCollection.Clear();
-                if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
+                if (success.IsSuccessStatusCode)
                 {
-                    YourPostsCollection.AddRange(AllPostsCollection);
-                    SetCollectionHeight();
+                    var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ProfileDB>(earthquakesJson);
+
+                    Name = $"{rootobject.FirstName} {rootobject.LastName}";
+                    realUsername = rootobject.Username;
+                    Username = $"({ rootobject.Username})";
+                    Description = rootobject.Description;
+
+                    if (rootobject.Photo == null)
+                        rootobject.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
+
+                    ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(rootobject.Photo));
+
+                    FollowingCount = rootobject.Follower;
+                    FollowersCount = rootobject.Followed;
+                    IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow;
+
+                    //AllPostsCollection = new ObservableRangeCollection<Post>(user.Posts);
+                    AllPostsCollection = new ObservableRangeCollection<Post>();
+                    PostsCount = AllPostsCollection.Count;
+
+                    YourPostsCollection.Clear();
+                    if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
+                    {
+                        YourPostsCollection.AddRange(AllPostsCollection);
+                    }
+                    else
+                    {
+                        YourPostsCollection.AddRange(AllPostsCollection.Take(3 * 10));
+                    }
                 }
-                else
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    YourPostsCollection.AddRange(AllPostsCollection.Take(3 * 10));
-                    SetCollectionHeight();
+                    await ServerServices.RefreshTokenAsync();
+                    SetUserData();
                 }
             }
-            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            catch(Exception ex)
             {
-                await ServerServices.RefreshTokenAsync();
-                SetUserData();
+                string s = ex.Message;
             }
         }
 
@@ -88,32 +94,6 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 if (value == yourPostsCollection) { return; }
                 yourPostsCollection = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Your Posts Collection height parameter
-        private double collectionHeight = 0;
-        public double CollectionHeight
-        {
-            get => collectionHeight;
-            set
-            {
-                if (value == collectionHeight) { return; }
-                collectionHeight = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Your Posts height parameter
-        private double postHeight = 0;
-        public double PostHeight
-        {
-            get => postHeight;
-            set
-            {
-                if (value == postHeight) { return; }
-                postHeight = value;
                 OnPropertyChanged();
             }
         }
@@ -229,10 +209,10 @@ namespace BDProject.ViewModels.ProfileViewModels
             set
             {
                 IsFollowing = value;
-                OnPropertyChanged(nameof(Following));
+                OnPropertyChanged(nameof(IsFollowingString));
             }
         }
-        public string Following => (IsFollowing) ? "Fllowing" : "Follow";
+        public string IsFollowingString => (IsFollowing) ? "Fllowing" : "Follow";
 
         // Commands PostHeight
         // Back to post command
@@ -318,22 +298,6 @@ namespace BDProject.ViewModels.ProfileViewModels
             }
 
             _Globals.IsBusy = false;
-        }
-
-        // Functions
-        // Set Collceton height function
-        private void SetCollectionHeight()
-        {
-            PostHeight = App.Current.MainPage.Width * 0.365;
-
-            if (YourPostsCollection.Count % 3 == 0)
-            {
-                CollectionHeight = PostHeight * (YourPostsCollection.Count / 3) + 16;
-            }
-            else
-            {
-                CollectionHeight = PostHeight * (Math.Ceiling(((double)YourPostsCollection.Count) / 3.0)) + 16;
-            }
         }
 
     }

@@ -222,7 +222,7 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    post.IsFollow = true;
+                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = true;
                     _Globals.GlobalMainUser.FollowingsCount++;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
@@ -240,7 +240,7 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    post.IsFollow = false;
+                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = false;
                     _Globals.GlobalMainUser.FollowingsCount--;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)

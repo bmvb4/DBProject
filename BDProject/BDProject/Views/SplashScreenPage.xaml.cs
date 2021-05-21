@@ -3,6 +3,7 @@ using BDProject.Helpers;
 using BDProject.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -26,6 +27,9 @@ namespace BDProject.Views
 
         private async void CheckAutoLogin()
         {
+            //Preferences.Set("UsernameKey", string.Empty);
+            //Preferences.Set("PasswordKey", string.Empty);
+
             if (Preferences.Get("UsernameKey", string.Empty) != string.Empty || Preferences.Get("PasswordKey", string.Empty) != string.Empty)
             {
                 JObject oJsonObject = new JObject();
@@ -39,7 +43,11 @@ namespace BDProject.Views
                     var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                     var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
 
-                    _Globals.GlobalMainUser = new User(rootobject);
+
+                    if (rootobject.Photo == null)
+                        _Globals.GlobalMainUser = new User(rootobject) { Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto) };
+                    else
+                        _Globals.GlobalMainUser = new User(rootobject);
 
                     success = await ServerServices.SendGetRequestAsync($"posts/getAll/{rootobject.Username}", oJsonObject);
 

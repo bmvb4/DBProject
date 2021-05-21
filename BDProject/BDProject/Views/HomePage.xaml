@@ -23,7 +23,6 @@
 
             <!--===============MY TEMPLATE===============-->
             <DataTemplate x:Key="MyTemplate">
-
                 <Grid 
                     RowDefinitions="auto,*, auto, auto"
                     Margin="0,0,0,16">
@@ -80,7 +79,7 @@
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
-                            
+
                             <TapGestureRecognizer
                                 NumberOfTapsRequired="1"
                                 Command="{Binding ShowTagsCommand, Source={
@@ -110,7 +109,7 @@
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                         CommandParameter="{Binding .}"/>
-                    
+
                     <Label 
                         Grid.Row="2"
                         Margin="6,0"
@@ -120,19 +119,16 @@
                         HorizontalOptions="Center"
                         VerticalOptions="End"/>
 
-                    <Grid 
+                    <StackLayout
                         Grid.Row="3"
-                        ColumnDefinitions="auto,auto,auto,auto,auto,auto,auto"
-                        HorizontalOptions="Center">
+                        Orientation="Horizontal">
 
                         <Button 
-                            Grid.Column="0"
                             Style="{StaticResource BaseButton}"
                             Text=""
                             FontFamily="FA-R"/>
 
                         <Label 
-                            Grid.Column="1"
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
@@ -140,7 +136,6 @@
                             Text="{Binding DeleteDateString}" />
 
                         <Button 
-                            Grid.Column="2"
                             Style="{StaticResource BaseButton}"
                             Text=""
                             FontFamily="{Binding LikeIconFamily}"
@@ -150,7 +145,6 @@
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="3"
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
@@ -158,7 +152,6 @@
                             Text="{Binding LikesCount}" />
 
                         <Button 
-                            Grid.Column="4"
                             Style="{StaticResource BaseButton}"
                             Text="" 
                             FontFamily="FA-R"
@@ -168,62 +161,61 @@
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="5"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
                             Text="{Binding CommentsCount}" />
 
-                    </Grid>
+                    </StackLayout>
 
                 </Grid>
-
             </DataTemplate>
 
             <!--===============MY TEMPLATE WITHOUT DESCRIPTION===============-->
             <DataTemplate x:Key="MyTemplateWithoutDescription">
                 <Grid 
-                    Padding="8,16"
-                    RowDefinitions="auto,*,auto">
+                    RowDefinitions="auto,*, auto, auto"
+                    Margin="0,0,0,16">
 
-                    <Grid
-                        Grid.Row="0"
-                        ColumnDefinitions="auto,auto,*,auto">
+                    <StackLayout
+                        Grid.Row="0">
 
                         <xct:AvatarView 
-                            Grid.Column="0"
                             Source="{Binding UserPhotoSource}"
-                            Size="40"/>
+                            Size="40"
+                            HorizontalOptions="Center"/>
 
                         <Label 
-                            Grid.Column="1"
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="{Binding Username}"/>
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding IdUser}"
+                            HorizontalOptions="Center"/>
 
-                        <Button 
-                            Grid.Column="3"
-                            HeightRequest="0"
-                            WidthRequest="38"
-                            Text=""
-                            FontFamily="FA-S"
-                            BackgroundColor="White"
-                            Command="{Binding MoreCommand, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                            }}"
-                            CommandParameter="{Binding .}"/>
-
-                        <Grid.GestureRecognizers>
+                        <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer 
                                 Command="{Binding OpenMyProfileCommand, Source={
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                                 CommandParameter="{Binding .}"/>
-                        </Grid.GestureRecognizers>
+                        </StackLayout.GestureRecognizers>
 
-                    </Grid>
+                    </StackLayout>
+
+                    <Button 
+                        Grid.Row="0"
+                        HeightRequest="0"
+                        WidthRequest="38"
+                        Text=""
+                        TextColor="{DynamicResource IconsColor}"
+                        FontFamily="FA-S"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="End"
+                        Command="{Binding MoreCommand, Source={
+                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                        }}"
+                        CommandParameter="{Binding .}"/>
 
                     <Image 
                         Grid.Row="1"
@@ -237,72 +229,85 @@
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
+
+                            <TapGestureRecognizer
+                                NumberOfTapsRequired="1"
+                                Command="{Binding ShowTagsCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
                         </Image.GestureRecognizers>
 
                     </Image>
 
-                    <Grid 
-                        Grid.Row="2"
-                        ColumnDefinitions="auto,auto,*,auto,auto,auto,auto">
-
-                        <Label 
-                            Grid.Column="0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="Days" />
-
-                        <Label 
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="{Binding DaysCount, Source={
+                    <Button
+                        Grid.Row="1"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Text="#"
+                        TextColor="{DynamicResource IconsColor}"
+                        IsVisible="{Binding IsTagsVisible, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}" />
+                                }}"
+                        Padding="0"
+                        Margin="0,0,4,4"
+                        CornerRadius="100"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        BackgroundColor="{DynamicResource BackgroundColor}"
+                        Command="{Binding OpenTagsCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                        CommandParameter="{Binding .}"/>
+
+                    <StackLayout
+                        Grid.Row="3"
+                        Orientation="Horizontal">
 
                         <Button 
-                            Grid.Column="3"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
+                            Text=""
+                            FontFamily="FA-R"/>
+
+                        <Label 
+                            Margin="0,0,16,0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding DeleteDateString}" />
+
+                        <Button 
+                            Style="{StaticResource BaseButton}"
                             Text=""
-                            FontSize="Large"
-                            FontFamily="FA-R"
-                            BackgroundColor="White"
+                            FontFamily="{Binding LikeIconFamily}"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="4"
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="Black"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding LikesCount}" />
 
                         <Button 
-                            Grid.Column="5"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
                             Text="" 
-                            FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="White"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="6"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="Black"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding CommentsCount}" />
 
-                    </Grid>
+                    </StackLayout>
 
                 </Grid>
             </DataTemplate>
@@ -310,55 +315,50 @@
             <!--==============OTHERS TEMPLATE===================-->
             <DataTemplate x:Key="OthersTemplate">
                 <Grid 
-                    Padding="8,16"
-                    RowDefinitions="auto,auto,*,auto">
+                    RowDefinitions="auto,*, auto, auto"
+                    Margin="0,0,0,16">
 
-                    <Grid
-                        Grid.Row="0"
-                        ColumnDefinitions="auto,auto,*,auto">
+                    <StackLayout
+                        Grid.Row="0">
 
                         <xct:AvatarView 
-                            Grid.Column="0"
                             Source="{Binding UserPhotoSource}"
-                            Size="40"/>
+                            Size="40"
+                            HorizontalOptions="Center"/>
 
                         <Label 
-                            Grid.Column="1"
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="{Binding Username}"/>
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding IdUser}"
+                            HorizontalOptions="Center"/>
 
-                        <Button 
-                            Grid.Column="3"
-                            CornerRadius="100"
-                            HeightRequest="0"
-                            Text="{Binding Following}"
-                            FontAttributes="Bold"
-                            Command="{Binding FollowProfileCommand, Source={
-                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}"
-                            CommandParameter="{Binding .}"/>
-
-                        <Grid.GestureRecognizers>
+                        <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer 
                                 Command="{Binding OpenProfileCommand, Source={
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                                 CommandParameter="{Binding .}"/>
-                        </Grid.GestureRecognizers>
+                        </StackLayout.GestureRecognizers>
 
-                    </Grid>
-
-                    <Label 
-                        Grid.Row="1"
-                        FontSize="Medium"
-                        TextColor="Black"
-                        Text="{Binding Description}" />
+                    </StackLayout>
+                    
+                    <Button 
+                        CornerRadius="100"
+                        HeightRequest="0"
+                        Text="{Binding IsFollowString}"
+                        TextColor="{DynamicResource TextColor}"
+                        FontAttributes="Bold"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="End"
+                        Command="{Binding FollowProfileCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                            }}"
+                        CommandParameter="{Binding .}"/>
 
                     <Image 
-                        Grid.Row="2"
+                        Grid.Row="1"
                         Aspect="Fill"
                         Source="{Binding PhotoSource}">
 
@@ -369,72 +369,94 @@
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
+
+                            <TapGestureRecognizer
+                                NumberOfTapsRequired="1"
+                                Command="{Binding ShowTagsCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
                         </Image.GestureRecognizers>
 
                     </Image>
 
-                    <Grid 
-                        Grid.Row="3"
-                        ColumnDefinitions="auto,auto,*,auto,auto,auto,auto">
-
-                        <Label 
-                            Grid.Column="0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="Days" />
-
-                        <Label 
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="{Binding DaysCount, Source={
+                    <Button
+                        Grid.Row="1"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Text="#"
+                        TextColor="{DynamicResource IconsColor}"
+                        IsVisible="{Binding IsTagsVisible, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}" />
+                                }}"
+                        Padding="0"
+                        Margin="0,0,4,4"
+                        CornerRadius="100"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        BackgroundColor="{DynamicResource BackgroundColor}"
+                        Command="{Binding OpenTagsCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                        CommandParameter="{Binding .}"/>
+
+                    <Label 
+                        Grid.Row="2"
+                        Margin="6,0"
+                        FontSize="Medium"
+                        TextColor="{DynamicResource TextColor}"
+                        Text="{Binding Description}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="End"/>
+
+                    <StackLayout
+                        Grid.Row="3"
+                        Orientation="Horizontal">
 
                         <Button 
-                            Grid.Column="3"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
+                            Text=""
+                            FontFamily="FA-R"/>
+
+                        <Label 
+                            Margin="0,0,16,0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding DeleteDateString}" />
+
+                        <Button 
+                            Style="{StaticResource BaseButton}"
                             Text=""
-                            FontSize="Large"
-                            FontFamily="FA-R"
-                            BackgroundColor="White"
+                            FontFamily="{Binding LikeIconFamily}"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="4"
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="Black"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding LikesCount}" />
 
                         <Button 
-                            Grid.Column="5"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
                             Text="" 
-                            FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="White"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="6"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="Black"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding CommentsCount}" />
 
-                    </Grid>
+                    </StackLayout>
 
                 </Grid>
             </DataTemplate>
@@ -442,46 +464,47 @@
             <!--==============OTHERS TEMPLATE WITHOUT DESCRIPTION===================-->
             <DataTemplate x:Key="OthersTemplateWithoutDescription">
                 <Grid 
-                    Padding="8,16"
-                    RowDefinitions="auto,*,auto">
+                    RowDefinitions="auto,*, auto, auto"
+                    Margin="0,0,0,16">
 
-                    <Grid
-                        Grid.Row="0"
-                        ColumnDefinitions="auto,auto,*,auto">
+                    <StackLayout
+                        Grid.Row="0">
 
                         <xct:AvatarView 
-                            Grid.Column="0"
                             Source="{Binding UserPhotoSource}"
-                            Size="40"/>
+                            Size="40"
+                            HorizontalOptions="Center"/>
 
                         <Label 
-                            Grid.Column="1"
                             FontSize="Medium"
                             FontAttributes="Bold"
                             VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="{Binding Username}"/>
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding IdUser}"
+                            HorizontalOptions="Center"/>
 
-                        <Button 
-                            Grid.Column="3"
-                            CornerRadius="100"
-                            HeightRequest="0"
-                            Text="{Binding Following}"
-                            FontAttributes="Bold"
-                            Command="{Binding FollowProfileCommand, Source={
-                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}"
-                            CommandParameter="{Binding .}"/>
-
-                        <Grid.GestureRecognizers>
+                        <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer 
                                 Command="{Binding OpenProfileCommand, Source={
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                                 CommandParameter="{Binding .}"/>
-                        </Grid.GestureRecognizers>
+                        </StackLayout.GestureRecognizers>
 
-                    </Grid>
+                    </StackLayout>
+
+                    <Button 
+                        CornerRadius="100"
+                        HeightRequest="0"
+                        Text="{Binding IsFollowString}"
+                        TextColor="{DynamicResource TextColor}"
+                        FontAttributes="Bold"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="End"
+                        Command="{Binding FollowProfileCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                            }}"
+                        CommandParameter="{Binding .}"/>
 
                     <Image 
                         Grid.Row="1"
@@ -495,72 +518,85 @@
                                     RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
+
+                            <TapGestureRecognizer
+                                NumberOfTapsRequired="1"
+                                Command="{Binding ShowTagsCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
                         </Image.GestureRecognizers>
 
                     </Image>
 
-                    <Grid 
-                        Grid.Row="2"
-                        ColumnDefinitions="auto,auto,*,auto,auto,auto,auto">
-
-                        <Label 
-                            Grid.Column="0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="Days" />
-
-                        <Label 
-                            Grid.Column="1"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="Black"
-                            Text="{Binding DaysCount, Source={
+                    <Button
+                        Grid.Row="1"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Text="#"
+                        TextColor="{DynamicResource IconsColor}"
+                        IsVisible="{Binding IsTagsVisible, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}" />
+                                }}"
+                        Padding="0"
+                        Margin="0,0,4,4"
+                        CornerRadius="100"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        BackgroundColor="{DynamicResource BackgroundColor}"
+                        Command="{Binding OpenTagsCommand, Source={
+                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                }}"
+                        CommandParameter="{Binding .}"/>
+
+                    <StackLayout
+                        Grid.Row="3"
+                        Orientation="Horizontal">
 
                         <Button 
-                            Grid.Column="3"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
+                            Text=""
+                            FontFamily="FA-R"/>
+
+                        <Label 
+                            Margin="0,0,16,0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding DeleteDateString}" />
+
+                        <Button 
+                            Style="{StaticResource BaseButton}"
                             Text=""
-                            FontSize="Large"
-                            FontFamily="FA-R"
-                            BackgroundColor="White"
+                            FontFamily="{Binding LikeIconFamily}"
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="4"
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="Black"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding LikesCount}" />
 
                         <Button 
-                            Grid.Column="5"
-                            HeightRequest="46"
-                            WidthRequest="46"
+                            Style="{StaticResource BaseButton}"
                             Text="" 
-                            FontSize="Large"
                             FontFamily="FA-R"
-                            BackgroundColor="White"
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
                             CommandParameter="{Binding .}"/>
 
                         <Label 
-                            Grid.Column="6"
                             FontSize="Medium"
                             VerticalOptions="Center"
-                            TextColor="Black"
+                            TextColor="{DynamicResource TextColor}"
                             Text="{Binding CommentsCount}" />
 
-                    </Grid>
+                    </StackLayout>
 
                 </Grid>
             </DataTemplate>
@@ -578,17 +614,14 @@
 
 
     <ContentPage.Content>
-        
         <RefreshView 
             IsRefreshing="{Binding IsRefreshing}"
             Command="{Binding RefreshCommand}">
-
             <Grid 
                 RowDefinitions="auto,*">
 
-                <Grid 
-                    Grid.Row="0"
-                    ColumnDefinitions="*,auto">
+                <StackLayout 
+                    Grid.Row="0">
 
                     <Button 
                         Grid.Column="1"
@@ -599,9 +632,10 @@
                         FontFamily="FA-S"
                         FontSize="Large"
                         BackgroundColor="Transparent"
-                        Command="{Binding OpenSearchCommand}"/>
+                        Command="{Binding OpenSearchCommand}"
+                        HorizontalOptions="End"/>
 
-                </Grid>
+                </StackLayout>
 
                 <CollectionView 
                     Grid.Row="1"
@@ -616,8 +650,6 @@
                     ItemTemplate="{StaticResource templateSelector}"/>
 
             </Grid>
-
         </RefreshView>
-
     </ContentPage.Content>
 </ContentPage>

@@ -15,57 +15,62 @@
 
         <Grid
             Margin="8,0"
-            RowDefinitions="*,auto, auto, auto, auto,*">
+            RowDefinitions="auto,*">
 
-            <Grid 
+            <Button 
                 Grid.Row="0"
-                ColumnDefinitions="auto,*">
-
-                <Button 
-                    Grid.Column="0"
-                    HeightRequest="48"
-                    WidthRequest="38"
-                    Text="" 
-                    FontFamily="FA-S"
-                    FontSize="Large"
-                    BackgroundColor="Transparent"
-                    Command="{Binding BackCommand}"/>
-
-            </Grid>
-
-            <Label
-                Grid.Row="1"
-                Text="Verify Profile"
+                HeightRequest="48"
+                WidthRequest="38"
+                Text="" 
+                FontFamily="FA-S"
                 FontSize="Large"
-                HorizontalOptions="Center"/>
+                BackgroundColor="Transparent"
+                Command="{Binding BackCommand}"
+                HorizontalOptions="Start"/>
 
-            <Entry
-                Grid.Row="2"
-                Text="{Binding Code}"
-                x:Name="codeEntry"
-                Placeholder="Verification Code"/>
+            <StackLayout
+                Grid.Row="1"
+                VerticalOptions="Center">
 
-            <Label 
-                Grid.Row="3"
-                Text="{Binding CodeAlert}" 
-                FontSize="Small"
-                TextColor="Red"/>
+                <Label
+                    Text="Verify Profile"
+                    TextColor="Black"
+                    FontSize="Large"
+                    HorizontalOptions="Center"/>
 
-            <Grid
-                Grid.Row="4"
-                ColumnDefinitions="auto,auto">
+                <Entry
+                    x:Name="codeEntry"
+                    Text="{Binding Code}"
+                    TextColor="Black"
+                    Placeholder="Verification Code"/>
 
-                <Button
-                    Grid.Column="0"
-                    Text="Resend"
-                    Command="{Binding ResendCommand}"/>
+                <Label 
+                    Text="{Binding CodeAlert}" 
+                    FontSize="Small"
+                    TextColor="Red"/>
 
-                <Button
-                    Grid.Column="1"
-                    Text="Verify"
-                    Command="{Binding VerifyCommand}"/>
+                <Grid
+                    ColumnDefinitions="*,*">
 
-            </Grid>
+                    <Button
+                        Grid.Column="0"
+                        Text="Resend"
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
+                        Command="{Binding ResendCommand}"/>
+
+                    <Button
+                        Grid.Column="1"
+                        Text="Verify"
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
+                        Command="{Binding VerifyCommand}"/>
+
+                </Grid>
+
+            </StackLayout>
 
         </Grid>
     </ContentPage.Content>

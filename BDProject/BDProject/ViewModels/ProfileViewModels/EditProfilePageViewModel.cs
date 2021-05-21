@@ -168,14 +168,12 @@ namespace BDProject.ViewModels.ProfileViewModels
 
             if (success.IsSuccessStatusCode)
             {
-                var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var rootobject = JsonConvert.DeserializeObject<ProfileDB>(earthquakesJson);
-
                 await Shell.Current.Navigation.PopAsync();
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ServerServices.RefreshTokenAsync();
+                await SaveChangesFunction();
             }
         }
 
