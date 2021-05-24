@@ -25,12 +25,8 @@ namespace BDProject.Views
         {
             base.OnAppearing();
 
-            if (_Globals.Refresh == true)
-            {
-                var vm = (ProfilePageViewModel)this.BindingContext;
-                vm.RefreshFunction();
-                _Globals.Refresh = false;
-            }
+            var vm = (ProfilePageViewModel)this.BindingContext;
+            vm.SetUserData();
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +19,7 @@ namespace BDProject.ViewModels
 
             BackCommand = new Command(async () => await BackFunction());
             ResetCommand = new Command(ResetFunction);
+            ResendCodeCommand = new Command(ResendCodeFunction);
         }
 
         // Parameters
@@ -116,11 +121,60 @@ namespace BDProject.ViewModels
         private async void ResetFunction()
         {
             if (CheckParameters() == true) { return; }
+            try
+            {
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("Username", _Globals.UsernameTemp);
 
-            // Reset password
-            await Shell.Current.GoToAsync("//LogInPage");
+                var success = await ServerServices.SendPostRequestAsync($"forgetpassword/{Code}", oJsonObject);
 
-            ClearEverything();
+                if (success.IsSuccessStatusCode)
+                {
+                    var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
+
+                    _Globals.GlobalMainUser.AccessToken = rootobject.AccessToken;
+
+                    JObject oJsonObject1 = new JObject();
+                    oJsonObject1.Add("Username", _Globals.UsernameTemp);
+                    oJsonObject1.Add("Password", Password);
+                    success = await ServerServices.SendPutRequestAsync("forgetpassword", oJsonObject1);
+
+                    if (success.IsSuccessStatusCode)
+                    {
+                        await Shell.Current.GoToAsync("//LogInPage");
+                    }
+                    else
+                    {
+                        CodeAlert = "Something is incorrect 2";
+                    }
+                }
+                else
+                {
+                    CodeAlert = "Something is incorrect";
+                }
+
+                ClearEverything();
+            }
+            catch(Exception ex)
+            {
+                string s = ex.Message;
+            }
+        }
+
+        // Open Posts command
+        public ICommand ResendCodeCommand { get; set; }
+        private async void ResendCodeFunction()
+        {
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("Username", _Globals.UsernameTemp);
+
+            var success = await ServerServices.SendPostRequestAsync("forgetpassword", oJsonObject);
+
+            //if (success.IsSuccessStatusCode)
+            //{
+            //    _Globals.UsernameTemp = Username;
+            //}
         }
 
         // Functions
@@ -189,7 +243,6 @@ namespace BDProject.ViewModels
         // Clear everything
         private void ClearEverything()
         {
-            
             Password = "";
             PasswordAlert = "";
             ConfirmPassword = "";

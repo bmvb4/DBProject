@@ -29,10 +29,9 @@ namespace BDProject.ViewModels.ProfileViewModels
                 if (success.IsSuccessStatusCode)
                 {
                     var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<ProfileDB>(earthquakesJson);
+                    var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
 
                     Name = $"{rootobject.FirstName} {rootobject.LastName}";
-                    realUsername = rootobject.Username;
                     Username = $"({ rootobject.Username})";
                     Description = rootobject.Description;
 
@@ -45,19 +44,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                     FollowersCount = rootobject.Followed;
                     IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow;
 
-                    //AllPostsCollection = new ObservableRangeCollection<Post>(user.Posts);
-                    AllPostsCollection = new ObservableRangeCollection<Post>();
-                    PostsCount = AllPostsCollection.Count;
-
-                    YourPostsCollection.Clear();
-                    if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
-                    {
-                        YourPostsCollection.AddRange(AllPostsCollection);
-                    }
-                    else
-                    {
-                        YourPostsCollection.AddRange(AllPostsCollection.Take(3 * 10));
-                    }
+                    
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -124,7 +111,6 @@ namespace BDProject.ViewModels.ProfileViewModels
         }
 
         // Your username parameter
-        private string realUsername = "";
         private string username = "";
         public string Username
         {
@@ -189,19 +175,6 @@ namespace BDProject.ViewModels.ProfileViewModels
             }
         }
 
-        // Refreshing parameter
-        private bool isRefreshing = false;
-        public bool IsRefreshing
-        {
-            get => isRefreshing;
-            set
-            {
-                //if (value == isRefreshing) { return; }
-                isRefreshing = value;
-                OnPropertyChanged();
-            }
-        }
-
         // following parameter
         private bool IsFollowing 
         { 
@@ -213,6 +186,18 @@ namespace BDProject.ViewModels.ProfileViewModels
             }
         }
         public string IsFollowingString => (IsFollowing) ? "Fllowing" : "Follow";
+
+        private bool isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                //if (value == isRefreshing) { return; }
+                isRefreshing = value;
+                OnPropertyChanged();
+            }
+        }
 
         // Commands PostHeight
         // Back to post command
@@ -247,7 +232,7 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.FollowingsCount++;
+                    FollowingCount++;
                     _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = true;
                     IsFollowing = true;
                 }
@@ -267,7 +252,7 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalMainUser.FollowingsCount--;
+                    FollowingCount--;
                     _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = false;
                     IsFollowing = false;
                 }
@@ -283,21 +268,14 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand LoadMoreCommand { get; set; }
         private async Task LoadMoreFunction()
         {
-            if (_Globals.IsBusy) { return; }
-            _Globals.IsBusy = true;
+            if (IsBusy) { return; }
+            IsBusy = true;
 
             await Task.Delay(1000);
 
-            if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
-            {
-                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count));
-            }
-            else
-            {
-                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count).Take(3 * 10));
-            }
+            
 
-            _Globals.IsBusy = false;
+            IsBusy = false;
         }
 
     }

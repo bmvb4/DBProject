@@ -1,10 +1,14 @@
-﻿using BDProject.Helpers;
+﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using BDProject.Models;
 using BDProject.Views._PopUps;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -16,39 +20,41 @@ namespace BDProject.ViewModels
 {
     public class ProfilePageViewModel : BaseViewModel
     {
-        public void SetUserData()
+        public async void SetUserData()
         {
-            User user = _Globals.GlobalMainUser;
+
+            YourPostsCollection.Clear();
 
             try
             {
-                Name = $"{user.FirstName} {user.LastName}";
-                Username = $"({user.Username})";
-                Description = user.Description;
-                if (user.Photo == null)
-                    user.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
+                var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.GlobalMainUser.Username}", new JObject());
 
-                ProfilePictureSource = user.PhotoSource;
-
-                FollowingCount = _Globals.GlobalMainUser.FollowingsCount;
-                FollowersCount = _Globals.GlobalMainUser.FollowersCount;
-
-                AllPostsCollection = new ObservableRangeCollection<Post>(_Globals.GlobalMainUser.Posts);
-                PostsCount = AllPostsCollection.Count;
-
-                YourPostsCollection.Clear();
-                if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
+                if (success.IsSuccessStatusCode)
                 {
-                    YourPostsCollection.AddRange(AllPostsCollection);
+                    var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
+
+                    Name = $"{rootobject.FirstName} {rootobject.LastName}";
+                    Username = $"({ rootobject.Username})";
+                    Description = rootobject.Description;
+
+                    if (rootobject.Photo == null)
+                        rootobject.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
+
+                    ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(rootobject.Photo));
+
+                    FollowingCount = rootobject.Followed;
+                    FollowersCount = rootobject.Follower;
                 }
-                else
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    YourPostsCollection.AddRange(AllPostsCollection.Take(3 * 10));
+                    await ServerServices.RefreshTokenAsync();
+                    SetUserData();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+                string s = ex.Message;
             }
         }
 
@@ -74,8 +80,6 @@ namespace BDProject.ViewModels
             MoreCommand = new Command<Post>(MoreFunction);
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
         }
-
-        private ObservableRangeCollection<Post> AllPostsCollection = new ObservableRangeCollection<Post>();
 
         // Parameters
         // Your Posts Collection parameter
@@ -208,19 +212,6 @@ namespace BDProject.ViewModels
         }
 
         // Refreshing parameter
-        private bool isRefreshing = false;
-        public bool IsRefreshing
-        {
-            get => isRefreshing;
-            set
-            {
-                //if (value == isRefreshing) { return; }
-                isRefreshing = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Refreshing parameter
         private bool isTagsVisible = false;
         public bool IsTagsVisible
         {
@@ -229,6 +220,18 @@ namespace BDProject.ViewModels
             {
                 if (value == isTagsVisible) { return; }
                 isTagsVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                //if (value == isRefreshing) { return; }
+                isRefreshing = value;
                 OnPropertyChanged();
             }
         }
@@ -261,21 +264,27 @@ namespace BDProject.ViewModels
         public ICommand LoadMoreCommand { get; set; }
         private async Task LoadMoreFunction()
         {
-            if (_Globals.IsBusy) { return; }
-            _Globals.IsBusy = true;
+            if (IsBusy) { return; }
+            IsBusy = true;
 
-            await Task.Delay(1000);
-
-            if (AllPostsCollection.Count - YourPostsCollection.Count < 3 * 10)
+            if(YourPostsCollection.Count % 10 == 0)
             {
-                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count));
-            }
-            else
-            {
-                YourPostsCollection.AddRange(AllPostsCollection.Skip(YourPostsCollection.Count).Take(3 * 10));
+                var success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/{YourPostsCollection.Count / 10}", new JObject());
+
+                if (success.IsSuccessStatusCode)
+                {
+
+                    var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                    var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
+
+                    foreach (BigPostDB post in postList)
+                        YourPostsCollection.Add(new Post(post));
+
+                    PostsCount = YourPostsCollection.Count;
+                }
             }
 
-            _Globals.IsBusy = false;
+            IsBusy = false;
         }
 
         // Like Post command

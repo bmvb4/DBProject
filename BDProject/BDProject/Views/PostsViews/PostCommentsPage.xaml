@@ -25,18 +25,20 @@
                 <Grid
                     Margin="8"
                     ColumnDefinitions="auto,*">
-                    <StackLayout
+                    
+                    <Grid
                         Grid.Column="0"
-                        Orientation="Horizontal">
+                        RowDefinitions="auto,*">
 
                         <xct:AvatarView 
+                            Grid.Row="0"
                             Source="{Binding UserPhotoSource}"
                             Size="40"
                             VerticalOptions="Start">
 
                             <xct:AvatarView.GestureRecognizers>
                                 <TapGestureRecognizer
-                                    NumberOfTapsRequired="2"
+                                    NumberOfTapsRequired="1"
                                     Command="{Binding OpenProfileCommand, Source={
                                         RelativeSource AncestorType={x:Type local:PostCommentsPageViewModel}
                                         }}"
@@ -44,7 +46,8 @@
                             </xct:AvatarView.GestureRecognizers>
 
                         </xct:AvatarView>
-                    </StackLayout>
+
+                    </Grid>
 
                     <Label 
                         Grid.Column="1"

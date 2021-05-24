@@ -27,20 +27,6 @@ namespace BDProject.Models
             }
         }
 
-        public User(ProfileDB user)
-        {
-            Username = user.Username;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Description = user.Description;
-            Photo = user.Photo;
-
-            AddPostsFromDB(user.Posts);
-
-            FollowingsCount = user.Follower;
-            FollowersCount = user.Followed;
-        }
-
         public User(UserDB user)
         {
             Username = user.Username;

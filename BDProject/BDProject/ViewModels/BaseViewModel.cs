@@ -19,5 +19,14 @@ namespace BDProject.ViewModels
                 Console.Write(ex + "in View Models");
             }
         }
+
+
+
+        private static bool isBusy = false;
+        public static bool IsBusy
+        {
+            get => isBusy;
+            set => isBusy = value;
+        }
     }
 }

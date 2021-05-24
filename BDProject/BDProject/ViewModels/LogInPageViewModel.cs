@@ -135,26 +135,12 @@ namespace BDProject.ViewModels
                 else
                     _Globals.GlobalMainUser = new User(rootobject);
 
-                success = await ServerServices.SendGetRequestAsync($"posts/getAll/{rootobject.Username}", oJsonObject);
+                await Shell.Current.GoToAsync("//HomePage");
 
-                if (success.IsSuccessStatusCode)
-                {
-                    earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                    var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
-                    _Globals.GlobalMainUser.AddPostsFromDB(postList);
-                    _Globals.AddPostsFromDB(postList);
-
-                    await Shell.Current.GoToAsync("//HomePage");
-
-                    Username = "";
-                    Password = "";
-                    UsernameAlert = "";
-                    PasswordAlert = "";
-                }
-                else
-                {
-                    PasswordAlert = "Something went wrong";
-                }
+                Username = "";
+                Password = "";
+                UsernameAlert = "";
+                PasswordAlert = "";
             }
             else
             {

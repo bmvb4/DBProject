@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -17,60 +16,43 @@ namespace BDProject.ViewModels.PostsViewModels
 {
     public class PostCommentsPageViewModel : BaseViewModel
     {
-
-        public void SetParameters()
+        public async void SetCollceton()
         {
-            Post SelectedPost = _Globals.GetPost(_Globals.OpenID);
+            CommentsCollection.Clear();
 
-            Username = SelectedPost.IdUser;
-            Description = SelectedPost.Description;
-        }
-
-        public async void SetCollection()
-        {
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
-
-            var success = await ServerServices.SendGetRequestAsync($"posts/comment/get/{_Globals.OpenID}", oJsonObject);
+            var success = await ServerServices.SendGetRequestAsync($"posts/comment/get/{_Globals.OpenID}/0", oJsonObject);
 
             if (success.IsSuccessStatusCode)
             {
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                 var rootobject = JsonConvert.DeserializeObject<List<CommentDB>>(earthquakesJson);
 
-                List<Comment> list = new List<Comment>();
+                List<Comment> comCollection = new List<Comment>();
                 foreach (CommentDB comment in rootobject)
-                    list.Add(new Comment(comment));
+                    comCollection.Add(new Comment(comment));
 
-                AllComments = new ObservableRangeCollection<Comment>(list);
-
-                CommentsCollection.Clear();
-                if (AllComments.Count >= 20)
-                {
-                    for (int i = 0; i < 20; i++)
-                    {
-                        CommentsCollection.Add(AllComments[i]);
-                    }
-                }
-                else
-                {
-                    CommentsCollection = AllComments;
-                }
-
-                CollectionHeight = 77 * CommentsCollection.Count;
+                CommentsCollection.AddRange(new ObservableRangeCollection<Comment>(comCollection));
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ServerServices.RefreshTokenAsync();
+                await LoadMoreFunction();
             }
         }
 
-        private ObservableRangeCollection<Comment> AllComments = new ObservableRangeCollection<Comment>();
+        public void SetParameters()
+        {
+            Username = _Globals.GlobalFeedPosts?.First(x => x.IdPost == _Globals.OpenID).IdUser;
+            Description = _Globals.GlobalFeedPosts?.First(x => x.IdPost == _Globals.OpenID).Description;
+        }
 
         public PostCommentsPageViewModel()
         {
+            IsBusy = true;
+            SetCollceton();
             SetParameters();
-            SetCollection();
 
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
@@ -80,6 +62,7 @@ namespace BDProject.ViewModels.PostsViewModels
             LoadMoreCommand = new Command(async () => await LoadMoreFunction());
 
             OpenProfileCommand = new Command<Comment>(OpenProfileFunctionAsync);
+            IsBusy = false;
         }
 
         // Parameters
@@ -135,27 +118,13 @@ namespace BDProject.ViewModels.PostsViewModels
             }
         }
 
-        // Your Posts height parameter
-        private double collectionHeight = 0;
-        public double CollectionHeight
-        {
-            get => collectionHeight;
-            set
-            {
-                if (value == collectionHeight) { return; }
-                collectionHeight = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Refreshing parameter
         private bool isRefreshing = false;
         public bool IsRefreshing
         {
             get => isRefreshing;
             set
             {
-                if (value == isRefreshing) { return; }
+                //if (value == isRefreshing) { return; }
                 isRefreshing = value;
                 OnPropertyChanged();
             }
@@ -176,7 +145,7 @@ namespace BDProject.ViewModels.PostsViewModels
         private void RefreshFunction()
         {
             IsRefreshing = true;
-            SetCollection();
+            SetCollceton();
             IsRefreshing = false;
         }
 
@@ -196,7 +165,7 @@ namespace BDProject.ViewModels.PostsViewModels
             if (success.IsSuccessStatusCode)
             {
                 _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).CommentsCount--;
-                SetCollection();
+                SetCollceton();
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
@@ -221,7 +190,7 @@ namespace BDProject.ViewModels.PostsViewModels
             if (success.IsSuccessStatusCode)
             {
                 _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).CommentsCount++;
-                SetCollection();
+                SetCollceton();
                 Comment = "";
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
@@ -234,21 +203,32 @@ namespace BDProject.ViewModels.PostsViewModels
         public ICommand LoadMoreCommand { get; set; }
         private async Task LoadMoreFunction()
         {
-            if (_Globals.IsBusy) { return; }
-            _Globals.IsBusy = true;
+            if (IsBusy) { return; }
+            IsBusy = true;
 
-            await Task.Delay(1000);
-
-            if (AllComments.Count - CommentsCollection.Count < 10) 
+            if(CommentsCollection.Count % 10 == 0)
             {
-                CommentsCollection.AddRange(AllComments.Skip(CommentsCollection.Count));
-            }
-            else
-            {
-                CommentsCollection.AddRange(AllComments.Skip(CommentsCollection.Count).Take(10));
+                var success = await ServerServices.SendGetRequestAsync($"posts/comment/get/{_Globals.OpenID}/{(CommentsCollection.Count / 10) + 1}", new JObject());
+
+                if (success.IsSuccessStatusCode)
+                {
+                    var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<List<CommentDB>>(earthquakesJson);
+
+                    List<Comment> comCollection = new List<Comment>();
+                    foreach (CommentDB comment in rootobject)
+                        comCollection.Add(new Comment(comment));
+
+                    CommentsCollection.AddRange(new ObservableRangeCollection<Comment>(comCollection));
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
+                    await LoadMoreFunction();
+                }
             }
 
-            _Globals.IsBusy = false;
+            IsBusy = false;
         }
 
 

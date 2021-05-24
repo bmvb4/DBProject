@@ -14,6 +14,9 @@ namespace BDProject.DatabaseModels
         public string Description { get; set; }
         public byte[] Photo { get; set; }
 
+        public int Follower { get; set; }
+        public int Followed { get; set; }
+
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
     }

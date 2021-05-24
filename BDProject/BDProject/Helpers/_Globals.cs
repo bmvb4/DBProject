@@ -53,13 +53,6 @@ namespace BDProject.Helpers
             set => openID = value;
         }
 
-        private static bool isBusy = false;
-        public static bool IsBusy
-        {
-            get => isBusy;
-            set => isBusy = value;
-        }
-
         private static bool refresh = false;
         public static bool Refresh
         {

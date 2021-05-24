@@ -49,21 +49,7 @@ namespace BDProject.Views
                     else
                         _Globals.GlobalMainUser = new User(rootobject);
 
-                    success = await ServerServices.SendGetRequestAsync($"posts/getAll/{rootobject.Username}", oJsonObject);
-
-                    if (success.IsSuccessStatusCode)
-                    {
-                        earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                        var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
-                        _Globals.GlobalMainUser.AddPostsFromDB(postList);
-                        _Globals.AddPostsFromDB(postList);
-
-                        await Shell.Current.GoToAsync("//HomePage");
-                    }
-                    else
-                    {
-                        await App.Current.MainPage.DisplayAlert("Warning!", "Couldn't get Posts", "OK");
-                    }
+                    await Shell.Current.GoToAsync("//HomePage");
                 }
                 else
                 {

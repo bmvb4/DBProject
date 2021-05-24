@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BDProject.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
@@ -20,31 +23,31 @@ namespace BDProject.ViewModels
 
         // Parameters
         // Email parameter
-        private string email = "";
-        public string Email
+        private string username = "";
+        public string Username
         {
-            get => email;
+            get => username;
             set
             {
-                if (value == email) { return; }
-                email = value;
+                if (value == username) { return; }
+                username = value;
 
-                RestrictLenght(email, 260);
+                RestrictLenght(username, 260);
 
-                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged();
             }
         }
 
         // Email parameter
-        private string emailAlert = "";
-        public string EmailAlert
+        private string usernameAlert = "";
+        public string UsernameAlert
         {
-            get => emailAlert;
+            get => usernameAlert;
             set
             {
-                if (value == emailAlert) { return; }
-                emailAlert = value;
-                OnPropertyChanged(nameof(EmailAlert));
+                if (value == usernameAlert) { return; }
+                usernameAlert = value;
+                OnPropertyChanged();
             }
         }
 
@@ -63,11 +66,22 @@ namespace BDProject.ViewModels
         {
             if (EmailValidator() == false) { return; }
 
-            if (CheckParameters() == true) { return; }
+            //if (CheckParameters() == true) { return; }
 
-            // send email
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("Username", Username);
 
-            await Shell.Current.GoToAsync("ResetPasswordPage");
+            var success = await ServerServices.SendPostRequestAsync("forgetpassword", oJsonObject);
+
+            if (success.IsSuccessStatusCode)
+            {
+                _Globals.UsernameTemp = Username;
+                await Shell.Current.GoToAsync("ResetPasswordPage");
+            }
+            else
+            {
+                UsernameAlert = "Something is incorrect";
+            }
             
             ClearEverything();
         }
@@ -78,7 +92,7 @@ namespace BDProject.ViewModels
         {
             if (text.Length >= restriction)
             {
-                Email = text.Remove(text.Length - 1);
+                Username = text.Remove(text.Length - 1);
             }
         }
 
@@ -87,15 +101,13 @@ namespace BDProject.ViewModels
         {
             try
             {
-                MailAddress m = new MailAddress(Email);
-
-                EmailAlert = "";
+                UsernameAlert = "";
 
                 return true;
             }
             catch
             {
-                EmailAlert = "Invalid Email";
+                UsernameAlert = "Invalid Username";
                 return false;
             }
         }
@@ -107,24 +119,24 @@ namespace BDProject.ViewModels
             bool flag = false;
 
             // Check Email parameter
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrEmpty(Email)) // empty box
+            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrEmpty(Username)) // empty box
             {
-                EmailAlert = "Email is required";
+                UsernameAlert = "Email is required";
                 flag = true;
             }
-            else if (Email.Length >= 255) // max letter length
+            else if (Username.Length >= 255) // max letter length
             {
-                EmailAlert = "Email should be less than 255 characters";
+                UsernameAlert = "Email should be less than 255 characters";
                 flag = true;
             }
-            else if (Email.Length < 3) // min letter length
+            else if (Username.Length < 3) // min letter length
             {
-                EmailAlert = "Email should be more than 3 characters";
+                UsernameAlert = "Email should be more than 3 characters";
                 flag = true;
             }
             else
             {
-                EmailAlert = "";
+                UsernameAlert = "";
             }
 
             // return flag result
@@ -134,8 +146,8 @@ namespace BDProject.ViewModels
         // Clear everything
         private void ClearEverything()
         {
-            Email = "";
-            EmailAlert = "";
+            Username = "";
+            UsernameAlert = "";
         }
 
     }

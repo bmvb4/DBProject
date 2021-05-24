@@ -136,8 +136,11 @@ namespace BDProject.ViewModels
         public ICommand AddTagCommand { get; set; }
         private void AddTagFunction()
         {
-            AllTags.Add(new Tag(TagText));
-            TagText = "";
+            if(!string.IsNullOrEmpty(TagText) || !string.IsNullOrWhiteSpace(TagText))
+            {
+                AllTags.Add(new Tag(TagText));
+                TagText = "";
+            }
         }
 
         // Take Photo command

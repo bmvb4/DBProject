@@ -193,8 +193,8 @@ namespace BDProject.ViewModels.SearchViewModels
         public ICommand LoadMoreCommand { get; set; }
         private async Task LoadMoreFunction()
         {
-            if (_Globals.IsBusy) { return; }
-            _Globals.IsBusy = true;
+            if (IsBusy) { return; }
+            IsBusy = true;
 
             await Task.Delay(1000);
 
@@ -223,7 +223,7 @@ namespace BDProject.ViewModels.SearchViewModels
                 default: break;
             }
 
-            _Globals.IsBusy = false;
+            IsBusy = false;
             return;
         }
 
