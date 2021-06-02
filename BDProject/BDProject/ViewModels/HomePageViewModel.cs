@@ -18,7 +18,7 @@ namespace BDProject.ViewModels
 {
     public class HomePageViewModel : BaseViewModel
     {
-        public async void SetCollcetion()
+        public async void SetCollection()
         {
             PostsCollection.Clear();
 
@@ -36,8 +36,6 @@ namespace BDProject.ViewModels
 
                 foreach (BigPostDB post in rootobject)
                     PostsCollection.Add(new Post(post));
-
-                PostsCollection.AddRange(_Globals.GlobalFeedPosts.Skip(PostsCollection.Count));
             }
         }
 
@@ -45,7 +43,7 @@ namespace BDProject.ViewModels
         public HomePageViewModel()
         {
             IsBusy = true;
-            SetCollcetion();
+            SetCollection();
 
             // Assigning functions to the commands
             // refresh command
@@ -65,7 +63,7 @@ namespace BDProject.ViewModels
 
             // More command
             MoreCommand = new Command<Post>(MoreFunction);
-            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
+            LoadMoreCommand = new Command(LoadMoreFunction);
 
             FollowProfileCommand = new Command<Post>(FollowProfileFunction);
             IsBusy = false;
@@ -116,7 +114,7 @@ namespace BDProject.ViewModels
         private async void LikePostFunction(Post post)
         {
             JObject oJsonObject = new JObject();
-            oJsonObject.Add("idUser", post.IdUser);
+            oJsonObject.Add("idUser", _Globals.GlobalMainUser.Username);
             oJsonObject.Add("idPost", post.IdPost);
 
             if (!post.IsLiked)
@@ -161,7 +159,7 @@ namespace BDProject.ViewModels
         {
             IsRefreshing = true;
             IsBusy = true;
-            SetCollcetion();
+            SetCollection();
             IsBusy = false;
             IsRefreshing = false;
         }
@@ -210,7 +208,13 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = true;
+                    for (int i = 0; i < PostsCollection.Count; i++)
+                        PostsCollection[i].IsFollow = true;
+                    for (int i = 0; i < _Globals.GlobalFeedPosts.Count; i++)
+                        _Globals.GlobalFeedPosts[i].IsFollow = true;
+
+                    //PostsCollection.First(x => x.IdPost == post.IdPost).IsFollow = true;
+                    //_Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = true;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -227,7 +231,13 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = false;
+                    for (int i = 0; i < PostsCollection.Count; i++)
+                        PostsCollection[i].IsFollow = false;
+                    for (int i = 0; i < _Globals.GlobalFeedPosts.Count; i++)
+                        _Globals.GlobalFeedPosts[i].IsFollow = false;
+
+                    //PostsCollection.First(x => x.IdPost == post.IdPost).IsFollow = false;
+                    //_Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = false;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -238,14 +248,14 @@ namespace BDProject.ViewModels
 
         // load more command 
         public ICommand LoadMoreCommand { get; set; }
-        private async Task LoadMoreFunction()
+        private void LoadMoreFunction()
         {
             if (IsBusy) { return; }
             IsBusy = true;
 
-            if (PostsCollection.Count % 10 == 0)
+            if(PostsCollection.Count % 10 == 0)
             {
-                var success = await ServerServices.SendGetRequestAsync($"posts/getAll/{PostsCollection.Count / 10}", new JObject());
+                var success = ServerServices.SendGetRequestAsync($"posts/getAll/{PostsCollection.Count / 10}", new JObject()).Result;
 
                 if (success.IsSuccessStatusCode)
                 {
@@ -257,8 +267,6 @@ namespace BDProject.ViewModels
 
                     foreach (BigPostDB post in postList)
                         PostsCollection.Add(new Post(post));
-
-                    PostsCollection.AddRange(_Globals.GlobalFeedPosts.Skip(PostsCollection.Count));
                 }
             }
 

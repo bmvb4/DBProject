@@ -21,7 +21,6 @@
 
             <!--===============MY TEMPLATE===============-->
             <DataTemplate x:Key="MyTemplate">
-
                 <Grid
                     Margin="8"
                     ColumnDefinitions="auto,*">
@@ -86,32 +85,53 @@
             <!--==============OTHERS TEMPLATE===================-->
             <DataTemplate x:Key="OthersTemplate">
                 <Grid
-                    Padding="8"
-                    ColumnDefinitions="auto,*,auto">
+                    Margin="8"
+                    ColumnDefinitions="auto,*">
 
-                    <xct:AvatarView 
+                    <Grid
                         Grid.Column="0"
-                        Source="{Binding UserPhotoSource}"
-                        Size="60"/>
+                        RowDefinitions="auto,*">
 
-                    <Grid 
-                        Grid.Column="1"
-                        RowDefinitions="auto,auto">
+                        <xct:AvatarView 
+                            Grid.Row="0"
+                            Source="{Binding UserPhotoSource}"
+                            Size="40"
+                            VerticalOptions="Start">
 
-                        <Label 
-                            Grid.Row="1"
-                            Text="{Binding IdUser}"
-                            TextColor="{DynamicResource TextColor}"
-                            FontSize="Medium"
-                            FontAttributes="Bold"/>
+                            <xct:AvatarView.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    NumberOfTapsRequired="1"
+                                    Command="{Binding OpenProfileCommand, Source={
+                                        RelativeSource AncestorType={x:Type local:PostCommentsPageViewModel}
+                                        }}"
+                                    CommandParameter="{Binding .}"/>
+                            </xct:AvatarView.GestureRecognizers>
 
-                        <Label 
-                            Grid.Row="2"
-                            Text="{Binding CommentText}"
-                            TextColor="{DynamicResource TextColor}"
-                            FontSize="Medium"/>
+                        </xct:AvatarView>
 
                     </Grid>
+
+                    <Label 
+                        Grid.Column="1"
+                        Margin="0,8"
+                        LineHeight="1.3">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <FormattedString.Spans>
+                                    <Span 
+                                        Text="{Binding IdUser}"
+                                        TextColor="{DynamicResource TextColor}"
+                                        FontSize="Medium"
+                                        FontAttributes="Bold"/>
+                                    <Span Text="{x:Static system:Environment.NewLine}"/>
+                                    <Span
+                                        Text="{Binding CommentText}"
+                                        TextColor="{DynamicResource TextColor}"
+                                        FontSize="Medium"/>
+                                </FormattedString.Spans>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
                 </Grid>
             </DataTemplate>

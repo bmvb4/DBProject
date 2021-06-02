@@ -16,10 +16,8 @@ namespace BDProject.ViewModels.PostsViewModels
 {
     public class PostCommentsPageViewModel : BaseViewModel
     {
-        public async void SetCollceton()
+        public async void SetCollection()
         {
-            CommentsCollection.Clear();
-
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
             var success = await ServerServices.SendGetRequestAsync($"posts/comment/get/{_Globals.OpenID}/0", oJsonObject);
@@ -29,16 +27,15 @@ namespace BDProject.ViewModels.PostsViewModels
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                 var rootobject = JsonConvert.DeserializeObject<List<CommentDB>>(earthquakesJson);
 
-                List<Comment> comCollection = new List<Comment>();
-                foreach (CommentDB comment in rootobject)
-                    comCollection.Add(new Comment(comment));
+                CommentsCollection.Clear();
 
-                CommentsCollection.AddRange(new ObservableRangeCollection<Comment>(comCollection));
+                foreach (CommentDB comment in rootobject)
+                    CommentsCollection.Add(new Comment(comment));
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ServerServices.RefreshTokenAsync();
-                await LoadMoreFunction();
+                SetCollection();
             }
         }
 
@@ -51,7 +48,7 @@ namespace BDProject.ViewModels.PostsViewModels
         public PostCommentsPageViewModel()
         {
             IsBusy = true;
-            SetCollceton();
+            SetCollection();
             SetParameters();
 
             // Assigning functions to the commands
@@ -59,7 +56,7 @@ namespace BDProject.ViewModels.PostsViewModels
             RefreshCommand = new Command(RefreshFunction);
             CommentCommand = new Command(CommentFunction);
             DeleteCommentCommand = new Command<Comment>(DeleteCommentFunction);
-            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
+            LoadMoreCommand = new Command(LoadMoreFunction);
 
             OpenProfileCommand = new Command<Comment>(OpenProfileFunctionAsync);
             IsBusy = false;
@@ -145,7 +142,7 @@ namespace BDProject.ViewModels.PostsViewModels
         private void RefreshFunction()
         {
             IsRefreshing = true;
-            SetCollceton();
+            SetCollection();
             IsRefreshing = false;
         }
 
@@ -165,7 +162,7 @@ namespace BDProject.ViewModels.PostsViewModels
             if (success.IsSuccessStatusCode)
             {
                 _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).CommentsCount--;
-                SetCollceton();
+                SetCollection();
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
@@ -190,7 +187,7 @@ namespace BDProject.ViewModels.PostsViewModels
             if (success.IsSuccessStatusCode)
             {
                 _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).CommentsCount++;
-                SetCollceton();
+                SetCollection();
                 Comment = "";
             }
             else if (success.StatusCode == HttpStatusCode.Unauthorized)
@@ -201,30 +198,27 @@ namespace BDProject.ViewModels.PostsViewModels
 
         // load more command 
         public ICommand LoadMoreCommand { get; set; }
-        private async Task LoadMoreFunction()
+        private void LoadMoreFunction()
         {
             if (IsBusy) { return; }
             IsBusy = true;
 
-            if(CommentsCollection.Count % 10 == 0)
+            if (CommentsCollection.Count % 10 == 0 && CommentsCollection.Count != 1 && CommentsCollection.Count != 0)
             {
-                var success = await ServerServices.SendGetRequestAsync($"posts/comment/get/{_Globals.OpenID}/{(CommentsCollection.Count / 10) + 1}", new JObject());
+                var success = ServerServices.SendGetRequestAsync($"posts/comment/get/{_Globals.OpenID}/{CommentsCollection.Count / 10}", new JObject()).Result;
 
                 if (success.IsSuccessStatusCode)
                 {
                     var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                     var rootobject = JsonConvert.DeserializeObject<List<CommentDB>>(earthquakesJson);
 
-                    List<Comment> comCollection = new List<Comment>();
                     foreach (CommentDB comment in rootobject)
-                        comCollection.Add(new Comment(comment));
-
-                    CommentsCollection.AddRange(new ObservableRangeCollection<Comment>(comCollection));
+                        CommentsCollection.Add(new Comment(comment));
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    await ServerServices.RefreshTokenAsync();
-                    await LoadMoreFunction();
+                    ServerServices.RefreshTokenAsync().Wait();
+                    LoadMoreFunction();
                 }
             }
 

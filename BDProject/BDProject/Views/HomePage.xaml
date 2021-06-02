@@ -126,14 +126,16 @@
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text=""
-                            FontFamily="FA-R"/>
+                            FontFamily="FA-R"
+                            HorizontalOptions="Start"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}" />
+                            Text="{Binding DeleteDateString}"
+                            HorizontalOptions="Start"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -142,14 +144,16 @@
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCount}"
+                            HorizontalOptions="End"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -158,13 +162,15 @@
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCount}"
+                            HorizontalOptions="End"/>
 
                     </StackLayout>
 
@@ -267,14 +273,16 @@
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text=""
-                            FontFamily="FA-R"/>
+                            FontFamily="FA-R"
+                            HorizontalOptions="Start"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}" />
+                            Text="{Binding DeleteDateString}"
+                            HorizontalOptions="Start"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -283,14 +291,16 @@
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCount}"
+                            HorizontalOptions="End"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -299,13 +309,15 @@
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCount}"
+                            HorizontalOptions="End"/>
 
                     </StackLayout>
 
@@ -416,14 +428,16 @@
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text=""
-                            FontFamily="FA-R"/>
+                            FontFamily="FA-R"
+                            HorizontalOptions="Start"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}" />
+                            Text="{Binding DeleteDateString}"
+                            HorizontalOptions="Start"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -432,14 +446,16 @@
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCount}"
+                            HorizontalOptions="End"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -448,13 +464,15 @@
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCount}"
+                            HorizontalOptions="End"/>
 
                     </StackLayout>
 
@@ -556,14 +574,16 @@
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text=""
-                            FontFamily="FA-R"/>
+                            FontFamily="FA-R"
+                            HorizontalOptions="Start"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}" />
+                            Text="{Binding DeleteDateString}"
+                            HorizontalOptions="Start"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -572,14 +592,16 @@
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCount}"
+                            HorizontalOptions="End"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -588,13 +610,15 @@
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:HomePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCount}"
+                            HorizontalOptions="End"/>
 
                     </StackLayout>
 

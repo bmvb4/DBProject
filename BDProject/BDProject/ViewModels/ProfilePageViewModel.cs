@@ -22,9 +22,6 @@ namespace BDProject.ViewModels
     {
         public async void SetUserData()
         {
-
-            YourPostsCollection.Clear();
-
             try
             {
                 var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.GlobalMainUser.Username}", new JObject());
@@ -35,7 +32,7 @@ namespace BDProject.ViewModels
                     var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
 
                     Name = $"{rootobject.FirstName} {rootobject.LastName}";
-                    Username = $"({ rootobject.Username})";
+                    Username = $"{rootobject.Username}";
                     Description = rootobject.Description;
 
                     if (rootobject.Photo == null)
@@ -45,6 +42,21 @@ namespace BDProject.ViewModels
 
                     FollowingCount = rootobject.Followed;
                     FollowersCount = rootobject.Follower;
+
+                    success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/0", new JObject());
+
+                    if (success.IsSuccessStatusCode)
+                    {
+                        earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                        var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
+
+                        YourPostsCollection.Clear();
+
+                        foreach (BigPostDB post in postList)
+                            YourPostsCollection.Add(new Post(post));
+
+                        PostsCount = YourPostsCollection.Count;
+                    }
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -60,7 +72,9 @@ namespace BDProject.ViewModels
 
         public ProfilePageViewModel()
         {
+            IsBusy = true;
             SetUserData();
+            LoadMoreFunction();
 
             // Assigning functions to the commands
             RefreshCommand = new Command(RefreshFunction);
@@ -78,7 +92,8 @@ namespace BDProject.ViewModels
 
             // More command
             MoreCommand = new Command<Post>(MoreFunction);
-            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
+            LoadMoreCommand = new Command(LoadMoreFunction);
+            IsBusy = false;
         }
 
         // Parameters
@@ -91,32 +106,6 @@ namespace BDProject.ViewModels
             {
                 if (value == yourPostsCollection) { return; }
                 yourPostsCollection = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Your Posts Collection height parameter
-        private double collectionHeight = 0;
-        public double CollectionHeight
-        {
-            get => collectionHeight;
-            set
-            {
-                if (value == collectionHeight) { return; }
-                collectionHeight = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Your Posts height parameter
-        private double postHeight = 0;
-        public double PostHeight
-        {
-            get => postHeight;
-            set
-            {
-                if (value == postHeight) { return; }
-                postHeight = value;
                 OnPropertyChanged();
             }
         }
@@ -256,20 +245,22 @@ namespace BDProject.ViewModels
         public void RefreshFunction()
         {
             IsRefreshing = true;
+            IsBusy = true;
             SetUserData();
+            IsBusy = false;
             IsRefreshing = false;
         }
 
         // load more command 
         public ICommand LoadMoreCommand { get; set; }
-        private async Task LoadMoreFunction()
+        private void LoadMoreFunction()
         {
             if (IsBusy) { return; }
             IsBusy = true;
 
-            if(YourPostsCollection.Count % 10 == 0)
+            if (YourPostsCollection.Count % 10 == 0 && YourPostsCollection.Count != 1 && YourPostsCollection.Count != 0) 
             {
-                var success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/{YourPostsCollection.Count / 10}", new JObject());
+                var success = ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/{YourPostsCollection.Count / 10}", new JObject()).Result;
 
                 if (success.IsSuccessStatusCode)
                 {
@@ -292,7 +283,7 @@ namespace BDProject.ViewModels
         private async void LikePostFunction(Post post)
         {
             JObject oJsonObject = new JObject();
-            oJsonObject.Add("idUser", post.IdUser);
+            oJsonObject.Add("idUser", _Globals.GlobalMainUser.Username);
             oJsonObject.Add("idPost", post.IdPost);
 
             if (!post.IsLiked)

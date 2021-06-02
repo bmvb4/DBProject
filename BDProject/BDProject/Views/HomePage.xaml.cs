@@ -27,12 +27,12 @@ namespace BDProject.Views
         {
             base.OnAppearing();
 
-            //if (_Globals.Refresh == true)
-            //{
-            //    var vm = (HomePageViewModel)this.BindingContext;
-            //    vm.SetCollection();
-            //    _Globals.Refresh = false;
-            //}
+            if (_Globals.Refresh == true)
+            {
+                var vm = (HomePageViewModel)this.BindingContext;
+                vm.SetCollection();
+                _Globals.Refresh = false;
+            }
         }
     }
 }

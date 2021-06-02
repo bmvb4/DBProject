@@ -13,7 +13,7 @@
 
     <ContentPage.Content>
         <Grid
-            RowDefinitions="auto,*,*,*, auto">
+            RowDefinitions="auto,*, auto">
 
             <Grid 
                 Grid.Row="0"
@@ -36,53 +36,70 @@
             <StackLayout
                 Grid.Row="1">
 
-                <Button
-                    Text="Set Icons"
-                    Command="{Binding SetIconsCommand}"/>
+                <Grid
+                    ColumnDefinitions="*,*">
 
-                <Label
-                    HeightRequest="46"
-                    WidthRequest="46"
-                    Text=""
-                    FontSize="Large"
-                    FontFamily="FA-R"
-                    TextColor="{Binding IconColor}"
-                    HorizontalOptions="Center"/>
+                    <Button
+                        Grid.Column="0"
+                        CornerRadius="100"
+                        Text="Set Icons"
+                        Command="{Binding SetIconsCommand}"/>
 
-            </StackLayout>
+                    <Label
+                        Grid.Column="1"
+                        HeightRequest="46"
+                        WidthRequest="46"
+                        Text=""
+                        FontSize="Large"
+                        FontFamily="FA-R"
+                        TextColor="{Binding IconColor}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"/>
 
-            <StackLayout
-                Grid.Row="2">
+                </Grid>
 
-                <Button
-                    Text="Set Text"
-                    Command="{Binding SetTextCommand}"/>
+                <Grid
+                    ColumnDefinitions="*,*">
 
-                <Label
-                    Text="Sample Text"
-                    FontSize="Medium"
-                    TextColor="{Binding TextColor}"
-                    HorizontalOptions="Center"/>
+                    <Button
+                        Grid.Column="0"
+                        CornerRadius="100"
+                        Text="Set Text"
+                        Command="{Binding SetTextCommand}"/>
 
-            </StackLayout>
+                    <Label
+                        Grid.Column="1"
+                        Text="Sample Text"
+                        FontSize="Medium"
+                        TextColor="{Binding TextColor}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"/>
 
-            <StackLayout
-                Grid.Row="3">
+                </Grid>
 
-                <Button
-                    Text="Set Background"
-                    Command="{Binding SetBackgroundCommand}"/>
+                <Grid
+                    ColumnDefinitions="*,*">
 
-                <Label
-                    Text="Background Color"
-                    FontSize="Medium"
-                    TextColor="{Binding TextColor}"
-                    HorizontalOptions="Center"/>
+                    <Button
+                        Grid.Column="0"
+                        CornerRadius="100"
+                        Text="Set Background"
+                        Command="{Binding SetBackgroundCommand}"/>
+
+                    <Label
+                        Grid.Column="1"
+                        Text="Background Color"
+                        FontSize="Medium"
+                        TextColor="{Binding TextColor}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"/>
+
+                </Grid>
 
             </StackLayout>
 
             <Grid
-                Grid.Row="4"
+                Grid.Row="2"
                 ColumnDefinitions="*,*">
 
                 <Button

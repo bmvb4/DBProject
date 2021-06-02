@@ -43,14 +43,6 @@
                             Text="{Binding IdUser}"
                             HorizontalOptions="Center"/>
 
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding OpenMyProfileCommand, Source={
-                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
-                                }}"
-                                CommandParameter="{Binding .}"/>
-                        </StackLayout.GestureRecognizers>
-
                     </StackLayout>
 
                     <Button 
@@ -63,27 +55,27 @@
                         BackgroundColor="Transparent"
                         HorizontalOptions="End"
                         Command="{Binding MoreCommand, Source={
-                            RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                            RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                         }}"
                         CommandParameter="{Binding .}"/>
 
                     <Image 
                         Grid.Row="1"
-                        Aspect="Fill"
+                        Aspect="AspectFit"
                         Source="{Binding PhotoSource}">
 
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer 
                                 NumberOfTapsRequired="2"
                                 Command="{Binding LikePostCommand, Source={
-                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
 
                             <TapGestureRecognizer
                                 NumberOfTapsRequired="1"
                                 Command="{Binding ShowTagsCommand, Source={
-                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                     }}"
                                 CommandParameter="{Binding .}"/>
                         </Image.GestureRecognizers>
@@ -97,7 +89,7 @@
                         Text="#"
                         TextColor="{DynamicResource IconsColor}"
                         IsVisible="{Binding IsTagsVisible, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                 }}"
                         Padding="0"
                         Margin="0,0,4,4"
@@ -106,7 +98,7 @@
                         VerticalOptions="End"
                         BackgroundColor="{DynamicResource BackgroundColor}"
                         Command="{Binding OpenTagsCommand, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                 }}"
                         CommandParameter="{Binding .}"/>
 
@@ -126,45 +118,51 @@
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text=""
-                            FontFamily="FA-R"/>
+                            FontFamily="FA-R"
+                            HorizontalOptions="Start"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}" />
+                            Text="{Binding DeleteDateString}"
+                            HorizontalOptions="Start"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text=""
                             FontFamily="{Binding LikeIconFamily}"
                             Command="{Binding LikePostCommand, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCount}"
+                            HorizontalOptions="End"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text="" 
                             FontFamily="FA-R"
                             Command="{Binding OpenPostCommentsCommand, Source={
-                                RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCount}"
+                            HorizontalOptions="End"/>
 
                     </StackLayout>
 
@@ -193,14 +191,6 @@
                             Text="{Binding IdUser}"
                             HorizontalOptions="Center"/>
 
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding OpenMyProfileCommand, Source={
-                                    RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
-                                }}"
-                                CommandParameter="{Binding .}"/>
-                        </StackLayout.GestureRecognizers>
-
                     </StackLayout>
 
                     <Button 
@@ -219,7 +209,7 @@
 
                     <Image 
                         Grid.Row="1"
-                        Aspect="Fill"
+                        Aspect="AspectFit"
                         Source="{Binding PhotoSource}">
 
                         <Image.GestureRecognizers>
@@ -267,14 +257,16 @@
                         <Button 
                             Style="{StaticResource BaseButton}"
                             Text=""
-                            FontFamily="FA-R"/>
+                            FontFamily="FA-R"
+                            HorizontalOptions="Start"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}" />
+                            Text="{Binding DeleteDateString}"
+                            HorizontalOptions="Start"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -283,14 +275,16 @@
                             Command="{Binding LikePostCommand, Source={
                                 RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             Margin="0,0,16,0"
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCount}"
+                            HorizontalOptions="End"/>
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -299,19 +293,22 @@
                             Command="{Binding OpenPostCommentsCommand, Source={
                                 RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
                                 }}"
-                            CommandParameter="{Binding .}"/>
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"/>
 
                         <Label 
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCount}"
+                            HorizontalOptions="End"/>
 
                     </StackLayout>
 
                 </Grid>
             </DataTemplate>
 
+            
             <!--===================DATA TEMPLATE SELECTOR=====================-->
             <selector:ProfilePostsDataTemplateSelector x:Key="templateSelector"
                 MyPosts="{StaticResource MyTemplate}"
@@ -319,7 +316,7 @@
 
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <ContentPage.Content>
         <RefreshView
             Margin="8,0"
@@ -328,6 +325,7 @@
 
             <CollectionView 
                 SelectionMode="None"
+                VerticalScrollBarVisibility="Never"
                 x:Name="YourPostsCollectionView"
                         
                 RemainingItemsThreshold="5"

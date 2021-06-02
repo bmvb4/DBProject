@@ -1,9 +1,12 @@
 ﻿using BDProject.DatabaseModels;
 using BDProject.Helpers;
 using BDProject.Models;
+using BDProject.Views._PopUps;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -18,10 +21,8 @@ namespace BDProject.ViewModels.ProfileViewModels
     public class PersonsProfilePageViewModel : BaseViewModel
     {
 
-        private async void SetUserData()
+        public async void SetUserData()
         {
-            YourPostsCollection.Clear();
-
             try
             {
                 var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.UsernameTemp}", new JObject());
@@ -32,7 +33,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                     var rootobject = JsonConvert.DeserializeObject<UserDB>(earthquakesJson);
 
                     Name = $"{rootobject.FirstName} {rootobject.LastName}";
-                    Username = $"({ rootobject.Username})";
+                    Username = $"{rootobject.Username}";
                     Description = rootobject.Description;
 
                     if (rootobject.Photo == null)
@@ -40,11 +41,24 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                     ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(rootobject.Photo));
 
-                    FollowingCount = rootobject.Follower;
-                    FollowersCount = rootobject.Followed;
-                    IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow;
+                    FollowingCount = rootobject.Followed;
+                    FollowersCount = rootobject.Follower;
+                    IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdUser == _Globals.UsernameTemp).IsFollow;
 
-                    
+                    success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.UsernameTemp}/0", new JObject());
+
+                    if (success.IsSuccessStatusCode)
+                    {
+                        earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                        var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
+
+                        YourPostsCollection.Clear();
+
+                        foreach (BigPostDB post in postList)
+                            YourPostsCollection.Add(new Post(post));
+
+                        PostsCount = YourPostsCollection.Count;
+                    }
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -52,7 +66,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                     SetUserData();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string s = ex.Message;
             }
@@ -60,16 +74,28 @@ namespace BDProject.ViewModels.ProfileViewModels
 
         public PersonsProfilePageViewModel()
         {
+            IsBusy = true;
             SetUserData();
 
             // Assigning functions to the commands
-            BackCommand = new Command(async () => await BackFunction());
             RefreshCommand = new Command(async () => await RefreshFunction());
-            FollowProfileCommand = new Command(FollowProfileFunction);
-            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
-        }
 
-        private ObservableRangeCollection<Post> AllPostsCollection = new ObservableRangeCollection<Post>();
+            // like commands
+            LikePostCommand = new Command<Post>(LikePostFunction);
+            SearchTagCommand = new Command<Tag>(SearchTagFunction);
+            ShowTagsCommand = new Command(ShowTagsFunction);
+
+            // open commands
+            OpenPostCommentsCommand = new Command<Post>(OpenPostCommentsFunction);
+            OpenTagsCommand = new Command<Post>(OpenTagsFunction);
+
+            // More command
+            BackCommand = new Command(async () => await BackFunction());
+            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
+            FollowProfileCommand = new Command(FollowProfileFunction);
+
+            IsBusy = false;
+        }
 
         // Parameters
         // Your Posts Collection parameter
@@ -176,16 +202,17 @@ namespace BDProject.ViewModels.ProfileViewModels
         }
 
         // following parameter
+        private bool isFollowing = false;
         private bool IsFollowing 
         { 
-            get => IsFollowing;
+            get => isFollowing;
             set
             {
-                IsFollowing = value;
+                isFollowing = value;
                 OnPropertyChanged(nameof(IsFollowingString));
             }
         }
-        public string IsFollowingString => (IsFollowing) ? "Fllowing" : "Follow";
+        public string IsFollowingString => (isFollowing) ? "Following" : "Follow";
 
         private bool isRefreshing = false;
         public bool IsRefreshing
@@ -195,6 +222,19 @@ namespace BDProject.ViewModels.ProfileViewModels
             {
                 //if (value == isRefreshing) { return; }
                 isRefreshing = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Refreshing parameter
+        private bool isTagsVisible = false;
+        public bool IsTagsVisible
+        {
+            get => isTagsVisible;
+            set
+            {
+                if (value == isTagsVisible) { return; }
+                isTagsVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -222,7 +262,7 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand FollowProfileCommand { get; set; }
         private async void FollowProfileFunction()
         {
-            if (IsFollowing)
+            if (!IsFollowing)
             {
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("idFollowed", Username);
@@ -233,7 +273,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                 if (success.IsSuccessStatusCode)
                 {
                     FollowingCount++;
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = true;
+                    _Globals.Refresh = true;
                     IsFollowing = true;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
@@ -253,7 +293,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                 if (success.IsSuccessStatusCode)
                 {
                     FollowingCount--;
-                    _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).IsFollow = false;
+                    _Globals.Refresh = true;
                     IsFollowing = false;
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
@@ -276,6 +316,75 @@ namespace BDProject.ViewModels.ProfileViewModels
             
 
             IsBusy = false;
+        }
+
+        // Like Post command
+        public ICommand LikePostCommand { get; set; }
+        private async void LikePostFunction(Post post)
+        {
+            JObject oJsonObject = new JObject();
+            oJsonObject.Add("idUser", _Globals.GlobalMainUser.Username);
+            oJsonObject.Add("idPost", post.IdPost);
+
+            if (!post.IsLiked)
+            {
+                var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
+                if (success.IsSuccessStatusCode)
+                {
+                    post.IsLiked = true;
+                    post.LikesCount++;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
+                }
+            }
+            else
+            {
+                var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
+                if (success.IsSuccessStatusCode)
+                {
+                    post.IsLiked = false;
+                    post.LikesCount--;
+                }
+                else if (success.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await ServerServices.RefreshTokenAsync();
+                }
+            }
+        }
+
+        // Open Post Comments command
+        public ICommand OpenPostCommentsCommand { get; set; }
+        private async void OpenPostCommentsFunction(Post post)
+        {
+            _Globals.OpenID = (int)post.IdPost;
+            await Shell.Current.GoToAsync("PostComments");
+        }
+
+        public ICommand SearchTagCommand { get; set; }
+        private async void SearchTagFunction(Tag tag)
+        {
+            await Task.Delay(1000);
+        }
+
+        public ICommand ShowTagsCommand { get; set; }
+        private async void ShowTagsFunction()
+        {
+            await Task.Delay(0);
+            if (IsTagsVisible)
+                IsTagsVisible = false;
+            else
+                IsTagsVisible = true;
+        }
+
+        public ICommand OpenTagsCommand { get; set; }
+        private async void OpenTagsFunction(Post post)
+        {
+            if (post.tags != null && post.tags.Count != 0)
+                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
+            else
+                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
         }
 
     }

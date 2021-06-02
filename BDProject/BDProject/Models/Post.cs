@@ -28,7 +28,7 @@ namespace BDProject.Models
             UserPhoto = post.UserPhoto;
             Description = post.Description;
             LikesCount = post.LikesCounter;
-            commentsCount = post.CommentsCounter;
+            CommentsCount = post.CommentsCounter;
             IsFollow = post.isFollow;
             IsLiked = post.isLiked;
 
@@ -125,7 +125,7 @@ namespace BDProject.Models
             set
             {
                 likesCount = value;
-                OnPropertyChanged(nameof(LikesCount));
+                OnPropertyChanged();
             }
         }
 

@@ -81,7 +81,11 @@
 
                 <Button 
                     Text="Save"
+                    TextColor="{DynamicResource TextColor}"
                     HorizontalOptions="Center"
+                    BorderColor="{DynamicResource TextColor}"
+                    BorderWidth="1"
+                    BackgroundColor="Transparent"
                     Command="{Binding SaveChangesCommand}"/>
 
             </StackLayout>

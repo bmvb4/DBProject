@@ -1,4 +1,5 @@
-﻿using BDProject.ViewModels.PostsViewModels;
+﻿using BDProject.Helpers;
+using BDProject.ViewModels.PostsViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,18 @@ namespace BDProject.Views.PostsViews
             CommentEntry.Unfocus();
 
             BindingContext = new PostCommentsPageViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (_Globals.Refresh == true)
+            {
+                var vm = (PostCommentsPageViewModel)this.BindingContext;
+                vm.SetCollection();
+                _Globals.Refresh = false;
+            }
         }
     }
 }
