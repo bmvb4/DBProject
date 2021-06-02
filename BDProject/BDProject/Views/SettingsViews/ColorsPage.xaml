@@ -105,11 +105,19 @@
                 <Button
                     Grid.Column="0"
                     Text="Reset Colors"
+                    TextColor="{DynamicResource TextColor}"
+                    BorderColor="{DynamicResource TextColor}"
+                    BorderWidth="1"
+                    BackgroundColor="Transparent"
                     Command="{Binding ResetCommand}"/>
 
                 <Button
                     Grid.Column="1"
                     Text="Save Changes"
+                    TextColor="{DynamicResource TextColor}"
+                    BorderColor="{DynamicResource TextColor}"
+                    BorderWidth="1"
+                    BackgroundColor="Transparent"
                     Command="{Binding SaveChangesCommand}"/>
 
             </Grid>

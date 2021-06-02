@@ -53,12 +53,20 @@
                     <Button 
                         Grid.Column="0"
                         Text="Take Photo"
+                        TextColor="{DynamicResource TextColor}"
+                        BorderColor="{DynamicResource TextColor}"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
                         HorizontalOptions="Center"
                         Command="{Binding TakePhotoCommand}"/>
 
                     <Button 
                         Grid.Column="1"
                         Text="Pick Photo"
+                        TextColor="{DynamicResource TextColor}"
+                        BorderColor="{DynamicResource TextColor}"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
                         HorizontalOptions="Center"
                         Command="{Binding PickPhotoCommand}"/>
 
@@ -130,6 +138,10 @@
 
                 <Button 
                     Text="Save"
+                    TextColor="{DynamicResource TextColor}"
+                    BorderColor="{DynamicResource TextColor}"
+                    BorderWidth="1"
+                    BackgroundColor="Transparent"
                     HorizontalOptions="Center"
                     Command="{Binding SaveChangesCommand}"/>
 
