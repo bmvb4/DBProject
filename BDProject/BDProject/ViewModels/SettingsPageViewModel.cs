@@ -60,8 +60,6 @@ namespace BDProject.ViewModels
             Preferences.Remove("UsernameKey");
             Preferences.Remove("PasswordKey");
 
-            _Globals.IsLeving = true;
-
             _Globals.OpenID = 0;
 
             _Globals.GlobalFeedPosts = new List<Post>();
@@ -79,8 +77,6 @@ namespace BDProject.ViewModels
             if (result == false) { return; }
 
             await ServerServices.SendPostRequestAsync("token/revoke", new Newtonsoft.Json.Linq.JObject());
-
-            _Globals.IsLeving = true;
 
             _Globals.OpenID = 0;
 

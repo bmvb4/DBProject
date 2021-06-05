@@ -42,6 +42,7 @@ namespace BDProject.ViewModels
 
                     FollowingCount = rootobject.Followed;
                     FollowersCount = rootobject.Follower;
+                    PostsCount = rootobject.PostCount;
 
                     JObject oJsonObject = new JObject();
                     oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
@@ -57,8 +58,6 @@ namespace BDProject.ViewModels
 
                         foreach (BigPostDB post in postList)
                             YourPostsCollection.Add(new Post(post));
-
-                        PostsCount = YourPostsCollection.Count;
                     }
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)

@@ -19,21 +19,21 @@ namespace BDProject.Views
             InitializeComponent();
 
             firstTime = true;
+
             BindingContext = new ProfilePageViewModel();
         }
 
-        static bool firstTime = false;
+        private static bool firstTime = false;
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (_Globals.IsLeving || firstTime)
+            if (!firstTime)
             {
-                _Globals.IsLeving = false;
+                var vm = (ProfilePageViewModel)this.BindingContext;
+                vm.SetUserData();
                 firstTime = false;
             }
-            else
-                BindingContext = new ProfilePageViewModel();
 
         }
     }

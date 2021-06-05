@@ -16,6 +16,9 @@ namespace BDProject.DatabaseModels
 
         public int Follower { get; set; }
         public int Followed { get; set; }
+        public int PostCount { get; set; }
+
+        public bool isFollow { get; set; }
 
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }

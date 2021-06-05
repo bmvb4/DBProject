@@ -60,13 +60,6 @@ namespace BDProject.Helpers
             set => refresh = value;
         }
 
-        private static bool isLeving = false;
-        public static bool IsLeving
-        {
-            get => isLeving;
-            set => isLeving = value;
-        }
-
 
 
         public static string UsernameTemp = "";

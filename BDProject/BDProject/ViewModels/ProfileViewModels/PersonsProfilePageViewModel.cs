@@ -28,7 +28,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
 
-                var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.UsernameTemp}", new JObject());
+                var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.UsernameTemp}", oJsonObject);
 
                 if (success.IsSuccessStatusCode)
                 {
@@ -46,7 +46,9 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                     FollowingCount = rootobject.Followed;
                     FollowersCount = rootobject.Follower;
-                    IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdUser == _Globals.UsernameTemp).IsFollow;
+                    PostsCount = rootobject.PostCount;
+
+                    IsFollowing = rootobject.isFollow;
 
                     success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.UsernameTemp}/0", oJsonObject);
 
@@ -59,8 +61,6 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                         foreach (BigPostDB post in postList)
                             YourPostsCollection.Add(new Post(post));
-
-                        PostsCount = YourPostsCollection.Count;
                     }
                 }
                 else if (success.StatusCode == HttpStatusCode.Unauthorized)
