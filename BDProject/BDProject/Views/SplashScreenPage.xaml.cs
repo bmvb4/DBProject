@@ -45,7 +45,7 @@ namespace BDProject.Views
 
 
                     if (rootobject.Photo == null)
-                        _Globals.GlobalMainUser = new User(rootobject) { Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto) };
+                        _Globals.GlobalMainUser = new User(rootobject) { Photo = _Globals.Base64Bytes };
                     else
                         _Globals.GlobalMainUser = new User(rootobject);
 

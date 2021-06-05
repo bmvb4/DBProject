@@ -55,16 +55,19 @@ namespace BDProject.ViewModels
 
             if (result == false) { return; }
 
+            await ServerServices.SendPostRequestAsync("token/revoke", new Newtonsoft.Json.Linq.JObject());
+
             Preferences.Remove("UsernameKey");
             Preferences.Remove("PasswordKey");
+
+            _Globals.IsLeving = true;
 
             _Globals.OpenID = 0;
 
             _Globals.GlobalFeedPosts = new List<Post>();
             _Globals.GlobalMainUser = new User();
 
-            await Shell.Current.Navigation.PopAsync();
-            Shell.Current.CurrentItem = new SplashScreenPage();
+            App.Current.MainPage = new AppShell();
         }
 
         // delete profile command
@@ -75,13 +78,16 @@ namespace BDProject.ViewModels
 
             if (result == false) { return; }
 
+            await ServerServices.SendPostRequestAsync("token/revoke", new Newtonsoft.Json.Linq.JObject());
+
+            _Globals.IsLeving = true;
+
             _Globals.OpenID = 0;
 
             _Globals.GlobalFeedPosts = new List<Post>();
             _Globals.GlobalMainUser = new User();
 
-            await Shell.Current.Navigation.PopAsync();
-            await Shell.Current.GoToAsync("//LogInPage");
+            App.Current.MainPage = new AppShell();
         }
 
     }

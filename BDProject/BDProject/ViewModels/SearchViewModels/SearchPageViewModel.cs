@@ -58,8 +58,8 @@ namespace BDProject.ViewModels.SearchViewModels
 
                 foreach (UserDB u in listUsers)
                 {
-                    if(u.Photo == null)
-                        AllBubbles.Add(new SearchBubble(u) { IsTag = false, ImageBytes=Convert.FromBase64String(_Globals.Base64DefaultPhoto)});
+                    if (u.Photo == null)
+                        AllBubbles.Add(new SearchBubble(u) { IsTag = false, ImageBytes = _Globals.Base64Bytes });
                     else
                         AllBubbles.Add(new SearchBubble(u) { IsTag = false });
                 }
@@ -67,7 +67,7 @@ namespace BDProject.ViewModels.SearchViewModels
                 foreach (UserDB u in listUsers)
                 {
                     if (u.Photo == null)
-                        AllPeople.Add(new SearchBubble(u) { IsTag = false, ImageBytes = Convert.FromBase64String(_Globals.Base64DefaultPhoto) });
+                        AllPeople.Add(new SearchBubble(u) { IsTag = false, ImageBytes = _Globals.Base64Bytes });
                     else
                         AllPeople.Add(new SearchBubble(u) { IsTag = false });
                 }

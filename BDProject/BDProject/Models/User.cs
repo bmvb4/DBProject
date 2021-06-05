@@ -1,4 +1,5 @@
 ﻿using BDProject.DatabaseModels;
+using BDProject.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -122,7 +123,7 @@ namespace BDProject.Models
                 OnPropertyChanged();
             }
         }
-        public ImageSource PhotoSource => ImageSource.FromStream(() => new MemoryStream(Photo));
+        public ImageSource PhotoSource => (Photo == null) ? ImageSource.FromStream(() => new MemoryStream(_Globals.Base64Bytes)) : ImageSource.FromStream(() => new MemoryStream(Photo));
 
 
 

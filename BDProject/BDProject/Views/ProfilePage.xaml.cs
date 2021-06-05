@@ -18,15 +18,23 @@ namespace BDProject.Views
         {
             InitializeComponent();
 
+            firstTime = true;
             BindingContext = new ProfilePageViewModel();
         }
 
+        static bool firstTime = false;
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            var vm = (ProfilePageViewModel)this.BindingContext;
-            vm.SetUserData();
+            if (_Globals.IsLeving || firstTime)
+            {
+                _Globals.IsLeving = false;
+                firstTime = false;
+            }
+            else
+                BindingContext = new ProfilePageViewModel();
+
         }
     }
 }

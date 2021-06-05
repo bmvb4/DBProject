@@ -209,7 +209,7 @@ namespace BDProject.ViewModels
             oJsonObject.Add("FirstName", FirstName);
             oJsonObject.Add("LastName", LastName);
             oJsonObject.Add("Email", Email);
-            oJsonObject.Add("Photo", Convert.FromBase64String(_Globals.Base64DefaultPhoto));
+            oJsonObject.Add("Photo", _Globals.Base64Bytes);
 
             var success = await ServerServices.SendPostRegisterRequestAsync("register", oJsonObject);
 

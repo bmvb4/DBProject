@@ -36,7 +36,7 @@ namespace BDProject.ViewModels
                     Description = rootobject.Description;
 
                     if (rootobject.Photo == null)
-                        rootobject.Photo = Convert.FromBase64String(_Globals.Base64DefaultPhoto);
+                        rootobject.Photo = _Globals.Base64Bytes;
 
                     ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(rootobject.Photo));
 
@@ -77,7 +77,6 @@ namespace BDProject.ViewModels
         {
             IsBusy = true;
             SetUserData();
-            LoadMoreFunction();
 
             // Assigning functions to the commands
             RefreshCommand = new Command(RefreshFunction);
