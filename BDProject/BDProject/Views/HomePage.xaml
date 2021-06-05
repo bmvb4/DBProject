@@ -180,7 +180,7 @@
             <!--===============MY TEMPLATE WITHOUT DESCRIPTION===============-->
             <DataTemplate x:Key="MyTemplateWithoutDescription">
                 <Grid 
-                    RowDefinitions="auto,*, auto, auto"
+                    RowDefinitions="auto,*, auto"
                     Margin="0,0,0,16">
 
                     <StackLayout
@@ -482,7 +482,7 @@
             <!--==============OTHERS TEMPLATE WITHOUT DESCRIPTION===================-->
             <DataTemplate x:Key="OthersTemplateWithoutDescription">
                 <Grid 
-                    RowDefinitions="auto,*, auto, auto"
+                    RowDefinitions="auto,*, auto"
                     Margin="0,0,0,16">
 
                     <StackLayout

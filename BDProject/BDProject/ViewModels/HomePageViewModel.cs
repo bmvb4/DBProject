@@ -255,7 +255,10 @@ namespace BDProject.ViewModels
 
             if(PostsCollection.Count % 10 == 0)
             {
-                var success = ServerServices.SendGetRequestAsync($"posts/getAll/{PostsCollection.Count / 10}", new JObject()).Result;
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
+
+                var success = ServerServices.SendGetRequestAsync($"posts/getAll/{PostsCollection.Count / 10}", oJsonObject).Result;
 
                 if (success.IsSuccessStatusCode)
                 {

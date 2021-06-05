@@ -25,6 +25,9 @@ namespace BDProject.ViewModels.ProfileViewModels
         {
             try
             {
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
+
                 var success = await ServerServices.SendGetRequestAsync($"profile/user/get/{ _Globals.UsernameTemp}", new JObject());
 
                 if (success.IsSuccessStatusCode)
@@ -45,7 +48,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                     FollowersCount = rootobject.Follower;
                     IsFollowing = _Globals.GlobalFeedPosts.First(x => x.IdUser == _Globals.UsernameTemp).IsFollow;
 
-                    success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.UsernameTemp}/0", new JObject());
+                    success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.UsernameTemp}/0", oJsonObject);
 
                     if (success.IsSuccessStatusCode)
                     {
@@ -311,9 +314,25 @@ namespace BDProject.ViewModels.ProfileViewModels
             if (IsBusy) { return; }
             IsBusy = true;
 
-            await Task.Delay(1000);
+            if (YourPostsCollection.Count % 10 == 0)
+            {
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
 
-            
+                var success = await ServerServices.SendGetRequestAsync($"posts/getAll/{YourPostsCollection.Count / 10}", oJsonObject);
+
+                if (success.IsSuccessStatusCode)
+                {
+
+                    var earthquakesJson = success.Content.ReadAsStringAsync().Result;
+                    var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
+
+                    _Globals.AddPostsFromDB(postList);
+
+                    foreach (BigPostDB post in postList)
+                        YourPostsCollection.Add(new Post(post));
+                }
+            }
 
             IsBusy = false;
         }

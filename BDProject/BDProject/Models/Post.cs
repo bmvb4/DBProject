@@ -33,7 +33,9 @@ namespace BDProject.Models
             IsLiked = post.isLiked;
 
             CreateDate = post.CreateDate;
-            DeleteDate = post.DeleteDate;
+
+            DeleteDate = new DateTime(post.DeleteDate.Year, post.DeleteDate.Month, post.DeleteDate.Day, post.DeleteDate.Hour, post.DeleteDate.Minute, 0, DateTimeKind.Local);
+            //DeleteDate = post.DeleteDate;
 
             tags = post.tags;
         }
@@ -61,7 +63,7 @@ namespace BDProject.Models
 
         public DateTime CreateDate { get; set; } // ========================= CREATED DATE
         public DateTime DeleteDate { get; set; } // ========================= DELETE DATE
-        public string DeleteDateString => $"{DeleteDate.ToLocalTime()}";
+        public string DeleteDateString => $"{DeleteDate.ToLocalTime().AddMinutes(1)}";
         
 
 
@@ -114,6 +116,16 @@ namespace BDProject.Models
             set
             {
                 isLiked = value;
+
+                if(DeleteDate.Year != 1)
+                {
+                    if(IsLiked)
+                        DeleteDate.AddMinutes(-5);
+                    else
+                        DeleteDate.AddMinutes(5);
+                }
+
+                OnPropertyChanged(nameof(DeleteDateString));
                 OnPropertyChanged(nameof(LikeIconFamily));
             }
         }

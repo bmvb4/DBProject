@@ -43,7 +43,10 @@ namespace BDProject.ViewModels
                     FollowingCount = rootobject.Followed;
                     FollowersCount = rootobject.Follower;
 
-                    success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/0", new JObject());
+                    JObject oJsonObject = new JObject();
+                    oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
+
+                    success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/0", oJsonObject);
 
                     if (success.IsSuccessStatusCode)
                     {
@@ -92,7 +95,7 @@ namespace BDProject.ViewModels
 
             // More command
             MoreCommand = new Command<Post>(MoreFunction);
-            LoadMoreCommand = new Command(LoadMoreFunction);
+            LoadMoreCommand = new Command(async () => await LoadMoreFunction());
             IsBusy = false;
         }
 
@@ -253,14 +256,17 @@ namespace BDProject.ViewModels
 
         // load more command 
         public ICommand LoadMoreCommand { get; set; }
-        private void LoadMoreFunction()
+        private async Task LoadMoreFunction()
         {
             if (IsBusy) { return; }
             IsBusy = true;
 
             if (YourPostsCollection.Count % 10 == 0 && YourPostsCollection.Count != 1 && YourPostsCollection.Count != 0) 
             {
-                var success = ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/{YourPostsCollection.Count / 10}", new JObject()).Result;
+                JObject oJsonObject = new JObject();
+                oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
+
+                var success = await ServerServices.SendGetRequestAsync($"posts/getAll/{_Globals.GlobalMainUser.Username}/{YourPostsCollection.Count / 10}", oJsonObject);
 
                 if (success.IsSuccessStatusCode)
                 {
