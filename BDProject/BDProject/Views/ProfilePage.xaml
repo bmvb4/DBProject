@@ -144,7 +144,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}"
+                            Text="{Binding LikesCountString}"
                             HorizontalOptions="End"/>
 
                         <Button 
@@ -161,7 +161,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}"
+                            Text="{Binding CommentsCountString}"
                             HorizontalOptions="End"/>
 
                     </StackLayout>
@@ -283,7 +283,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}"
+                            Text="{Binding LikesCountString}"
                             HorizontalOptions="End"/>
 
                         <Button 
@@ -300,7 +300,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}"
+                            Text="{Binding CommentsCountString}"
                             HorizontalOptions="End"/>
 
                     </StackLayout>

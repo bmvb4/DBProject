@@ -169,7 +169,7 @@ namespace BDProject.ViewModels
             get => postsCount;
             set
             {
-                if (value == postsCount) { return; }
+                if (value == postsCount || value < 0) { return; }
                 postsCount = value;
                 OnPropertyChanged();
             }
@@ -182,7 +182,7 @@ namespace BDProject.ViewModels
             get => followersCount;
             set
             {
-                if (value == followersCount) { return; }
+                if (value == followersCount || value < 0) { return; }
                 followersCount = value;
                 OnPropertyChanged();
             }
@@ -195,7 +195,7 @@ namespace BDProject.ViewModels
             get => followingCount;
             set
             {
-                if (value == followingCount) { return; }
+                if (value == followingCount || value < 0) { return; }
                 followingCount = value;
                 OnPropertyChanged();
             }

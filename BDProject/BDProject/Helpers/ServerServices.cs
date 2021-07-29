@@ -13,10 +13,12 @@ namespace BDProject.Helpers
 {
     public class ServerServices
     {
+        public const string MainURL = "https://10.0.2.2:5001/";
+        public const string RefreshURL = "https://10.0.2.2:5001/token/refresh";
 
         public static async Task<HttpResponseMessage> SendPostRequestAsync(string path, JObject oJsonObject)
         {
-            string URL = "https://10.0.2.2:5001/" + path;
+            string URL = $"{MainURL}{path}";
             const string sContentType = "application/json";
 
             HttpClientHandler clientHandler = new HttpClientHandler();
@@ -30,7 +32,7 @@ namespace BDProject.Helpers
 
         public static async Task<HttpResponseMessage> SendPostRegisterRequestAsync(string path, JObject oJsonObject)
         {
-            string URL = "https://10.0.2.2:5001/" + path;
+            string URL = $"{MainURL}{path}";
             const string sContentType = "application/json";
 
             HttpClientHandler clientHandler = new HttpClientHandler();
@@ -42,7 +44,7 @@ namespace BDProject.Helpers
 
         public static async Task<HttpResponseMessage> SendGetRequestAsync(string path, JObject oJsonObject)
         {
-            string URL = "https://10.0.2.2:5001/" + path;
+            string URL = $"{MainURL}{path}";
             const string sContentType = "application/json";
 
             HttpClientHandler clientHandler = new HttpClientHandler();
@@ -62,7 +64,7 @@ namespace BDProject.Helpers
 
         public static async Task<HttpResponseMessage> SendPutRequestAsync(string path, JObject oJsonObject)
         {
-            string URL = "https://10.0.2.2:5001/" + path;
+            string URL = $"{MainURL}{path}";
             const string sContentType = "application/json";
 
             HttpClientHandler clientHandler = new HttpClientHandler();
@@ -76,7 +78,7 @@ namespace BDProject.Helpers
 
         public static async Task<HttpResponseMessage> SendDeleteRequestAsync(string path, JObject oJsonObject)
         {
-            string URL = "https://10.0.2.2:5001/" + path;
+            string URL = $"{MainURL}{path}";
             const string sContentType = "application/json";
 
             HttpClientHandler clientHandler = new HttpClientHandler();
@@ -96,7 +98,6 @@ namespace BDProject.Helpers
 
         public static async Task RefreshTokenAsync()
         {
-            string URL = "https://10.0.2.2:5001/token/refresh";
             const string sContentType = "application/json";
 
             JObject oJsonObject = new JObject();
@@ -110,7 +111,7 @@ namespace BDProject.Helpers
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(URL),
+                RequestUri = new Uri(RefreshURL),
                 Content = new StringContent(oJsonObject.ToString(), Encoding.UTF8, sContentType)
             };
 

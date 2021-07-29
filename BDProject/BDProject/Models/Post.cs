@@ -136,10 +136,13 @@ namespace BDProject.Models
             get => likesCount;
             set
             {
+                if (value < 0) return;
                 likesCount = value;
                 OnPropertyChanged();
+                OnPropertyChanged(LikesCountString);
             }
         }
+        public string LikesCountString => FormatNumber(likesCount);
 
 
         private int commentsCount;
@@ -148,10 +151,13 @@ namespace BDProject.Models
             get => commentsCount;
             set
             {
+                if (value < 0) return;
                 commentsCount = value;
                 OnPropertyChanged();
+                OnPropertyChanged(CommentsCountString);
             }
         }
+        public string CommentsCountString => FormatNumber(commentsCount);
 
 
         private bool isFollow { get; set; } // ========================= FOLLOWINGS
@@ -191,5 +197,19 @@ namespace BDProject.Models
             }
         }
         public ObservableRangeCollection<Tag> TagsCollection => new ObservableRangeCollection<Tag>(Tags);
+
+
+
+        private static string FormatNumber(int num)
+        {
+            // Ensure number has max 3 significant digits (no rounding up can happen)
+            int i = (int)Math.Pow(10, Math.Max(0, Math.Log10(num) - 2));
+            num = num / i * i;
+
+            if (num >= 1000000000) return (num / 1000000000D).ToString("0.##") + "B";
+            if (num >= 1000000) return (num / 1000000D).ToString("0.##") + "M";
+            if (num >= 1000) return (num / 1000D).ToString("0.##") + "K";
+            return num.ToString("#,0");
+        }
     }
 }

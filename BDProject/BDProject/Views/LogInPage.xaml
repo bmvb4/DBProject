@@ -47,9 +47,10 @@
                     WidthRequest="45"
                     Margin="0"
                     Text="{Binding Eye}"
+                    TextColor="Black"
                     FontSize="Medium"
                     FontFamily="FA-S"
-                    BackgroundColor="White"
+                    BackgroundColor="Transparent"
                     Command="{Binding ShowHidePasswordCommand}"/>
 
             </Grid>
@@ -72,6 +73,7 @@
                 <Button 
                     Grid.Column="0"
                     Text="Sign Up"
+                    TextColor="Black"
                     BorderColor="Black"
                     BorderWidth="1"
                     BackgroundColor="Transparent"
@@ -80,6 +82,7 @@
                 <Button 
                     Grid.Column="1"
                     Text="Log In"
+                    TextColor="Black"
                     BorderColor="Black"
                     BorderWidth="1"
                     BackgroundColor="Transparent"

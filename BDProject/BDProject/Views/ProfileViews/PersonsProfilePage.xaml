@@ -135,7 +135,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCountString}" />
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -150,7 +150,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCountString}" />
 
                     </StackLayout>
 
@@ -254,7 +254,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCount}" />
+                            Text="{Binding LikesCountString}" />
 
                         <Button 
                             Style="{StaticResource BaseButton}"
@@ -269,7 +269,7 @@
                             FontSize="Medium"
                             VerticalOptions="Center"
                             TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCount}" />
+                            Text="{Binding CommentsCountString}" />
 
                     </StackLayout>
 
