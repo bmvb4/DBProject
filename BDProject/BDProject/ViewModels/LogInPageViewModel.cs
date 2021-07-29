@@ -116,6 +116,11 @@ namespace BDProject.ViewModels
         {
             if (CheckParameters() == true) { return; }
 
+            //=================== TESTING ========================
+            if(Username == "admin" && Password == "admin")
+                await Shell.Current.GoToAsync("//HomePage");
+            //=================== TESTING ========================
+
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", Username);
             oJsonObject.Add("Password", Password);
