@@ -5,7 +5,9 @@
              
              BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
-             Shell.TabBarIsVisible="False">
+             Shell.TabBarIsVisible="False"
+             
+             Title="SettingsPage">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>

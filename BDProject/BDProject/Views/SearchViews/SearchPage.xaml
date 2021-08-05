@@ -8,7 +8,8 @@
              xmlns:local="clr-namespace:BDProject.ViewModels.SearchViewModels"
              
              BackgroundColor="{DynamicResource BackgroundColor}"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Title="SearchPage">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>

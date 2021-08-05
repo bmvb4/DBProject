@@ -64,7 +64,11 @@ namespace BDProject.ViewModels
         public ICommand SendCommand { get; set; }
         private async void SendFunction()
         {
-            if (EmailValidator() == false) { return; }
+            if (string.IsNullOrEmpty(Username))
+            {
+                UsernameAlert = "Username is required";
+                return;
+            }
 
             //if (CheckParameters() == true) { return; }
 
@@ -90,57 +94,7 @@ namespace BDProject.ViewModels
         // Restrict lenght function
         private void RestrictLenght(string text, int restriction)
         {
-            if (text.Length >= restriction)
-            {
-                Username = text.Remove(text.Length - 1);
-            }
-        }
-
-        // Email validation
-        private bool EmailValidator()
-        {
-            try
-            {
-                UsernameAlert = "";
-
-                return true;
-            }
-            catch
-            {
-                UsernameAlert = "Invalid Username";
-                return false;
-            }
-        }
-
-        // Check parameters
-        private bool CheckParameters()
-        {
-            // error checer
-            bool flag = false;
-
-            // Check Email parameter
-            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrEmpty(Username)) // empty box
-            {
-                UsernameAlert = "Email is required";
-                flag = true;
-            }
-            else if (Username.Length >= 255) // max letter length
-            {
-                UsernameAlert = "Email should be less than 255 characters";
-                flag = true;
-            }
-            else if (Username.Length < 3) // min letter length
-            {
-                UsernameAlert = "Email should be more than 3 characters";
-                flag = true;
-            }
-            else
-            {
-                UsernameAlert = "";
-            }
-
-            // return flag result
-            return flag;
+            if (text.Length >= restriction) Username = text.Remove(text.Length - 1);
         }
 
         // Clear everything

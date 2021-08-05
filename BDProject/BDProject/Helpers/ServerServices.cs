@@ -13,8 +13,8 @@ namespace BDProject.Helpers
 {
     public class ServerServices
     {
-        public const string MainURL = "https://10.0.2.2:5001/";
-        public const string RefreshURL = "https://10.0.2.2:5001/token/refresh";
+        public const string MainURL = "http://159.65.94.122/";
+        public const string RefreshURL = "http://159.65.94.122/token/refresh";
 
         public static async Task<HttpResponseMessage> SendPostRequestAsync(string path, JObject oJsonObject)
         {

@@ -5,7 +5,8 @@
              
              xmlns:local="clr-namespace:BDProject.ViewModels"
              
-             BackgroundColor="{DynamicResource BackgroundColor}">
+             BackgroundColor="{DynamicResource BackgroundColor}"
+             Title="MakePostPage">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
@@ -42,12 +43,11 @@
                     HorizontalOptions="End"/>
 
             </StackLayout>
-            
+
             <CollectionView 
                 Grid.Row="1"
                 Margin="8"
                 SelectionMode="None"
-                HeightRequest="{Binding AllTagsHeight}"
                 ItemsSource="{Binding AllTags}">
                 <CollectionView.Header>
                     <StackLayout>
@@ -154,134 +154,5 @@
             </CollectionView>
         </Grid>
     </ContentPage.Content>
-    
+
 </ContentPage>
-    
-    <!--
-        <ScrollView
-            Margin="8,0">
-
-    <StackLayout>
-
-        <StackLayout
-                    Orientation="Horizontal">
-
-            <Button 
-                        Text="" 
-                        HeightRequest="48"
-                        WidthRequest="38"
-                        TextColor="{DynamicResource IconsColor}"
-                        FontFamily="FA-S"
-                        FontSize="Large"
-                        BackgroundColor="Transparent"
-                        Command="{Binding BackCommand}"
-                        HorizontalOptions="StartAndExpand"/>
-
-            <Button 
-                        Text="" 
-                        HeightRequest="48"
-                        WidthRequest="48"
-                        TextColor="{DynamicResource IconsColor}"
-                        FontFamily="FA-S"
-                        FontSize="Large"
-                        BackgroundColor="Transparent"
-                        Command="{Binding PostCommand}"
-                        HorizontalOptions="End"/>
-
-        </StackLayout>
-
-        <Image 
-                    Aspect="AspectFit"
-                    WidthRequest="{Binding ImageWidth}"
-                    HeightRequest="{Binding ImageHeight}"
-                    Source="{Binding TakenPhoto}" />
-
-        <Grid
-                    ColumnDefinitions="*,*">
-
-            <Button
-                        Grid.Column="0"
-                        Text="Take"
-                        TextColor="{DynamicResource TextColor}"
-                        BorderColor="{DynamicResource TextColor}"
-                        BorderWidth="1"
-                        BackgroundColor="Transparent"
-                        Command="{Binding TakePhotoCommand}"/>
-
-            <Button
-                        Grid.Column="1"
-                        Text="Pick"
-                        TextColor="{DynamicResource TextColor}"
-                        BorderColor="{DynamicResource TextColor}"
-                        BorderWidth="1"
-                        BackgroundColor="Transparent"
-                        Command="{Binding PickPhotoCommand}"/>
-
-        </Grid>
-
-        <StackLayout 
-                    Orientation="Vertical">
-
-            <Label 
-                        Text="Descripton"
-                        TextColor="{DynamicResource TextColor}"
-                        FontSize="Medium"/>
-
-            <Editor
-                        x:Name="descriptionEditor"
-                        HeightRequest="100"
-                        Text="{Binding Description}"
-                        TextColor="{DynamicResource TextColor}"/>
-
-            <Label 
-                        Text="Tags"
-                        TextColor="{DynamicResource TextColor}"
-                        FontSize="Medium"/>
-
-            <Editor
-                        x:Name="tagsEditor"
-                        TextChanged="tagsEditor_TextChangesd"
-                        TextColor="{DynamicResource TextColor}"/>
-
-            <CollectionView 
-                        SelectionMode="None"
-                        HeightRequest="{Binding AllTagsHeight}"
-                        ItemsSource="{Binding AllTags}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-
-                        <Grid 
-                                    HeightRequest="45"
-                                    ColumnDefinitions="*,auto">
-
-                            <Label
-                                        Grid.Column="0"
-                                        FontSize="Medium"
-                                        VerticalOptions="Center"
-                                        TextColor="{DynamicResource TextColor}"
-                                        Text="{Binding TagName}"/>
-
-                            <Button
-                                        Grid.Column="1"
-                                        Text=""
-                                        TextColor="{DynamicResource IconsColor}"
-                                        FontFamily="FA-S"
-                                        WidthRequest="48"
-                                        BackgroundColor="Transparent"
-                                        Command="{Binding DeleteTagCommand, Source={
-                                            RelativeSource AncestorType={x:Type local:MakePostPageViewModel}
-                                            }}"
-                                        CommandParameter="{Binding .}"/>
-
-                        </Grid>
-
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-        </StackLayout>
-
-    </StackLayout>
-
-    </ScrollView>
-    -->

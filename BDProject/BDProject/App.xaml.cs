@@ -23,10 +23,12 @@ namespace BDProject
 
         protected override void OnSleep()
         {
+            //Preferences.Set("LastPage", Shell.Current.CurrentPage.Title);
         }
 
         protected override void OnResume()
         {
+            //Shell.Current.GoToAsync(Preferences.Get("LastPage", string.Empty));
         }
 
         private void SetColors()

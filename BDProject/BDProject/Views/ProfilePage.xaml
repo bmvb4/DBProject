@@ -8,7 +8,8 @@
              xmlns:selector="clr-namespace:BDProject.Helpers"
              xmlns:system="clr-namespace:System;assembly=netstandard"
              
-             BackgroundColor="{DynamicResource BackgroundColor}">
+             BackgroundColor="{DynamicResource BackgroundColor}"
+             Title="ProfilePage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -111,60 +112,75 @@
                         HorizontalOptions="Center"
                         VerticalOptions="End"/>
 
-                    <StackLayout
+                    <Grid
                         Grid.Row="3"
-                        Orientation="Horizontal">
+                        ColumnDefinitions="*,*,*">
 
-                        <Button 
-                            Style="{StaticResource BaseButton}"
-                            Text=""
-                            FontFamily="FA-R"
-                            HorizontalOptions="Start"/>
+                        <Grid
+                            Grid.Column="0"
+                            ColumnDefinitions="auto,*"
+                            HorizontalOptions="StartAndExpand">
+                            <Button 
+                                Grid.Column="0"
+                                Style="{StaticResource BaseButton}"
+                                Text=""
+                                FontFamily="{Binding LikeIconFamily}"
+                                Command="{Binding LikePostCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
 
-                        <Label 
-                            Margin="0,0,16,0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}"
-                            HorizontalOptions="Start"/>
+                            <Label 
+                                Grid.Column="1"
+                                Margin="0,0,16,0"
+                                FontSize="Small"
+                                VerticalOptions="Center"
+                                TextColor="{DynamicResource TextColor}"
+                                Text="{Binding LikesCountString}"/>
+                        </Grid>
 
-                        <Button 
-                            Style="{StaticResource BaseButton}"
-                            Text=""
-                            FontFamily="{Binding LikeIconFamily}"
-                            Command="{Binding LikePostCommand, Source={
-                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
-                                }}"
-                            CommandParameter="{Binding .}"
-                            HorizontalOptions="End"/>
+                        <Grid
+                            Grid.Column="1"
+                            ColumnDefinitions="auto,*"
+                            HorizontalOptions="StartAndExpand">
+                            <Button 
+                                Grid.Column="0"
+                                Style="{StaticResource BaseButton}"
+                                Text="" 
+                                FontFamily="FA-R"
+                                Command="{Binding OpenPostCommentsCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
 
-                        <Label 
-                            Margin="0,0,16,0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCountString}"
-                            HorizontalOptions="End"/>
+                            <Label 
+                                Grid.Column="1"
+                                FontSize="Small"
+                                VerticalOptions="Center"
+                                TextColor="{DynamicResource TextColor}"
+                                Text="{Binding CommentsCountString}"/>
+                        </Grid>
 
-                        <Button 
-                            Style="{StaticResource BaseButton}"
-                            Text="" 
-                            FontFamily="FA-R"
-                            Command="{Binding OpenPostCommentsCommand, Source={
-                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
-                                }}"
-                            CommandParameter="{Binding .}"
-                            HorizontalOptions="End"/>
+                        <Grid
+                            Grid.Column="2"
+                            ColumnDefinitions="auto,*"
+                            HorizontalOptions="EndAndExpand">
+                            <Button 
+                                Grid.Column="0"
+                                Style="{StaticResource BaseButton}"
+                                Text=""
+                                FontFamily="FA-R"/>
 
-                        <Label 
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCountString}"
-                            HorizontalOptions="End"/>
+                            <Label 
+                                Grid.Column="1"
+                                Margin="0,0,16,0"
+                                FontSize="Small"
+                                VerticalOptions="Center"
+                                TextColor="{DynamicResource TextColor}"
+                                Text="{Binding DeleteDateString}"/>
+                        </Grid>
 
-                    </StackLayout>
+                    </Grid>
 
                 </Grid>
             </DataTemplate>
@@ -250,60 +266,75 @@
                                 }}"
                         CommandParameter="{Binding .}"/>
 
-                    <StackLayout
-                        Grid.Row="3"
-                        Orientation="Horizontal">
+                    <Grid
+                        Grid.Row="2"
+                        ColumnDefinitions="*,*,*">
 
-                        <Button 
-                            Style="{StaticResource BaseButton}"
-                            Text=""
-                            FontFamily="FA-R"
-                            HorizontalOptions="Start"/>
+                        <Grid
+                            Grid.Column="0"
+                            ColumnDefinitions="auto,*"
+                            HorizontalOptions="StartAndExpand">
+                            <Button 
+                                Grid.Column="0"
+                                Style="{StaticResource BaseButton}"
+                                Text=""
+                                FontFamily="{Binding LikeIconFamily}"
+                                Command="{Binding LikePostCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
 
-                        <Label 
-                            Margin="0,0,16,0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding DeleteDateString}"
-                            HorizontalOptions="Start"/>
+                            <Label 
+                                Grid.Column="1"
+                                Margin="0,0,16,0"
+                                FontSize="Small"
+                                VerticalOptions="Center"
+                                TextColor="{DynamicResource TextColor}"
+                                Text="{Binding LikesCountString}"/>
+                        </Grid>
 
-                        <Button 
-                            Style="{StaticResource BaseButton}"
-                            Text=""
-                            FontFamily="{Binding LikeIconFamily}"
-                            Command="{Binding LikePostCommand, Source={
-                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
-                                }}"
-                            CommandParameter="{Binding .}"
-                            HorizontalOptions="End"/>
+                        <Grid
+                            Grid.Column="1"
+                            ColumnDefinitions="auto,*"
+                            HorizontalOptions="StartAndExpand">
+                            <Button 
+                                Grid.Column="0"
+                                Style="{StaticResource BaseButton}"
+                                Text="" 
+                                FontFamily="FA-R"
+                                Command="{Binding OpenPostCommentsCommand, Source={
+                                    RelativeSource AncestorType={x:Type local:HomePageViewModel}
+                                    }}"
+                                CommandParameter="{Binding .}"/>
 
-                        <Label 
-                            Margin="0,0,16,0"
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding LikesCountString}"
-                            HorizontalOptions="End"/>
+                            <Label 
+                                Grid.Column="1"
+                                FontSize="Small"
+                                VerticalOptions="Center"
+                                TextColor="{DynamicResource TextColor}"
+                                Text="{Binding CommentsCountString}"/>
+                        </Grid>
 
-                        <Button 
-                            Style="{StaticResource BaseButton}"
-                            Text="" 
-                            FontFamily="FA-R"
-                            Command="{Binding OpenPostCommentsCommand, Source={
-                                RelativeSource AncestorType={x:Type local:ProfilePageViewModel}
-                                }}"
-                            CommandParameter="{Binding .}"
-                            HorizontalOptions="End"/>
+                        <Grid
+                            Grid.Column="2"
+                            ColumnDefinitions="auto,*"
+                            HorizontalOptions="EndAndExpand">
+                            <Button 
+                                Grid.Column="0"
+                                Style="{StaticResource BaseButton}"
+                                Text=""
+                                FontFamily="FA-R"/>
 
-                        <Label 
-                            FontSize="Medium"
-                            VerticalOptions="Center"
-                            TextColor="{DynamicResource TextColor}"
-                            Text="{Binding CommentsCountString}"
-                            HorizontalOptions="End"/>
+                            <Label 
+                                Grid.Column="1"
+                                Margin="0,0,16,0"
+                                FontSize="Small"
+                                VerticalOptions="Center"
+                                TextColor="{DynamicResource TextColor}"
+                                Text="{Binding DeleteDateString}"/>
+                        </Grid>
 
-                    </StackLayout>
+                    </Grid>
 
                 </Grid>
             </DataTemplate>

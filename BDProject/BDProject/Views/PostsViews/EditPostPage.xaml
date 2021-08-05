@@ -3,98 +3,164 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDProject.Views.PostsViews.EditPostPage"
              
+             xmlns:local="clr-namespace:BDProject.ViewModels.PostsViewModels"
+             
              BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
-             Shell.TabBarIsVisible="False">
+             Shell.TabBarIsVisible="False"
+             Title="EditPostPage">
 
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackCommand}"/>
     </Shell.BackButtonBehavior>
 
     <ContentPage.Content>
-        <StackLayout>
+        <CollectionView
+                Margin="8, 0"
+                SelectionMode="None"
+                ItemsSource="{Binding AllTags}">
+            <CollectionView.Header>
+                <StackLayout>
+                    <Grid 
+                        Padding="8,8,8,0"
+                        ColumnDefinitions="auto,*,auto">
 
-            <Grid 
-                Padding="8,8,8,0"
-                ColumnDefinitions="auto,*,auto">
+                        <Button 
+                            Grid.Column="0"
+                            HeightRequest="48"
+                            WidthRequest="38"
+                            Text="" 
+                            TextColor="{DynamicResource IconsColor}"
+                            FontFamily="FA-S"
+                            FontSize="Large"
+                            BackgroundColor="Transparent"
+                            Command="{Binding BackCommand}"/>
 
-                <Button 
-                    Grid.Column="0"
-                    HeightRequest="48"
-                    WidthRequest="38"
-                    Text="" 
-                    TextColor="{DynamicResource IconsColor}"
-                    FontFamily="FA-S"
-                    FontSize="Large"
-                    BackgroundColor="Transparent"
-                    Command="{Binding BackCommand}"/>
-
-                <Button 
-                    Grid.Column="2"
-                    HeightRequest="48"
-                    WidthRequest="48"
-                    Text="" 
-                    TextColor="{DynamicResource IconsColor}"
-                    FontFamily="FA-S"
-                    FontSize="Large"
-                    BackgroundColor="Transparent"
-                    Command="{Binding SaveChangesCommand}"/>
-
-            </Grid>
-
-            <Grid 
-                Padding="8,16"
-                RowDefinitions="auto,auto,*">
-
-                <Grid
-                    Grid.Row="0"
-                    ColumnDefinitions="auto,auto,*,auto">
-
-                    <Frame
-                        Grid.Column="0"
-                        HeightRequest="40"
-                        WidthRequest="40"
-                        CornerRadius="100"
-                        Padding="0"
-                        IsClippedToBounds="True">
-
-                        <Image 
-                            HorizontalOptions="Center"
-                            VerticalOptions="Center"
-                            Scale="1.4"
-                            Source="{Binding UserPhotoSource}"/>
-
-                    </Frame>
-
-                    <Grid
-                        Grid.Column="1"
-                        RowDefinitions="auto,auto">
-
-                        <Label 
-                            Grid.Row="0"
-                            FontSize="Medium"
-                            FontAttributes="Bold"
-                            Text="{Binding Username}"
-                            TextColor="{DynamicResource TextColor}"/>
+                        <Button 
+                            Grid.Column="2"
+                            HeightRequest="48"
+                            WidthRequest="48"
+                            Text="" 
+                            TextColor="{DynamicResource IconsColor}"
+                            FontFamily="FA-S"
+                            FontSize="Large"
+                            BackgroundColor="Transparent"
+                            Command="{Binding SaveChangesCommand}"/>
 
                     </Grid>
 
-                </Grid>
+                    <Grid 
+                        Margin="0, 16"
+                        RowDefinitions="auto,auto,*">
 
-                <Entry 
-                    Grid.Row="1"
-                    FontSize="Medium"
-                    Text="{Binding Description}"
-                    TextColor="{DynamicResource TextColor}"/>
+                        <Grid
+                            Grid.Row="0"
+                            ColumnDefinitions="auto,auto,*,auto">
 
-                <Image 
-                    Grid.Row="2"
-                    Aspect="Fill"
-                    Source="{Binding PhotoSource}"/>
+                            <Frame
+                                Grid.Column="0"
+                                HeightRequest="40"
+                                WidthRequest="40"
+                                CornerRadius="100"
+                                Padding="0"
+                                IsClippedToBounds="True">
 
-            </Grid>
+                                <Image 
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    Scale="1.4"
+                                    Source="{Binding UserPhotoSource}"/>
 
-        </StackLayout>
+                            </Frame>
+
+                            <Grid
+                                Grid.Column="1"
+                                RowDefinitions="auto,auto">
+
+                                <Label 
+                                    Grid.Row="0"
+                                    FontSize="Medium"
+                                    FontAttributes="Bold"
+                                    Text="{Binding Username}"
+                                    TextColor="{DynamicResource TextColor}"/>
+
+                            </Grid>
+
+                        </Grid>
+
+                        <Entry 
+                            Grid.Row="1"
+                            FontSize="Medium"
+                            Text="{Binding Description}"
+                            TextColor="{DynamicResource TextColor}"/>
+
+                        <Image 
+                            Grid.Row="2"
+                            Aspect="Fill"
+                            Source="{Binding PhotoSource}"/>
+
+                    </Grid>
+
+                    <Label 
+                        Text="Tags"
+                        TextColor="{DynamicResource TextColor}"
+                        FontSize="Medium"/>
+
+                    <Grid
+                        ColumnDefinitions="*,auto">
+
+                        <Entry
+                            Grid.Column="0"
+                            x:Name="tagsEditor"
+                            Text="{Binding TagText}"
+                            TextColor="{DynamicResource TextColor}"/>
+
+                        <Button
+                            Grid.Column="1"
+                            WidthRequest="45"
+                            Margin="0"
+                            Text=""
+                            TextColor="{DynamicResource IconsColor}"
+                            FontFamily="FA-S"
+                            FontSize="Large"
+                            BackgroundColor="Transparent"
+                            Command="{Binding AddTagCommand}"/>
+
+                    </Grid>
+
+                </StackLayout>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Grid
+                        HeightRequest="45"
+                        ColumnDefinitions="*,auto">
+
+                        <Label
+                            Grid.Column="0"
+                            FontSize="Medium"
+                            VerticalOptions="Center"
+                            TextColor="{DynamicResource TextColor}"
+                            Text="{Binding TagName}"/>
+
+                        <Button
+                            Grid.Column="1"
+                            Text=""
+                            TextColor="{DynamicResource IconsColor}"
+                            FontFamily="FA-S"
+                            WidthRequest="48"
+                            BackgroundColor="Transparent"
+                            Command="{Binding DeleteTagCommand, Source={
+                                RelativeSource AncestorType={x:Type local:EditPostPageViewModel}
+                                }}"
+                            CommandParameter="{Binding .}"/>
+
+                    </Grid>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </ContentPage.Content>
     
 </ContentPage>

@@ -1,6 +1,7 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
 using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -12,15 +13,22 @@ namespace BDProject.ViewModels.PostsViewModels
 
         private void SetParameters()
         {
-            SelectedPost = _Globals.GetPost(_Globals.OpenID);
+            Post SelectedPost = _Globals.GetPost(_Globals.OpenID);
+            idPost = SelectedPost.IdPost;
+            idUser = SelectedPost.IdUser;
 
             PhotoSource = SelectedPost.PhotoSource;
             UserPhotoSource = SelectedPost.UserPhotoSource;
             Username = SelectedPost.IdUser;
             Description = SelectedPost.Description;
 
+            AllTags = new ObservableCollection<Tag>(SelectedPost.Tags);
+
             _Globals.OpenID = 0;
         }
+
+        private long idPost = 0;
+        private string idUser = "";
 
         public EditPostPageViewModel()
         {
@@ -29,12 +37,11 @@ namespace BDProject.ViewModels.PostsViewModels
             // Assigning functions to the commands
             BackCommand = new Command(async () => await BackFunction());
             SaveChangesCommand = new Command(async () => await SaveChangesFunction());
+            DeleteTagCommand = new Command<Tag>(DeleteTagFunction);
+            AddTagCommand = new Command(AddTagFunction);
         }
 
         // Parameters
-        // editet post
-        Post SelectedPost = new Post();
-
         // post Image parameter
         private ImageSource photoSource = null;
         public ImageSource PhotoSource
@@ -87,6 +94,32 @@ namespace BDProject.ViewModels.PostsViewModels
             }
         }
 
+        // Post Tag
+        private string tagText = "";
+        public string TagText
+        {
+            get => tagText;
+            set
+            {
+                if (value == tagText) { return; }
+                tagText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // All tags
+        private ObservableCollection<Tag> allTags = new ObservableCollection<Tag>();
+        public ObservableCollection<Tag> AllTags
+        {
+            get => allTags;
+            set
+            {
+                if (value == allTags) { return; }
+                allTags = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Commands
         // Back to post command
         public ICommand BackCommand { get; set; }
@@ -100,11 +133,11 @@ namespace BDProject.ViewModels.PostsViewModels
         private async Task SaveChangesFunction()
         {
             JObject oJsonObject = new JObject();
-            oJsonObject.Add("IdPost", SelectedPost.IdPost);
-            oJsonObject.Add("IdUser", SelectedPost.IdUser);
+            oJsonObject.Add("IdPost", idPost);
+            oJsonObject.Add("IdUser", idUser);
             oJsonObject.Add("Description", Description);
 
-            var success = await ServerServices.SendPutRequestAsync($"posts/update/{SelectedPost.IdPost}", oJsonObject);
+            var success = await ServerServices.SendPutRequestAsync($"posts/update/{idPost}", oJsonObject);
 
             if (success.IsSuccessStatusCode)
             {
@@ -112,6 +145,24 @@ namespace BDProject.ViewModels.PostsViewModels
                 await Shell.Current.Navigation.PopAsync();
 
                 PhotoSource = null;
+            }
+        }
+
+        // Delete tag command
+        public ICommand DeleteTagCommand { get; set; }
+        private void DeleteTagFunction(Tag tag)
+        {
+            AllTags.Remove(tag);
+        }
+
+        // Add tag command
+        public ICommand AddTagCommand { get; set; }
+        private void AddTagFunction()
+        {
+            if (!string.IsNullOrEmpty(TagText) || !string.IsNullOrWhiteSpace(TagText))
+            {
+                AllTags.Add(new Tag(TagText));
+                TagText = "";
             }
         }
 

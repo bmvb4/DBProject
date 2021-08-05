@@ -17,6 +17,8 @@ namespace BDProject.Views.PostsViews
         {
             InitializeComponent();
 
+            tagsEditor.Unfocus();
+
             BindingContext = new EditPostPageViewModel();
         }
     }

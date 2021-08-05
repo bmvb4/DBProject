@@ -94,7 +94,6 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BDProject\BDProject.csproj">
       <Project>{18EFFA39-D915-41B4-9344-C3D6DDC17206}</Project>

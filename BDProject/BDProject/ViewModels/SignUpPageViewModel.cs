@@ -197,11 +197,8 @@ namespace BDProject.ViewModels
         public ICommand SignUpCommand { get; set; }
         private async Task SignUpFunction()
         {
-            // vaidate email and username
-            if (EmailValidator() == false || UsernameValidation() == false) { return; }
-
-            // checking all parameters
-            if (CheckParameters() == true) { return; }
+            if (EmailValidator() == false || UsernameValidation() == false || CheckParameters() == true) return;
+            ClearAlerts();
 
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", Username);
@@ -244,6 +241,12 @@ namespace BDProject.ViewModels
             ConfirmPassword = "";
             Email = "";
 
+            ClearAlerts();
+        }
+
+        // Functions
+        private void ClearAlerts()
+        {
             FirstNameAlert = "";
             LastNameAlert = "";
             UsernameAlert = "";
@@ -252,7 +255,6 @@ namespace BDProject.ViewModels
             EmailAlert = "";
         }
 
-        // Functions
         // Restrict lenght function
         private void RestrictLenght(string text, int restriction, int choice)
         {
@@ -300,10 +302,7 @@ namespace BDProject.ViewModels
                     if (result == false)
                     {
                         FirstNameAlert = "First name shouldn't have numbers or symbols";
-                    }
-                    else
-                    {
-                        FirstNameAlert = "";
+                        return;
                     }
                     break;
 
@@ -311,10 +310,7 @@ namespace BDProject.ViewModels
                     if (result == false)
                     {
                         LastNameAlert = "Last name shouldn't have numbers or symbols";
-                    }
-                    else
-                    {
-                        LastNameAlert = "";
+                        return;
                     }
                     break;
 
@@ -332,11 +328,7 @@ namespace BDProject.ViewModels
                 UsernameAlert = "Invalid Username";
                 return false;
             }
-            else
-            {
-                UsernameAlert = "";
-                return true;
-            }
+            return true;
         }
 
         // Email validation
@@ -344,11 +336,8 @@ namespace BDProject.ViewModels
         {
             try
             {
-                MailAddress m = new MailAddress(Email);
-
-                EmailAlert = "";
-
-                return true;
+                var addr = new System.Net.Mail.MailAddress(Email);
+                return addr.Address == Email;
             }
             catch
             {
@@ -360,127 +349,100 @@ namespace BDProject.ViewModels
         // Check parameters
         private bool CheckParameters()
         {
-            // error checer
-            bool flag = false;
-
             // Check First name parameter
-            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrEmpty(FirstName)) // empty box
+            if (string.IsNullOrEmpty(FirstName.Trim())) // empty box
             {
                 FirstNameAlert = "First name is required";
-                flag = true;
+                return true;
             }
             else if (FirstName.Length >= 26) // max letter length
             {
                 FirstNameAlert = "First name should be less than 26 characters";
-                flag = true;
+                return true;
             }
             else if (FirstName.Length < 2) // min letter length
             {
                 FirstNameAlert = "First name should be more than 2 characters";
-                flag = true;
-            }
-            else
-            {
-                FirstNameAlert = "";
+                return true;
             }
 
             // Check Last name parameter
             if (string.IsNullOrWhiteSpace(LastName) || string.IsNullOrEmpty(LastName)) // empty box
             {
                 LastNameAlert = "Last name is required";
-                flag = true;
+                return true;
             }
             else if (LastName.Length >= 26) // max letter length
             {
                 LastNameAlert = "Last name should be less than 26 characters";
-                flag = true;
+                return true;
             }
             else if (LastName.Length < 2) // min letter length
             {
                 LastNameAlert = "Last name should be more than 2 characters";
-                flag = true;
-            }
-            else
-            {
-                LastNameAlert = "";
+                return true;
             }
 
             // Check Username parameter
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrEmpty(Username)) // empty box
             {
                 UsernameAlert = "Username is required";
-                flag = true;
+                return true;
             }
             else if (Username.Length >= 30) // max letter length
             {
                 UsernameAlert = "Username should be less than 30 characters";
-                flag = true;
+                return true;
             }
             else if (Username.Length <= 4) // min letter length
             {
                 UsernameAlert = "Userame should be more than 4 characters";
-                flag = true;
-            }
-            else
-            {
-                UsernameAlert = "";
+                return true;
             }
 
             // Check Password parameter
             if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrEmpty(Password)) // empty box
             {
                 PasswordAlert = "Password is required";
-                flag = true;
+                return true;
             }
             else if (Password.Length >= 128) // max letter length
             {
                 PasswordAlert = "Password should be less than 128 characters";
-                flag = true;
+                return true;
             }
             else if (Password.Length <= 6) // min letter length
             {
                 PasswordAlert = "Password should be more than 6 characters";
-                flag = true;
-            }
-            else
-            {
-                PasswordAlert = "";
+                return true;
             }
 
             // Check Confirm Password parameter
             if (ConfirmPassword != Password) // matching
             {
                 ConfirmPasswordAlert = "Passwords doesn't match";
-                flag = true;
-            }
-            else
-            {
-                ConfirmPasswordAlert = "";
+                return true;
             }
 
             // Check Email parameter
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrEmpty(Email)) // empty box
             {
                 EmailAlert = "Email is required";
-                flag = true;
+                return true;
             }
             else if (Email.Length >= 255) // max letter length
             {
                 EmailAlert = "Email should be less than 255 characters";
-                flag = true;
+                return true;
             }
             else if (Email.Length < 3) // min letter length
             {
                 EmailAlert = "Email should be more than 3 characters";
-                flag = true;
-            }
-            else
-            {
-                EmailAlert = "";
+                return true;
             }
 
             // return flag result
-            return flag;
+            return false;
         }
 
     }

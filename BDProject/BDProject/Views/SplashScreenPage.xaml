@@ -5,7 +5,8 @@
              
              BackgroundColor="{DynamicResource BackgroundColor}"
              Shell.NavBarIsVisible="False"
-             Shell.TabBarIsVisible="False">
+             Shell.TabBarIsVisible="False"
+             Title="SplashScreenPage">
     
     <ContentPage.Content>
         <StackLayout>

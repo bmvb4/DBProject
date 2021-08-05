@@ -5,7 +5,8 @@
              
              BackgroundColor="White"
              Shell.NavBarIsVisible="False"
-             Shell.TabBarIsVisible="False">
+             Shell.TabBarIsVisible="False"
+             Title="SignUpPage">
     
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding CancelCommand}"/>

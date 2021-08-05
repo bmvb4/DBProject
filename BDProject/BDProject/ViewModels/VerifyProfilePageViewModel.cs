@@ -71,6 +71,12 @@ namespace BDProject.ViewModels
         public ICommand VerifyCommand { get; set; }
         private async void VerifyFunction()
         {
+            if (string.IsNullOrEmpty(code))
+            {
+                CodeAlert = "Code is required";
+                return;
+            }
+
             var success = await ServerServices.SendPostRequestAsync($"email/confirmEmail?Username={_Globals.UsernameTemp}&Code={Code}", new JObject());
 
             if (success.IsSuccessStatusCode)
@@ -101,6 +107,8 @@ namespace BDProject.ViewModels
                         _Globals.GlobalMainUser.AddPostsFromDB(postList);
                         _Globals.AddPostsFromDB(postList);
 
+                        ClearEverything();
+
                         await Shell.Current.GoToAsync("//HomePage");
                     }
                 }
@@ -109,11 +117,6 @@ namespace BDProject.ViewModels
             {
                 CodeAlert = "Invalid Code";
             }
-
-            // Reset password
-            await Shell.Current.GoToAsync("//HomePage");
-
-            ClearEverything();
         }
 
         // Functions

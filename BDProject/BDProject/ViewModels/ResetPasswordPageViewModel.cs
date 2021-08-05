@@ -88,7 +88,7 @@ namespace BDProject.ViewModels
                 if (value == confirmPassword) { return; }
                 confirmPassword = value;
 
-                RestrictLenght(confirmPassword, 133, 1);
+                RestrictLenght(confirmPassword, 133, 2);
 
                 OnPropertyChanged(nameof(ConfirmPassword));
             }
@@ -121,6 +121,7 @@ namespace BDProject.ViewModels
         private async void ResetFunction()
         {
             if (CheckParameters() == true) { return; }
+
             try
             {
                 JObject oJsonObject = new JObject();
@@ -182,62 +183,58 @@ namespace BDProject.ViewModels
         private void RestrictLenght(string text, int restriction, int choice)
         {
             if (text.Length >= restriction)
-            {
                 switch (choice)
                 {
-                    case 1:
-                        Password = text.Remove(text.Length - 1);
-                        break;
-
-                    case 2:
-                        ConfirmPassword = text.Remove(text.Length - 1);
-                        break;
-
+                    case 1: Password = text.Remove(text.Length - 1); break;
+                    case 2: ConfirmPassword = text.Remove(text.Length - 1); break;
                     default: break;
                 }
-            }
         }
 
         // Check parameters
         private bool CheckParameters()
         {
-            // error checer
-            bool flag = false;
-
             // Check Password parameter
-            if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrEmpty(Password)) // empty box
+            if (string.IsNullOrEmpty(Password.Trim())) // empty box
             {
                 PasswordAlert = "Password is required";
-                flag = true;
+                return true;
             }
-            else if (Password.Length >= 128) // max letter length
+            if (Password.Length >= 128) // max letter length
             {
                 PasswordAlert = "Password should be less than 128 characters";
-                flag = true;
+                return true;
             }
-            else if (Password.Length <= 6) // min letter length
+            if (Password.Length <= 6) // min letter length
             {
                 PasswordAlert = "Password should be more than 6 characters";
-                flag = true;
-            }
-            else
-            {
-                PasswordAlert = "";
+                return true;
             }
 
             // Check Confirm Password parameter
+            if (string.IsNullOrEmpty(Password.Trim())) // empty box
+            {
+                PasswordAlert = "Password is required";
+                return true;
+            }
+            if (ConfirmPassword.Length >= 128) // max letter length
+            {
+                ConfirmPasswordAlert = "Password should be less than 128 characters";
+                return true;
+            }
+            if (ConfirmPassword.Length <= 6) // min letter length
+            {
+                ConfirmPasswordAlert = "Password should be more than 6 characters";
+                return true;
+            }
             if (ConfirmPassword != Password) // matching
             {
                 ConfirmPasswordAlert = "Passwords doesn't match";
-                flag = true;
-            }
-            else
-            {
-                ConfirmPasswordAlert = "";
+                return true;
             }
 
-            // return flag result
-            return flag;
+            ClearEverything();
+            return false;
         }
 
         // Clear everything
