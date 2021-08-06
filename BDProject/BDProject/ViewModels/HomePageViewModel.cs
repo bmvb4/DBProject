@@ -5,7 +5,6 @@ using BDProject.Views._PopUps;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -31,8 +30,6 @@ namespace BDProject.ViewModels
             {
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                 var rootobject = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
-
-                _Globals.AddPostsFromDB(rootobject);
 
                 foreach (BigPostDB post in rootobject)
                     PostsCollection.Add(new Post(post));
@@ -138,17 +135,20 @@ namespace BDProject.ViewModels
         private async void OpenPostCommentsFunction(Post post)
         {
             _Globals.OpenID = (int)post.IdPost;
+            _Globals.HomePageViewModelInstance = this;
             await Shell.Current.GoToAsync("PostComments");
         }
 
         // Refresh collection view command
         public ICommand RefreshCommand { get; set; }
-        private void RefreshFunction()
+        private async void RefreshFunction()
         {
             IsRefreshing = true;
             IsBusy = true;
             SetCollection();
             IsBusy = false;
+
+            await Task.Delay(3000);
             IsRefreshing = false;
         }
 
@@ -193,44 +193,20 @@ namespace BDProject.ViewModels
                 oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
 
                 var success = await ServerServices.SendPostRequestAsync("follow", oJsonObject);
-
-                if (success.IsSuccessStatusCode)
-                {
-                    for (int i = 0; i < PostsCollection.Count; i++)
-                        PostsCollection[i].IsFollow = true;
-                    for (int i = 0; i < _Globals.GlobalFeedPosts.Count; i++)
-                        _Globals.GlobalFeedPosts[i].IsFollow = true;
-
-                    //PostsCollection.First(x => x.IdPost == post.IdPost).IsFollow = true;
-                    //_Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = true;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) PostsCollection.First(x => x.IdPost == post.IdPost).IsFollow = true;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
-            else
+            if (post.IsFollow)
             {
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("idFollowed", post.IdUser);
                 oJsonObject.Add("idFollower", _Globals.GlobalMainUser.Username);
 
                 var success = await ServerServices.SendDeleteRequestAsync("follow", oJsonObject);
-
-                if (success.IsSuccessStatusCode)
-                {
-                    for (int i = 0; i < PostsCollection.Count; i++)
-                        PostsCollection[i].IsFollow = false;
-                    for (int i = 0; i < _Globals.GlobalFeedPosts.Count; i++)
-                        _Globals.GlobalFeedPosts[i].IsFollow = false;
-
-                    //PostsCollection.First(x => x.IdPost == post.IdPost).IsFollow = false;
-                    //_Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).IsFollow = false;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) PostsCollection.First(x => x.IdPost == post.IdPost).IsFollow = false;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
         }
 
@@ -238,7 +214,7 @@ namespace BDProject.ViewModels
         public ICommand LoadMoreCommand { get; set; }
         private void LoadMoreFunction()
         {
-            if (IsBusy) { return; }
+            if (IsBusy) return;
             IsBusy = true;
 
             if(PostsCollection.Count % 10 == 0)
@@ -250,11 +226,8 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-
                     var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                     var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
-
-                    _Globals.AddPostsFromDB(postList);
 
                     foreach (BigPostDB post in postList)
                         PostsCollection.Add(new Post(post));
@@ -275,18 +248,27 @@ namespace BDProject.ViewModels
         {
             await Task.Delay(0);
             if (IsTagsVisible)
+            {
                 IsTagsVisible = false;
-            else
+                return;
+            }
+            if (!IsTagsVisible)
+            {
                 IsTagsVisible = true;
+                return;
+            }
         }
 
         public ICommand OpenTagsCommand { get; set; }
         private async void OpenTagsFunction(Post post)
         {
             if(post.tags != null && post.tags.Count != 0)
+            {
                 await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
-            else
-                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
+                return;
+            }
+            
+            await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
         }
     }
 }

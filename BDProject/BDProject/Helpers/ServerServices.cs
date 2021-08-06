@@ -1,9 +1,6 @@
-﻿using BDProject.Models;
-using BDProject.ViewModels;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -120,7 +117,7 @@ namespace BDProject.Helpers
             if (success.IsSuccessStatusCode)
             {
                 var earthquakesJson = success.Content.ReadAsStringAsync().Result;
-                var user = JsonConvert.DeserializeObject<User>(earthquakesJson);
+                var user = JsonConvert.DeserializeObject<Models.User>(earthquakesJson);
 
                 _Globals.GlobalMainUser.AccessToken = user.AccessToken;
                 _Globals.GlobalMainUser.RefreshToken = user.RefreshToken;

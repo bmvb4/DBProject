@@ -26,7 +26,7 @@
             <DataTemplate x:Key="MyTemplate">
                 <Grid 
                     RowDefinitions="auto,*, auto, auto"
-                    Margin="0,0,0,16">
+                    Padding="0,0,0,16">
 
                     <StackLayout
                         Grid.Row="0">
@@ -70,7 +70,7 @@
 
                     <Image 
                         Grid.Row="1"
-                        Aspect="Fill"
+                        Aspect="AspectFit"
                         Source="{Binding PhotoSource}">
 
                         <Image.GestureRecognizers>
@@ -197,7 +197,7 @@
             <DataTemplate x:Key="MyTemplateWithoutDescription">
                 <Grid 
                     RowDefinitions="auto, *, auto"
-                    Margin="0,0,0,16">
+                    Padding="0,0,0,16">
 
                     <StackLayout
                         Grid.Row="0">
@@ -241,7 +241,7 @@
 
                     <Image 
                         Grid.Row="1"
-                        Aspect="Fill"
+                        Aspect="AspectFit"
                         Source="{Binding PhotoSource}">
 
                         <Image.GestureRecognizers>
@@ -359,7 +359,7 @@
             <DataTemplate x:Key="OthersTemplate">
                 <Grid 
                     RowDefinitions="auto,*, auto, auto"
-                    Margin="0,0,0,16">
+                    Padding="0,0,0,16">
 
                     <StackLayout
                         Grid.Row="0">
@@ -402,7 +402,7 @@
 
                     <Image 
                         Grid.Row="1"
-                        Aspect="Fill"
+                        Aspect="AspectFit"
                         Source="{Binding PhotoSource}">
 
                         <Image.GestureRecognizers>
@@ -529,7 +529,7 @@
             <DataTemplate x:Key="OthersTemplateWithoutDescription">
                 <Grid 
                     RowDefinitions="auto,*, auto"
-                    Margin="0,0,0,16">
+                    Padding="0,0,0,16">
 
                     <StackLayout
                         Grid.Row="0">
@@ -572,7 +572,7 @@
 
                     <Image 
                         Grid.Row="1"
-                        Aspect="Fill"
+                        Aspect="AspectFit"
                         Source="{Binding PhotoSource}">
 
                         <Image.GestureRecognizers>

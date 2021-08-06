@@ -1,8 +1,5 @@
 ﻿using BDProject.Views._PopUps;
 using Rg.Plugins.Popup.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;

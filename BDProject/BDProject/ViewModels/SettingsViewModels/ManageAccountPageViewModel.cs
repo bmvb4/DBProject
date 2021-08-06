@@ -1,7 +1,4 @@
 ﻿using BDProject.Helpers;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;

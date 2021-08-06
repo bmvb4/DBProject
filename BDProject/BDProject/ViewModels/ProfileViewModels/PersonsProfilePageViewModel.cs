@@ -7,9 +7,6 @@ using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -326,8 +323,6 @@ namespace BDProject.ViewModels.ProfileViewModels
 
                     var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                     var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
-
-                    _Globals.AddPostsFromDB(postList);
 
                     foreach (BigPostDB post in postList)
                         YourPostsCollection.Add(new Post(post));

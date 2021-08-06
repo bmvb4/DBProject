@@ -1,47 +1,15 @@
-﻿using BDProject.DatabaseModels;
-using BDProject.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 
 namespace BDProject.Helpers
 {
     public static class _Globals
     {
         // ================= Main User
-        private static User MainUser = new User();
-        public static User GlobalMainUser
+        private static Models.User MainUser = new Models.User();
+        public static Models.User GlobalMainUser
         {
             get => MainUser;
             set => MainUser = value;
-        }
-
-
-
-        // ================= Main Feed
-        private static List<Post> FeedPosts = new List<Post>();
-        public static List<Post> GlobalFeedPosts
-        {
-            get => FeedPosts;
-            set => FeedPosts = value;
-        }
-        public static Post GetPost(long id)
-        {
-            Post post = FeedPosts?.First(x => x.IdPost == id);
-            return (post != null) ? post : new Post();
-        }
-        public static void AddPostsFromDB(List<PostDB> posts)
-        {
-            FeedPosts.Clear();
-            foreach (PostDB post in posts)
-                FeedPosts.Add(new Post(post));
-        }
-        public static void AddPostsFromDB(List<BigPostDB> posts)
-        {
-            FeedPosts.Clear();
-            foreach (BigPostDB post in posts)
-                FeedPosts.Add(new Post(post));
         }
 
 
@@ -59,6 +27,10 @@ namespace BDProject.Helpers
             get => refresh;
             set => refresh = value;
         }
+
+
+
+        public static ViewModels.HomePageViewModel HomePageViewModelInstance;
 
 
 

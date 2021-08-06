@@ -2,6 +2,7 @@
 using BDProject.Models;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace BDProject.ViewModels.PostsViewModels
 
         private void SetParameters()
         {
-            Post SelectedPost = _Globals.GetPost(_Globals.OpenID);
+            Post SelectedPost = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID);
             idPost = SelectedPost.IdPost;
             idUser = SelectedPost.IdUser;
 

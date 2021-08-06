@@ -1,9 +1,6 @@
 ﻿using BDProject.DatabaseModels;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using Xamarin.Forms;
 
 namespace BDProject.Models

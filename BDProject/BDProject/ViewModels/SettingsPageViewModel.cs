@@ -1,7 +1,5 @@
 ﻿using BDProject.Helpers;
 using BDProject.Models;
-using BDProject.Views;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -62,7 +60,6 @@ namespace BDProject.ViewModels
 
             _Globals.OpenID = 0;
 
-            _Globals.GlobalFeedPosts = new List<Post>();
             _Globals.GlobalMainUser = new User();
 
             App.Current.MainPage = new AppShell();
@@ -80,7 +77,6 @@ namespace BDProject.ViewModels
 
             _Globals.OpenID = 0;
 
-            _Globals.GlobalFeedPosts = new List<Post>();
             _Globals.GlobalMainUser = new User();
 
             App.Current.MainPage = new AppShell();

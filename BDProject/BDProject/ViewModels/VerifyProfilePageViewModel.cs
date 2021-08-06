@@ -3,9 +3,7 @@ using BDProject.Helpers;
 using BDProject.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -105,7 +103,6 @@ namespace BDProject.ViewModels
                         earthquakesJson = success.Content.ReadAsStringAsync().Result;
                         var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
                         _Globals.GlobalMainUser.AddPostsFromDB(postList);
-                        _Globals.AddPostsFromDB(postList);
 
                         ClearEverything();
 

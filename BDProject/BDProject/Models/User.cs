@@ -1,13 +1,11 @@
 ﻿using BDProject.DatabaseModels;
 using BDProject.Helpers;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Xamarin.Forms;
 
 namespace BDProject.Models

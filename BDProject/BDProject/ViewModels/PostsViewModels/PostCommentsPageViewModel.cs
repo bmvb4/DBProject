@@ -3,7 +3,6 @@ using BDProject.Helpers;
 using BDProject.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -28,21 +27,23 @@ namespace BDProject.ViewModels.PostsViewModels
                 var rootobject = JsonConvert.DeserializeObject<List<CommentDB>>(earthquakesJson);
 
                 CommentsCollection.Clear();
-
                 foreach (CommentDB comment in rootobject)
                     CommentsCollection.Add(new Comment(comment));
+
+                return;
             }
-            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ServerServices.RefreshTokenAsync();
                 SetCollection();
+                return;
             }
         }
 
         public void SetParameters()
         {
-            Username = _Globals.GlobalFeedPosts?.First(x => x.IdPost == _Globals.OpenID).IdUser;
-            Description = _Globals.GlobalFeedPosts?.First(x => x.IdPost == _Globals.OpenID).Description;
+            Username = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).IdUser;
+            Description = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).Description;
         }
 
         public PostCommentsPageViewModel()
@@ -161,12 +162,14 @@ namespace BDProject.ViewModels.PostsViewModels
             var success = await ServerServices.SendDeleteRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.GlobalFeedPosts.First(x => x.IdPost == _Globals.OpenID).CommentsCount--;
+                _Globals.HomePageViewModelInstance.PostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount--;
                 SetCollection();
+                return;
             }
-            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ServerServices.RefreshTokenAsync();
+                return;
             }
         }
 
@@ -176,7 +179,7 @@ namespace BDProject.ViewModels.PostsViewModels
         {
             if (string.IsNullOrEmpty(Comment) || string.IsNullOrWhiteSpace(Comment)) { return; }
 
-            Post post = _Globals.GetPost(_Globals.OpenID);
+            Post post = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID);
 
             JObject oJsonObject = new JObject();
             oJsonObject.Add("IdPost", post.IdPost);
@@ -186,13 +189,15 @@ namespace BDProject.ViewModels.PostsViewModels
             var success = await ServerServices.SendPostRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.GlobalFeedPosts.First(x => x.IdPost == post.IdPost).CommentsCount++;
+                _Globals.HomePageViewModelInstance.PostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount++;
                 SetCollection();
                 Comment = "";
+                return;
             }
-            else if (success.StatusCode == HttpStatusCode.Unauthorized)
+            if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ServerServices.RefreshTokenAsync();
+                return;
             }
         }
 
@@ -235,9 +240,10 @@ namespace BDProject.ViewModels.PostsViewModels
             {
                 _Globals.UsernameTemp = com.IdUser;
                 await Shell.Current.GoToAsync("PersonsProfilePage");
+                return;
             }
-            else
-                await Shell.Current.GoToAsync("//ProfilePage");
+
+            await Shell.Current.GoToAsync("//ProfilePage");
         }
     }
 }
