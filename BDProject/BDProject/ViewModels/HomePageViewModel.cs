@@ -22,28 +22,6 @@ namespace BDProject.ViewModels
         {
             PostsCollection.Clear();
 
-            //=================== TESTING ========================
-            List<BigPostDB> bigposts = new List<BigPostDB>()
-            {
-                new BigPostDB
-                {
-                    IdPost = 1,
-                    IdUser = _Globals.GlobalMainUser.Username,
-                    Photo = _Globals.GlobalMainUser.Photo,
-                    Description = "My First Artwork",
-                    CommentsCounter = 1234,
-                    LikesCounter = 245678,
-                    isLiked = true,
-                    isFollow = true,
-                    UserPhoto = _Globals.GlobalMainUser.Photo,
-                    DeleteDate = new DateTime(2021, 7, 30),
-                    tags = new List<string> { "Cat", "Cats", "Animals", "Nature" }
-                }
-            };
-            _Globals.GlobalFeedPosts.Add(new Post(bigposts[0]));
-            PostsCollection.Add(new Post(bigposts[0]));
-            //=================== TESTING ========================
-
             JObject oJsonObject = new JObject();
             oJsonObject.Add("Username", _Globals.GlobalMainUser.Username);
 
@@ -142,28 +120,16 @@ namespace BDProject.ViewModels
             if (!post.IsLiked)
             {
                 var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
-                if (success.IsSuccessStatusCode)
-                {
-                    post.IsLiked = true;
-                    post.LikesCount++;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) post.IsLiked = true;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
-            else
+            if (post.IsLiked)
             {
                 var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
-                if (success.IsSuccessStatusCode)
-                {
-                    post.IsLiked = false;
-                    post.LikesCount--;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) post.IsLiked = false;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
         }
 

@@ -293,28 +293,16 @@ namespace BDProject.ViewModels
             if (!post.IsLiked)
             {
                 var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
-                if (success.IsSuccessStatusCode)
-                {
-                    post.IsLiked = true;
-                    post.LikesCount++;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) post.IsLiked = true;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
-            else
+            if (post.IsLiked)
             {
                 var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
-                if (success.IsSuccessStatusCode)
-                {
-                    post.IsLiked = false;
-                    post.LikesCount--;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) post.IsLiked = false;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
         }
 

@@ -117,19 +117,28 @@ namespace BDProject.Models
             {
                 isLiked = value;
 
-                if(DeleteDate.Year != 1)
+                if (DeleteDate.Year != 1) return;
+
+                if (isLiked)
                 {
-                    if(IsLiked)
-                        DeleteDate.AddMinutes(-5);
-                    else
-                        DeleteDate.AddMinutes(5);
+                    LikesCount--;
+                    DeleteDate.AddMinutes(-5);
+                }
+                else
+                {
+                    LikesCount++;
+                    DeleteDate.AddMinutes(5);
                 }
 
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(DeleteDateString));
                 OnPropertyChanged(nameof(LikeIconFamily));
+                OnPropertyChanged(nameof(LikesCount));
+                OnPropertyChanged(nameof(LikesCountString));
             }
         }
         public string LikeIconFamily => (isLiked) ? "FA-S" : "FA-R";
+
         private int likesCount;
         public int LikesCount // ========================= LIKES COUNTER
         {
@@ -139,7 +148,6 @@ namespace BDProject.Models
                 if (value < 0) return;
                 likesCount = value;
                 OnPropertyChanged();
-                OnPropertyChanged(LikesCountString);
             }
         }
         public string LikesCountString => FormatNumber(likesCount);
@@ -167,6 +175,7 @@ namespace BDProject.Models
             set
             {
                 isFollow = value;
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(IsFollowString));
             }
         }
