@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -212,7 +213,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                 OnPropertyChanged(nameof(IsFollowingString));
             }
         }
-        public string IsFollowingString => (isFollowing) ? "Following" : "Follow";
+        public string IsFollowingString => isFollowing ? "Following" : "Follow";
 
         private bool isRefreshing = false;
         public bool IsRefreshing
@@ -281,8 +282,9 @@ namespace BDProject.ViewModels.ProfileViewModels
                     await ServerServices.RefreshTokenAsync();
                     FollowProfileFunction();
                 }
+                return;
             }
-            else
+            if (IsFollowing)
             {
                 JObject oJsonObject = new JObject();
                 oJsonObject.Add("idFollowed", Username);
@@ -301,6 +303,7 @@ namespace BDProject.ViewModels.ProfileViewModels
                     await ServerServices.RefreshTokenAsync();
                     FollowProfileFunction();
                 }
+                return;
             }
         }
 
@@ -308,7 +311,7 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand LoadMoreCommand { get; set; }
         private async Task LoadMoreFunction()
         {
-            if (IsBusy) { return; }
+            if (IsBusy) return;
             IsBusy = true;
 
             if (YourPostsCollection.Count % 10 == 0)
@@ -343,28 +346,16 @@ namespace BDProject.ViewModels.ProfileViewModels
             if (!post.IsLiked)
             {
                 var success = await ServerServices.SendPostRequestAsync("posts/like", oJsonObject);
-                if (success.IsSuccessStatusCode)
-                {
-                    post.IsLiked = true;
-                    post.LikesCount++;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) post.IsLiked = true;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
-            else
+            if (post.IsLiked)
             {
                 var success = await ServerServices.SendDeleteRequestAsync("posts/unlike", oJsonObject);
-                if (success.IsSuccessStatusCode)
-                {
-                    post.IsLiked = false;
-                    post.LikesCount--;
-                }
-                else if (success.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ServerServices.RefreshTokenAsync();
-                }
+                if (success.IsSuccessStatusCode) post.IsLiked = false;
+                if (success.StatusCode == HttpStatusCode.Unauthorized) await ServerServices.RefreshTokenAsync();
+                return;
             }
         }
 
@@ -372,7 +363,9 @@ namespace BDProject.ViewModels.ProfileViewModels
         public ICommand OpenPostCommentsCommand { get; set; }
         private async void OpenPostCommentsFunction(Post post)
         {
-            _Globals.OpenID = (int)post.IdPost;
+            _Globals.OpenID = post.IdPost;
+            _Globals.PageNumber = 3;
+            _Globals.PersonsProfilePageViewModelInstance = this;
             await Shell.Current.GoToAsync("PostComments");
         }
 
@@ -386,19 +379,15 @@ namespace BDProject.ViewModels.ProfileViewModels
         private async void ShowTagsFunction()
         {
             await Task.Delay(0);
-            if (IsTagsVisible)
-                IsTagsVisible = false;
-            else
-                IsTagsVisible = true;
+            if (IsTagsVisible) IsTagsVisible = false;
+            else IsTagsVisible = true;
         }
 
         public ICommand OpenTagsCommand { get; set; }
         private async void OpenTagsFunction(Post post)
         {
-            if (post.tags != null && post.tags.Count != 0)
-                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
-            else
-                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
+            if (post.tags != null && post.tags.Count != 0) await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
+            else await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
         }
 
     }

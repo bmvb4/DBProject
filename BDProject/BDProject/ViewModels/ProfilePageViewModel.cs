@@ -266,7 +266,6 @@ namespace BDProject.ViewModels
 
                 if (success.IsSuccessStatusCode)
                 {
-
                     var earthquakesJson = success.Content.ReadAsStringAsync().Result;
                     var postList = JsonConvert.DeserializeObject<List<BigPostDB>>(earthquakesJson);
 
@@ -308,7 +307,9 @@ namespace BDProject.ViewModels
         public ICommand OpenPostCommentsCommand { get; set; }
         private async void OpenPostCommentsFunction(Post post)
         {
-            _Globals.OpenID = (int)post.IdPost;
+            _Globals.OpenID = post.IdPost;
+            _Globals.PageNumber = 2;
+            _Globals.ProfilePageViewModelInstance = this;
             await Shell.Current.GoToAsync("PostComments");
         }
 
@@ -330,19 +331,15 @@ namespace BDProject.ViewModels
         private async void ShowTagsFunction()
         {
             await Task.Delay(0);
-            if (IsTagsVisible)
-                IsTagsVisible = false;
-            else
-                IsTagsVisible = true;
+            if (IsTagsVisible) IsTagsVisible = false;
+            else IsTagsVisible = true;
         }
 
         public ICommand OpenTagsCommand { get; set; }
         private async void OpenTagsFunction(Post post)
         {
-            if (post.tags != null && post.tags.Count != 0)
-                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
-            else
-                await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
+            if (post.tags != null && post.tags.Count != 0) await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(post.TagsCollection));
+            else await PopupNavigation.Instance.PushAsync(new AllTagsPopUp(new ObservableRangeCollection<Tag>()));
         }
 
     }

@@ -30,7 +30,10 @@ namespace BDProject.Helpers
 
 
 
+        public static int PageNumber = 0;
         public static ViewModels.HomePageViewModel HomePageViewModelInstance;
+        public static ViewModels.ProfilePageViewModel ProfilePageViewModelInstance;
+        public static ViewModels.ProfileViewModels.PersonsProfilePageViewModel PersonsProfilePageViewModelInstance;
 
 
 

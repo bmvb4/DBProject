@@ -42,8 +42,24 @@ namespace BDProject.ViewModels.PostsViewModels
 
         public void SetParameters()
         {
-            Username = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).IdUser;
-            Description = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).Description;
+            if(_Globals.PageNumber == 1)
+            {
+                Username = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).IdUser;
+                Description = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).Description;
+                return;
+            }
+            if(_Globals.PageNumber == 2)
+            {
+                Username = _Globals.ProfilePageViewModelInstance.YourPostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).IdUser;
+                Description = _Globals.ProfilePageViewModelInstance.YourPostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).Description;
+                return;
+            }
+            if(_Globals.PageNumber == 3)
+            {
+                Username = _Globals.PersonsProfilePageViewModelInstance.YourPostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).IdUser;
+                Description = _Globals.PersonsProfilePageViewModelInstance.YourPostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID).Description;
+                return;
+            }
         }
 
         public PostCommentsPageViewModel()
@@ -162,9 +178,24 @@ namespace BDProject.ViewModels.PostsViewModels
             var success = await ServerServices.SendDeleteRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.HomePageViewModelInstance.PostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount--;
-                SetCollection();
-                return;
+                if (_Globals.PageNumber == 1)
+                {
+                    _Globals.HomePageViewModelInstance.PostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount--;
+                    SetCollection();
+                    return;
+                }
+                if (_Globals.PageNumber == 2)
+                {
+                    _Globals.ProfilePageViewModelInstance.YourPostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount--;
+                    SetCollection();
+                    return;
+                }
+                if (_Globals.PageNumber == 3)
+                {
+                    _Globals.PersonsProfilePageViewModelInstance.YourPostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount--;
+                    SetCollection();
+                    return;
+                }
             }
             if (success.StatusCode == HttpStatusCode.Unauthorized)
             {
@@ -179,7 +210,10 @@ namespace BDProject.ViewModels.PostsViewModels
         {
             if (string.IsNullOrEmpty(Comment) || string.IsNullOrWhiteSpace(Comment)) { return; }
 
-            Post post = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID);
+            Post post = new Post();
+            if (_Globals.PageNumber == 1) post = _Globals.HomePageViewModelInstance.PostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID);
+            if (_Globals.PageNumber == 2) post = _Globals.ProfilePageViewModelInstance.YourPostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID);
+            if (_Globals.PageNumber == 3) post = _Globals.PersonsProfilePageViewModelInstance.YourPostsCollection?.FirstOrDefault(x => x.IdPost == _Globals.OpenID);
 
             JObject oJsonObject = new JObject();
             oJsonObject.Add("IdPost", post.IdPost);
@@ -189,10 +223,27 @@ namespace BDProject.ViewModels.PostsViewModels
             var success = await ServerServices.SendPostRequestAsync("posts/comment", oJsonObject);
             if (success.IsSuccessStatusCode)
             {
-                _Globals.HomePageViewModelInstance.PostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount++;
-                SetCollection();
-                Comment = "";
-                return;
+                if (_Globals.PageNumber == 1)
+                {
+                    _Globals.HomePageViewModelInstance.PostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount++;
+                    SetCollection();
+                    Comment = "";
+                    return;
+                }
+                if (_Globals.PageNumber == 2)
+                {
+                    _Globals.ProfilePageViewModelInstance.YourPostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount++;
+                    SetCollection();
+                    Comment = "";
+                    return;
+                }
+                if (_Globals.PageNumber == 3)
+                {
+                    _Globals.PersonsProfilePageViewModelInstance.YourPostsCollection.FirstOrDefault(x => x.IdPost == _Globals.OpenID).CommentsCount++;
+                    SetCollection();
+                    Comment = "";
+                    return;
+                }
             }
             if (success.StatusCode == HttpStatusCode.Unauthorized)
             {

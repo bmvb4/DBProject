@@ -134,7 +134,8 @@ namespace BDProject.ViewModels
         public ICommand OpenPostCommentsCommand { get; set; }
         private async void OpenPostCommentsFunction(Post post)
         {
-            _Globals.OpenID = (int)post.IdPost;
+            _Globals.OpenID = post.IdPost;
+            _Globals.PageNumber = 1;
             _Globals.HomePageViewModelInstance = this;
             await Shell.Current.GoToAsync("PostComments");
         }
